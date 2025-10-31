@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartTourism - Nhận diện Ảnh</title>
+</head>
+<body>
+    <h1>Tải ảnh lên để Nhận diện</h1>
+    
+    <form method="POST" action="/" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="submit" value="Phân Tích">
+    </form>
+    
+    <hr>
+    
+    {% if result %}
+        <h2>✅ Kết quả Dự đoán:</h2>
+        <p>Hình ảnh này có thể là: <strong>{{ result }}</strong></p>
+        {% endif %}
+
+    {% if error %}
+        <p style="color: red;">Lỗi: {{ error }}</p>
+    {% endif %}
+
+</body>
+</html>
