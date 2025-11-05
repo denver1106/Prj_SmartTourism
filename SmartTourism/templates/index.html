@@ -9,18 +9,6 @@
 
     <form method="POST" action="/" enctype="multipart/form-data">
 
-        <div>
-            <input type="radio" id="radio_food" name="model_type" value="food"
-                   {% if selected_model =='food' or not selected_model %}checked{% endif %}>
-            <label for="radio_food">Nhận diện Món ăn</label>
-        </div>
-        <div>
-            <input type="radio" id="radio_place" name="model_type" value="place"
-                   {% if selected_model =='place' %}checked{% endif %}>
-            <label for="radio_place">Nhận diện Địa điểm</label>
-        </div>
-
-        <br>
 
         <input type="file" name="file" accept="image/*" required>
         <input type="submit" value="Phân Tích">
