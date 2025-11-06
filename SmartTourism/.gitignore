@@ -1,6 +1,8 @@
 ﻿#  Bỏ qua Môi trường ảo
 venv/
-
+SmartTourism/venv/
+__pycache__/
+*.pyc
 
 __pycache__/
 *.pyc
