@@ -5,22 +5,28 @@
     <title>SmartTourism - Nhận diện Ảnh</title>
 </head>
 <body>
-    <h1>Upload Image</h1>
-    
+    <h1>Tải ảnh lên để Nhận diện</h1>
+
     <form method="POST" action="/" enctype="multipart/form-data">
+
+
         <input type="file" name="file" accept="image/*" required>
-        <input type="submit" value="Analyze">
+        <input type="submit" value="Phân Tích">
     </form>
-    
+
     <hr>
-    
-    {% if result %}
-        <h2>✅ Kết quả Dự đoán:</h2>
-        <p>Identified: <strong>{{ result }}</strong></p>
-        {% endif %}
 
     {% if error %}
-        <p style="color: red;">Lỗi: {{ error }}</p>
+    <p style="color:red;">LỖI: {{ error }}</p>
+    {% endif %}
+
+    {% if result %}
+    <h2>✅ Kết quả Dự đoán:</h2>
+    <p>Hình ảnh này có thể là: <strong>{{ result }}</strong></p>
+
+    <p>Ảnh bạn đã tải lên ({{ filename }}):</p>
+    <img src="{{ url_for('static', filename=filename) }}" width="300"
+         alt="Ảnh đã tải lên">
     {% endif %}
 
 </body>

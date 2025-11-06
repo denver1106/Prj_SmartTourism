@@ -1,0 +1,22 @@
+﻿# 1. Bỏ qua Môi trường ảo Python (Rất quan trọng!)
+venv/
+
+# 2. Bỏ qua các file cache của Python
+__pycache__/
+*.pyc
+
+# 3. Bỏ qua các file và thư mục của Visual Studio (màu tím)
+# Thư mục cài đặt ẩn
+.vs/
+
+# File Solution và Project (nếu có)
+*.sln
+*.pyproj
+*.user
+
+# Thư mục Build (nếu có)
+bin/
+obj/
+Debug/
+Release/
+
