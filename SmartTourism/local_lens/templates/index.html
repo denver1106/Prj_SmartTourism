@@ -1,0 +1,21 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<section class="text-center my-5">
+    <h1 class="text-primary fw-bold mb-1">Local Lens</h1>
+    <p class="text-muted">Discover local flavors from a single photo.</p>
+
+    <form class="upload-box mt-4" method="post" action="{{ url_for('search') }}" enctype="multipart/form-data">
+        <label class="upload-area">
+            <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" hidden>
+            <div class="upload-dashed">
+                <div class="big-icon">📷+</div>
+                <div class="small-hint">Click to upload an image</div>
+                <div class="tiny-hint">(.jpg, .png, .webp | ≤ 5MB)</div>
+            </div>
+        </label>
+        <div class="mt-3">
+            <button class="btn btn-primary px-4" type="submit">Analyze</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
