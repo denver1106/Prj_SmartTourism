@@ -1,0 +1,60 @@
+﻿/* Header vàng */
+.topbar {
+    background: #ffd400;
+    padding: 10px 0;
+}
+
+.brand-tag {
+    font-size: 14px;
+}
+
+.search-input {
+    border-radius: 999px;
+    padding-left: 16px;
+}
+
+/* Upload box giống khung nét đứt nhưng tránh đỏ (cảm giác cảnh báo) */
+.upload-area {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.upload-dashed {
+    width: min(620px, 92vw);
+    height: 220px;
+    border: 2px dashed #a4c6ff;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    transition: 120ms ease-in-out;
+}
+
+    .upload-dashed:hover {
+        background: #f6faff;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+
+.big-icon {
+    font-size: 42px;
+    opacity: 0.7;
+}
+
+.small-hint {
+    color: #6c757d;
+}
+
+.tiny-hint {
+    color: #9aa3ab;
+    font-size: 12px;
+}
+
+/* Cards kết quả */
+.result-card .image-placeholder .ph {
+    height: 180px;
+    display: grid;
+    place-items: center;
+    background: #eef4ff;
+    border-radius: 8px;
+    color: #8aa7d6;
+}

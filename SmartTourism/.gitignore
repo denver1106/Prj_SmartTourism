@@ -1,23 +1,38 @@
-﻿# 1. Bỏ qua Môi trường ảo Python (Rất quan trọng!)
+﻿#  Bỏ qua Môi trường ảo
 venv/
-
-# 2. Bỏ qua các file cache của Python
+SmartTourism/venv/
 __pycache__/
 *.pyc
 
-# 3. Bỏ qua các file và thư mục của Visual Studio (màu tím)
-# Thư mục cài đặt ẩn
+__pycache__/
+*.pyc
+
+echo "SmartTourism/venv/" >> .gitignore
+echo "venv/" >> .gitignore
+
 .vs/
 
-# File Solution và Project (nếu có)
 *.sln
 *.pyproj
 *.user
 
-# Thư mục Build (nếu có)
+
 bin/
 obj/
 Debug/
 Release/
 
+<<<<<<< HEAD
 instance/firebase-key.json
+=======
+# --- Dataset folders (ignore heavy data) ---
+data/**/images/
+data/**/labels/
+
+# compressing file
+*.zip
+*.rar
+*.tar
+*.tar.gz
+
+>>>>>>> 863f7cdb4d2e206e28c3abaae08eab5484699685
