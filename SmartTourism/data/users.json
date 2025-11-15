@@ -1,0 +1,16 @@
+[
+  {
+    "id": "demo_user",
+    "displayName": "User demo",
+
+    "preferencesTags": [ "mon_nuoc", "fast_food" ],
+    "favoritesFoods": [ "pho_bo", "bun_cha" ],
+    "favoritesRestaurants": [ "pho_thin_lo_duc" ],
+
+    "dislikedTags": [ "cay" ],
+    "dislikedFoods": [ "ca_kho_to" ],
+
+    "maxDistanceKm": 3,
+    "priceRange": "medium"
+  }
+]

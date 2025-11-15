@@ -1,0 +1,20 @@
+﻿[
+  {
+    "id": "da_nang",
+    "placeName": "Đà Nẵng",
+    "normalizedPlace": "da nang",
+    "foods": [ "mi_quang", "bun_cha_ca", "banh_trang_cuon_thit_heo" ]
+  },
+  {
+    "id": "ha_noi",
+    "placeName": "Hà Nội",
+    "normalizedPlace": "ha noi",
+    "foods": [ "pho_bo", "bun_cha", "banh_cuon" ]
+  },
+  {
+    "id": "sai_gon",
+    "placeName": "Sài Gòn",
+    "normalizedPlace": "sai gon",
+    "foods": [ "com_tam", "banh_mi", "hu_tieu" ]
+  }
+]
