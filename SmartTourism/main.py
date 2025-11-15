@@ -12,6 +12,18 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def predict_food(filename):
+    name = filename.lower()
+    if 'comtam' in name or 'com_tam' in name:
+        return "Cơm tấm"
+    elif 'bunbo' in name or 'bun_bo' in name:
+        return "Bún bò Huế"
+    elif 'pho' in name:
+        return "Phở bò"
+    elif 'banhmi' in name or 'banh_mi' in name:
+        return "Bánh mì"
+    else:
+        return "Không nhận dạng được món ăn"
 
 # --- ĐỊNH TUYẾN CHÍNH ---
 @app.route('/', methods=['GET', 'POST'])
