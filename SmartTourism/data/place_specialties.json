@@ -1,0 +1,380 @@
+﻿[
+  {
+    "id": "ha_noi",
+    "placeName": "Ha Noi",
+    "normalizedPlace": "ha noi",
+    "foods": [ "pho_bo", "pho_ga", "bun_cha", "bun_dau_mam_tom", "xoi_xeo", "banh_cuon", "ca_phe_sua_da", "sua_chua_nep_cam" ]
+  },
+  {
+    "id": "ha_giang",
+    "placeName": "Ha Giang",
+    "normalizedPlace": "ha giang",
+    "foods": [ "thang_co", "thit_trau_gac_bep", "com_lam", "xoi_ngu_sac" ]
+  },
+  {
+    "id": "cao_bang",
+    "placeName": "Cao Bang",
+    "normalizedPlace": "cao bang",
+    "foods": [ "banh_ap_chao", "pho_chua_cao_bang", "vit_quay_7_vi", "banh_khao" ]
+  },
+  {
+    "id": "bac_kan",
+    "placeName": "Bac Kan",
+    "normalizedPlace": "bac kan",
+    "foods": [ "com_lam", "lon_quay", "mien_dong", "banh_tep" ]
+  },
+  {
+    "id": "tuyen_quang",
+    "placeName": "Tuyen Quang",
+    "normalizedPlace": "tuyen quang",
+    "foods": [ "vit_quay_tuyen_quang", "banh_xeo", "banh_khao", "com_lam" ]
+  },
+  {
+    "id": "lao_cai",
+    "placeName": "Lao Cai",
+    "normalizedPlace": "lao cai",
+    "foods": [ "thang_co", "lon_cap_nach", "xoi_ngu_sac", "com_lam" ]
+  },
+  {
+    "id": "dien_bien",
+    "placeName": "Dien Bien",
+    "normalizedPlace": "dien bien",
+    "foods": [ "com_lam", "ga_den", "thit_trau_gac_bep", "xoi_ngu_sac" ]
+  },
+  {
+    "id": "lai_chau",
+    "placeName": "Lai Chau",
+    "normalizedPlace": "lai chau",
+    "foods": [ "ca_bong_song_da", "thit_trau_gac_bep", "com_lam", "ruou_ngon" ]
+  },
+  {
+    "id": "son_la",
+    "placeName": "Son La",
+    "normalizedPlace": "son la",
+    "foods": [ "ca_bong_song_da", "thit_trau_gac_bep", "bo_gac_bep", "com_lam" ]
+  },
+  {
+    "id": "yen_bai",
+    "placeName": "Yen Bai",
+    "normalizedPlace": "yen bai",
+    "foods": [ "xoi_ngu_sac", "com_lam", "thit_trau_gac_bep" ]
+  },
+  {
+    "id": "hoa_binh",
+    "placeName": "Hoa Binh",
+    "normalizedPlace": "hoa binh",
+    "foods": [ "com_lam", "thit_lon_muong", "ca_sui_nuong", "ruou_can" ]
+  },
+  {
+    "id": "thai_nguyen",
+    "placeName": "Thai Nguyen",
+    "normalizedPlace": "thai nguyen",
+    "foods": [ "che_tan_cuong", "banh_chung", "banh_cooc_mo", "pho_bo" ]
+  },
+  {
+    "id": "lang_son",
+    "placeName": "Lang Son",
+    "normalizedPlace": "lang son",
+    "foods": [ "vit_quay_lang_son", "khau_sli", "banh_chung_den", "pho_chua_cao_bang" ]
+  },
+  {
+    "id": "quang_ninh",
+    "placeName": "Quang Ninh",
+    "normalizedPlace": "quang ninh",
+    "foods": [ "cha_muc", "sam_bien", "sua_chua_tran_chau", "hai_san_nuong" ]
+  },
+  {
+    "id": "hai_phong",
+    "placeName": "Hai Phong",
+    "normalizedPlace": "hai phong",
+    "foods": [ "banh_da_cua", "banh_mi_que", "nem_cua_be", "oc_bien", "hai_san_nuong" ]
+  },
+  {
+    "id": "bac_giang",
+    "placeName": "Bac Giang",
+    "normalizedPlace": "bac giang",
+    "foods": [ "vai_thieu", "banh_da_keo", "banh_chung" ]
+  },
+  {
+    "id": "phu_tho",
+    "placeName": "Phu Tho",
+    "normalizedPlace": "phu tho",
+    "foods": [ "banh_tay", "banh_chung", "che_sen", "thit_chua_phu_tho" ]
+  },
+  {
+    "id": "vinh_phuc",
+    "placeName": "Vinh Phuc",
+    "normalizedPlace": "vinh phuc",
+    "foods": [ "banh_gio", "banh_troi", "ca_thac_hoa", "suon_nuong" ]
+  },
+  {
+    "id": "bac_ninh",
+    "placeName": "Bac Ninh",
+    "normalizedPlace": "bac ninh",
+    "foods": [ "nem_bac_ninh", "banh_phu_the", "banh_khao", "pho_bo" ]
+  },
+  {
+    "id": "hai_duong",
+    "placeName": "Hai Duong",
+    "normalizedPlace": "hai duong",
+    "foods": [ "banh_dau_xanh", "banh_gai", "banh_chung", "banh_day" ]
+  },
+  {
+    "id": "hung_yen",
+    "placeName": "Hung Yen",
+    "normalizedPlace": "hung yen",
+    "foods": [ "nhan_long", "banh_te", "banh_gai", "ca_kho" ]
+  },
+  {
+    "id": "thai_binh",
+    "placeName": "Thai Binh",
+    "normalizedPlace": "thai binh",
+    "foods": [ "banh_cay", "banh_gai", "canh_ca_que", "banh_da_cua" ]
+  },
+  {
+    "id": "ha_nam",
+    "placeName": "Ha Nam",
+    "normalizedPlace": "ha nam",
+    "foods": [ "ca_ro_kho", "banh_da", "com_chay", "nem_chua" ]
+  },
+  {
+    "id": "nam_dinh",
+    "placeName": "Nam Dinh",
+    "normalizedPlace": "nam dinh",
+    "foods": [ "pho_bo", "xoi_xeo", "banh_gai", "bun_ca_ro" ]
+  },
+  {
+    "id": "ninh_binh",
+    "placeName": "Ninh Binh",
+    "normalizedPlace": "ninh binh",
+    "foods": [ "de_nui_ninh_binh", "com_chay_ninh_binh", "mien_luon", "oc_nui" ]
+  },
+  {
+    "id": "thanh_hoa",
+    "placeName": "Thanh Hoa",
+    "normalizedPlace": "thanh hoa",
+    "foods": [ "nem_chua_thanh_hoa", "banh_cuon_thanh_hoa", "cha_tom", "bun_ca" ]
+  },
+  {
+    "id": "nghe_an",
+    "placeName": "Nghe An",
+    "normalizedPlace": "nghe an",
+    "foods": [ "chao_luon", "nhut_thanh_chuong", "banh_muot", "ca_kho" ]
+  },
+  {
+    "id": "ha_tinh",
+    "placeName": "Ha Tinh",
+    "normalizedPlace": "ha tinh",
+    "foods": [ "banh_beo_ha_tinh", "banh_loc", "ca_bien_nuong", "chao_can" ]
+  },
+  {
+    "id": "quang_binh",
+    "placeName": "Quang Binh",
+    "normalizedPlace": "quang binh",
+    "foods": [ "ca_khoai", "chao_hai_san", "banh_loc", "banh_xeo" ]
+  },
+  {
+    "id": "quang_tri",
+    "placeName": "Quang Tri",
+    "normalizedPlace": "quang tri",
+    "foods": [ "banh_khoi", "banh_canh", "bun_bo_hue", "hai_san_nuong" ]
+  },
+  {
+    "id": "thua_thien_hue",
+    "placeName": "Thua Thien Hue",
+    "normalizedPlace": "thua thien hue",
+    "foods": [ "bun_bo_hue", "nem_lui", "banh_beo", "banh_loc", "banh_nam", "che_thap_cam" ]
+  },
+  {
+    "id": "da_nang",
+    "placeName": "Da Nang",
+    "normalizedPlace": "da nang",
+    "foods": [ "mi_quang", "banh_trang_cuon_thit_heo", "banh_trang_nuong", "bun_cha_ca", "hai_san_nuong" ]
+  },
+  {
+    "id": "quang_nam",
+    "placeName": "Quang Nam",
+    "normalizedPlace": "quang nam",
+    "foods": [ "mi_quang", "cao_lau", "banh_trang_cuon_thit_heo", "banh_xeo" ]
+  },
+  {
+    "id": "quang_ngai",
+    "placeName": "Quang Ngai",
+    "normalizedPlace": "quang ngai",
+    "foods": [ "don_quang_ngai", "cha_ca_quang_ngai", "banh_xeo", "mi_quang" ]
+  },
+  {
+    "id": "binh_dinh",
+    "placeName": "Binh Dinh",
+    "normalizedPlace": "binh dinh",
+    "foods": [ "banh_xeo_tom_nhay", "banh_hoi_long_heo", "bun_cha_ca", "hai_san_nuong" ]
+  },
+  {
+    "id": "phu_yen",
+    "placeName": "Phu Yen",
+    "normalizedPlace": "phu yen",
+    "foods": [ "ca_ngu_dai_duong", "banh_can", "hai_san_nuong", "goi_ca" ]
+  },
+  {
+    "id": "khanh_hoa",
+    "placeName": "Khanh Hoa",
+    "normalizedPlace": "khanh hoa",
+    "foods": [ "nem_ninh_hoa", "bun_cha_ca", "hai_san_nuong", "banh_can" ]
+  },
+  {
+    "id": "ninh_thuan",
+    "placeName": "Ninh Thuan",
+    "normalizedPlace": "ninh thuan",
+    "foods": [ "goi_ca_ninh_thuan", "nho_ninh_thuan", "dong_cuu_nuong", "banh_can" ]
+  },
+  {
+    "id": "binh_thuan",
+    "placeName": "Binh Thuan",
+    "normalizedPlace": "binh thuan",
+    "foods": [ "banh_can", "banh_xeo", "hai_san_nuong", "banh_re" ]
+  },
+  {
+    "id": "kon_tum",
+    "placeName": "Kon Tum",
+    "normalizedPlace": "kon tum",
+    "foods": [ "goi_la", "ga_nuong", "com_lam", "ruou_can" ]
+  },
+  {
+    "id": "gia_lai",
+    "placeName": "Gia Lai",
+    "normalizedPlace": "gia lai",
+    "foods": [ "pho_kho_gia_lai", "com_lam", "ga_nuong", "ca_suoi" ]
+  },
+  {
+    "id": "dak_lak",
+    "placeName": "Dak Lak",
+    "normalizedPlace": "dak lak",
+    "foods": [ "ca_phe_buon_me_thuot", "bun_bo", "ga_sa_lot", "com_lam" ]
+  },
+  {
+    "id": "dak_nong",
+    "placeName": "Dak Nong",
+    "normalizedPlace": "dak nong",
+    "foods": [ "ca_suoi_nuong", "com_lam", "ga_nuong", "ca_phe_buon_me_thuot" ]
+  },
+  {
+    "id": "lam_dong",
+    "placeName": "Lam Dong",
+    "normalizedPlace": "lam dong",
+    "foods": [ "banh_trang_nuong", "lau_ga_la_e", "rau_cu_luoc_cham_kho_que", "sua_chua_nep_cam" ]
+  },
+  {
+    "id": "binh_phuoc",
+    "placeName": "Binh Phuoc",
+    "normalizedPlace": "binh phuoc",
+    "foods": [ "hat_dieu", "banh_trang_nuong", "ga_nuong", "com_lam" ]
+  },
+  {
+    "id": "tay_ninh",
+    "placeName": "Tay Ninh",
+    "normalizedPlace": "tay ninh",
+    "foods": [ "banh_trang_phoi_suong", "muoi_tom_tay_ninh", "goi_cuon", "lau_bo" ]
+  },
+  {
+    "id": "binh_duong",
+    "placeName": "Binh Duong",
+    "normalizedPlace": "binh duong",
+    "foods": [ "banh_beo_binh_duong", "banh_khot", "ga_quay", "lai_thieu" ]
+  },
+  {
+    "id":  "dong_nai",
+    "placeName": "Dong Nai",
+    "normalizedPlace": "dong nai",
+    "foods": [ "goi_ca", "cha_ca", "banh_xeo", "hai_san_nuong" ]
+  },
+  {
+    "id": "ba_ria_vung_tau",
+    "placeName": "Ba Ria Vung Tau",
+    "normalizedPlace": "ba ria vung tau",
+    "foods": [ "banh_khot", "hai_san_nuong", "lau_ca_duoi", "ca_mai_tron" ]
+  },
+  {
+    "id": "ho_chi_minh",
+    "placeName": "Ho Chi Minh",
+    "normalizedPlace": "ho chi minh",
+    "foods": [ "com_tam", "banh_mi", "hu_tieu", "bun_rieu_cua", "bun_thit_nuong", "banh_trang_tron", "che_khuc_bach", "tra_sua", "ca_phe_sua_da", "bun_mam" ]
+  },
+  {
+    "id": "long_an",
+    "placeName": "Long An",
+    "normalizedPlace": "long an",
+    "foods": [ "banh_tet", "lau_mam", "canh_chua_ca_loc", "banh_trang_phoi_suong" ]
+  },
+  {
+    "id": "tien_giang",
+    "placeName": "Tien Giang",
+    "normalizedPlace": "tien giang",
+    "foods": [ "hu_tieu_my_tho", "trai_cay_mien_tay", "banh_tet", "ca_kho_tieu" ]
+  },
+  {
+    "id": "ben_tre",
+    "placeName": "Ben Tre",
+    "normalizedPlace": "ben tre",
+    "foods": [ "keo_dua", "dua_sap", "banh_xeo", "ca_kho_tieu" ]
+  },
+  {
+    "id": "tra_vinh",
+    "placeName": "Tra Vinh",
+    "normalizedPlace": "tra vinh",
+    "foods": [ "bun_nuoc_leo", "banh_canh", "banh_tet", "ca_kho" ]
+  },
+  {
+    "id": "vinh_long",
+    "placeName": "Vinh Long",
+    "normalizedPlace": "vinh long",
+    "foods": [ "ca_loc_nuong_trui", "lau_ca_keo", "banh_xeo", "trai_cay_mien_tay" ]
+  },
+  {
+    "id":  "dong_thap",
+    "placeName": "Dong Thap",
+    "normalizedPlace": "dong thap",
+    "foods": [ "hu_tieu", "ca_kho_tieu", "lau_ca_keo", "sen_hong" ]
+  },
+  {
+    "id": "an_giang",
+    "placeName": "An Giang",
+    "normalizedPlace": "an giang",
+    "foods": [ "lau_mam", "ca_linh_kho", "banh_bo_thot_not", "ca_keo_kho" ]
+  },
+  {
+    "id": "kien_giang",
+    "placeName": "Kien Giang",
+    "normalizedPlace": "kien giang",
+    "foods": [ "bun_mam", "hai_san_nuong", "goi_ca", "bun_quay" ]
+  },
+  {
+    "id": "can_tho",
+    "placeName": "Can Tho",
+    "normalizedPlace": "can tho",
+    "foods": [ "bun_mam", "banh_xeo", "oc_len_xao_dua", "che_thap_cam", "trai_cay_mien_tay" ]
+  },
+  {
+    "id": "hau_giang",
+    "placeName": "Hau Giang",
+    "normalizedPlace": "hau giang",
+    "foods": [ "ca_loc_kho_tieu", "lau_mam", "banh_xeo", "trai_cay_mien_tay" ]
+  },
+  {
+    "id": "soc_trang",
+    "placeName": "Soc Trang",
+    "normalizedPlace": "soc trang",
+    "foods": [ "bun_nuoc_leo", "banh_pia", "banh_tet", "banh_it_la_gai" ]
+  },
+  {
+    "id": "bac_lieu",
+    "placeName": "Bac Lieu",
+    "normalizedPlace": "bac lieu",
+    "foods": [ "lau_mam", "banh_tam_bi", "ca_kho", "hai_san_nuong" ]
+  },
+  {
+    "id": "ca_mau",
+    "placeName": "Ca Mau",
+    "normalizedPlace": "ca mau",
+    "foods": [ "ca_kho_to", "cua_bien", "tom_tich_nuong", "banh_tet_mat_cat", "hai_san_nuong" ]
+  }
+]

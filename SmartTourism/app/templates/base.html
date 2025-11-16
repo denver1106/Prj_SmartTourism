@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - SmartTourism</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('main.index') }}">Trang chủ</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('main.login') }}">Đăng nhập</a>
+        <a href="{{ url_for('main.register') }}">Đăng ký</a>
+        {% else %}
+        <span>Chào, {{ current_user.username }}!</span>
+        <a href="{{ url_for('main.logout') }}">Đăng xuất</a>
+        {% endif %}
+    </nav>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+</body>
+</html>

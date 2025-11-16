@@ -22,6 +22,9 @@ obj/
 Debug/
 Release/
 
+
+instance/firebase-key.json
+
 # --- Dataset folders (ignore heavy data) ---
 data/**/images/
 data/**/labels/
@@ -31,4 +34,3 @@ data/**/labels/
 *.rar
 *.tar
 *.tar.gz
-
