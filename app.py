@@ -1,122 +1,247 @@
-﻿import os
-from pathlib import Path
-from urllib.parse import urlencode
-
-from flask import Flask, render_template, request, redirect, url_for, flash
-
-# ====== Config ======
-BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
+﻿from flask import Flask, render_template, request, redirect, url_for, session
+from core import data_manager, search_handler, service
+import os
 
 app = Flask(__name__)
-app.secret_key = "dev-secret"  # đổi khi deploy thực tế
-app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024  # 5MB
 
-ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".webp"}
+# SECRET KEY để dùng session (bắt buộc phải có)
+app.secret_key = "smartfood-secret-key-demo"
 
+WEATHER_API_KEY = "DUMMY_API_KEY_FOR_NOW"
 
-# ====== Helpers ======
-def allowed_file(filename: str) -> bool:
-    return Path(filename).suffix.lower() in ALLOWED_EXT
-
-
-def make_maps_link(query: str):
-    # Link Google Maps search như “bún bò Huế near Ho Chi Minh City”
-    params = {"q": query}
-    return f"https://www.google.com/maps/search/?{urlencode(params)}"
+# Khởi tạo các "Data Res" layer
+db_manager = data_manager.DataManager()
+search_engine = search_handler.SearchHandler()
+tourism_service = service.SmartTourismService(weather_api_key=WEATHER_API_KEY)
 
 
-def fake_analyze_image(image_path: Path):
+# ================== HÀM CHUẨN HÓA DỮ LIỆU -> FRONT ==================
+
+def normalize_restaurants(raw_list):
     """
-    Placeholder phân tích ảnh.
-    TODO: thay bằng model thực tế (Vision API, CLIP, v.v.)
-    Trả về: (identified_location, [dishes])
+    Chuẩn hoá dữ liệu quán ăn từ DataManager / SmartTourismService
+    về cùng một format mà results.html có thể hiển thị:
+
+    {
+        "id": ...,
+        "name": ...,
+        "address": ...,
+        "place": ...,
+        "price_level": ...,
+        "distance_km": ...,
+        "tags": [...],
+        "dishes": [...],
+        "lat": ...,
+        "lng": ...,
+        "description": ...
+    }
     """
-    # Demo cứng: bạn có thể random theo tên file nếu muốn
-    identified_location = "Ho Chi Minh City"
-    dishes = [
-        {"name": "Bún bò Huế", "desc": "Món nước đậm vị, sả và mắm ruốc nhẹ."},
-        {"name": "Cơm tấm", "desc": "Sườn bì chả, mỡ hành, nước mắm chua ngọt."},
-        {"name": "Bánh mì", "desc": "Ổ bánh mì giòn, pate, thịt nguội, rau thơm."},
-    ]
-    return identified_location, dishes
+    normalized = []
+
+    for r in raw_list:
+        if not isinstance(r, dict):
+            continue
+
+        name = r.get("name", "Tên chưa cập nhật")
+        address = r.get("address", "Địa chỉ đang cập nhật")
+        place = r.get("place") or r.get("area") or address
+        price_level = r.get("price_level", "?")
+
+        try:
+            distance_km = float(r.get("distance_km", 0.0))
+        except (TypeError, ValueError):
+            distance_km = 0.0
+
+        tags = r.get("tags") or []
+        dishes = r.get("foods") or r.get("menu") or []
+
+        lat = r.get("lat")
+        lng = r.get("lng")
+        description = r.get("description", "Chưa có mô tả.")
+
+        normalized.append({
+            "id": r.get("id"),
+            "name": name,
+            "address": address,
+            "place": place,
+            "price_level": price_level,
+            "distance_km": distance_km,
+            "tags": tags,
+            "dishes": dishes,
+            "lat": lat,
+            "lng": lng,
+            "description": description
+        })
+
+    return normalized
 
 
-# ====== Routes ======
-@app.route("/", methods=["GET"])
-def home():
-    # Trạng thái ban đầu (hình 1)
-    return render_template("index.html")
+# ================== AUTH / ACCOUNT (ĐĂNG NHẬP / ĐĂNG KÝ) ==================
 
-
-@app.route("/search", methods=["POST"])
-def search():
+@app.route("/account", methods=["GET", "POST"])
+def account():
     """
-    Nhận input: có thể là từ khóa (search_text) hoặc upload ảnh (image).
-    - Nếu có ảnh: lưu file → phân tích → render kết quả (hình 2).
-    - Nếu chỉ có text: hiển thị kết quả thẳng, dùng text làm location.
+    Trang đăng ký / đăng nhập (account.html).
+    - GET  : hiển thị form
+    - POST : nhận dữ liệu form, lưu vào session và chuyển sang trang chủ
     """
-    search_text = request.form.get("search_text", "").strip()
+    if request.method == "POST":
+        user_name = request.form.get("user_name") or "Bạn"
+        email = request.form.get("email") or ""
+        # Ở đây chưa kiểm tra mật khẩu, vì phần này thuộc backend / bảo mật
 
-    file = request.files.get("image")
-    if file and file.filename:
-        if not allowed_file(file.filename):
-            flash("Định dạng ảnh không hợp lệ. Cho phép: jpg, jpeg, png, webp.")
-            return redirect(url_for("home"))
+        # Lưu thông tin cơ bản vào session
+        session["user_name"] = user_name
+        session["email"] = email
 
-        save_path = UPLOAD_DIR / file.filename
-        file.save(save_path)
+        # Đăng nhập xong -> vào trang chủ
+        return redirect(url_for("index"))
 
-        # Phân tích ảnh (giả lập)
-        location, dishes = fake_analyze_image(save_path)
+    # Nếu đã đăng nhập rồi mà vẫn gõ /account -> cho về trang chủ
+    if "user_name" in session:
+        return redirect(url_for("index"))
 
+    # Lần đầu hoặc chưa đăng nhập -> hiển thị form account
+    return render_template("account.html")
+
+
+# ================== ROUTES FRONTEND CHÍNH ==================
+
+@app.route("/")
+def index():
+    """
+    Trang chủ SmartFood (index.html).
+    Bắt buộc phải đăng nhập trước:
+    - Nếu chưa có session["user_name"] -> chuyển về /account
+    - Nếu có rồi -> render trang chủ
+    """
+    if "user_name" not in session:
+        return redirect(url_for("account"))
+
+    return render_template("index.html", user_name=session.get("user_name"))
+
+
+@app.route("/results")
+def results_page():
+    """
+    Route xử lý tìm kiếm và lọc khoảng cách.
+    Connect Data Res - Front:
+    - Gọi DataManager + SearchHandler để lấy dữ liệu (Data Res)
+    - Chuẩn hoá => normalize_restaurants
+    - Truyền vào results.html để hiển thị (Front)
+    """
+    if "user_name" not in session:
+        return redirect(url_for("account"))
+
+    query = request.args.get("query", "").strip()
+
+    # Lấy tham số lọc khoảng cách (nếu có)
+    try:
+        max_distance_str = request.args.get("max_distance")
+        max_distance = float(max_distance_str) if max_distance_str else None
+    except ValueError:
+        max_distance = None
+
+    # Lấy toạ độ user (nếu front có truyền)
+    try:
+        user_lat = float(request.args.get("lat"))
+        user_lon = float(request.args.get("lon"))
+    except (TypeError, ValueError):
+        user_lat = None
+        user_lon = None
+
+    # 1. Lấy dữ liệu (bao gồm Mock Data gần user_lat/lon nếu DataManager hỗ trợ)
+    all_restaurants = db_manager.get_all_restaurants(
+        use_cache=False,
+        user_lat=user_lat,
+        user_lon=user_lon
+    )
+
+    # 2. Tìm kiếm theo từ khóa
+    results = search_engine.search(all_restaurants, query)
+
+    # 3. Tính khoảng cách và LỌC THEO MAX DISTANCE
+    final_results = []
+    if user_lat is not None and user_lon is not None:
+        for r in results:
+            if r.get("distance_km", 0) == 0 and r.get("lat") is not None and r.get("lng") is not None:
+                dist = ((r["lat"] - user_lat) ** 2 + (r["lng"] - user_lon) ** 2) ** 0.5 * 111
+                r["distance_km"] = dist
+
+            current_dist = r.get("distance_km", 0) or 0
+            if max_distance is not None and current_dist > max_distance:
+                continue
+
+            final_results.append(r)
     else:
-        # Không có ảnh, dùng text làm “location”
-        if not search_text:
-            flash("Hãy nhập từ khóa hoặc chọn một ảnh.")
-            return redirect(url_for("home"))
-        location = search_text
-        # Demo món ăn mẫu
-        dishes = [
-            {"name": "Phở bò", "desc": "Bánh phở, nước dùng trong, thịt bò thái mỏng."},
-            {"name": "Bún chả", "desc": "Chả nướng ăn cùng bún, rau sống, nước chấm."},
-            {"name": "Gỏi cuốn", "desc": "Cuốn tôm thịt, bún, rau, chấm tương đậu."},
-        ]
+        final_results = results
 
-    # Chuẩn bị 3 cột gợi ý quán ăn (mỗi món 3 quán demo)
-    cards = []
-    for dish in dishes[:3]:
-        shops = [
-            {
-                "label": "Quán ăn 1",
-                "map_url": make_maps_link(f"{dish['name']} near {location}"),
-            },
-            {
-                "label": "Quán ăn 2",
-                "map_url": make_maps_link(f"{dish['name']} best near {location}"),
-            },
-            {
-                "label": "Quán ăn 3",
-                "map_url": make_maps_link(f"{dish['name']} street food near {location}"),
-            },
-        ]
-        cards.append(
-            {
-                "dish": dish["name"],
-                "desc": dish["desc"],
-                "image_url": url_for("static", filename="placeholder-food.png"),
-                "shops": shops,
-            }
-        )
+    # 4. Chuẩn hoá data trước khi gửi ra giao diện
+    restaurants_for_front = normalize_restaurants(final_results)
 
+    # 5. Truyền sang template
     return render_template(
         "results.html",
-        identified_location=location,
-        cards=cards,
+        restaurants=restaurants_for_front,
+        query=query
     )
 
 
+@app.route("/recommend")
+def recommend_page():
+    """
+    Route demo gợi ý thông minh (SmartTourismService).
+    Cũng connect Data Res -> Front qua normalize_restaurants.
+    """
+    if "user_name" not in session:
+        return redirect(url_for("account"))
+
+    try:
+        lat = float(request.args.get("lat"))
+        lon = float(request.args.get("lon"))
+    except (TypeError, ValueError):
+        return "Lỗi: Không nhận được tọa độ vị trí hợp lệ!", 400
+
+    user_id = "guest_user_001"
+    service_output = tourism_service.process_user_input(user_id, lat, lon)
+
+    context_data = service_output["context"]
+    recommendations = service_output["recommendations"]
+
+    restaurants_for_front = normalize_restaurants(recommendations)
+    context_desc = f"Buổi {context_data.get('time_of_day')}, Mùa {context_data.get('season')}"
+
+    return render_template(
+        "results.html",
+        restaurants=restaurants_for_front,
+        context=context_desc,
+        query="Gợi ý thông minh"
+    )
+
+
+@app.route("/user")
+def user_page():
+    """
+    Trang người dùng (user.html).
+    Cũng yêu cầu đăng nhập để xem.
+    """
+    if "user_name" not in session:
+        return redirect(url_for("account"))
+
+    # Tạm thời chỉ render UI demo, chưa nối data thật
+    return render_template("user.html")
+
+
+@app.route("/logout")
+def logout():
+    """
+    Đăng xuất:
+    - Xoá session
+    - Quay lại trang đăng nhập (account.html)
+    """
+    session.clear()
+    return redirect(url_for("account"))
+
+
 if __name__ == "__main__":
-    # Run dev server
     app.run(debug=True)
