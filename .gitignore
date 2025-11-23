@@ -1,0 +1,47 @@
+﻿#  Bỏ qua Môi trường ảo
+venv/
+SmartTourism/venv/
+__pycache__/
+*.pyc
+
+__pycache__/
+*.pyc
+
+# --- BẢO MẬT (Bắt buộc) ---
+firebase-key.json
+*.json         
+.env           
+instance/       
+
+# --- RÁC HỆ THỐNG & PYTHON ---
+__pycache__/
+*.pyc
+venv/
+.venv/
+.DS_Store      
+
+echo "SmartTourism/venv/" >> .gitignore
+echo "venv/" >> .gitignore
+
+.vs/
+
+*.sln
+*.pyproj
+*.user
+
+
+bin/
+obj/
+Debug/
+Release/
+
+# --- Dataset folders (ignore heavy data) ---
+data/**/images/
+data/**/labels/
+
+# compressing file
+*.zip
+*.rar
+*.tar
+*.tar.gz
+

@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết quán – SmartFood</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+
+        <!-- NAVBAR -->
+        <header class="navbar">
+            <div class="nav-logo">
+                <span class="icon">🍽️</span>
+                <span class="brand-name">SmartFood</span>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Trang chủ</a>
+                <a href="{{ url_for('user_page') }}" class="nav-link">Người dùng</a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout">Đăng xuất</a>
+            </nav>
+        </header>
+
+        <!-- DETAIL -->
+        <section class="card detail-layout">
+            <div>
+                <div class="detail-main-title">{{ restaurant.name }}</div>
+                <div class="subtitle">
+                    {{ restaurant.place }} • Khoảng cách: {{ "%.1f"|format(restaurant.distance_km) }} km •
+                    Giá: {{ restaurant.price_level }}
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <div class="detail-section-title">Món phục vụ</div>
+                    <p class="detail-text">
+                        {{ restaurant.dishes|join(", ") }}
+                    </p>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <div class="detail-section-title">Mô tả (demo)</div>
+                    <p class="detail-text">
+                        Đây là khu vực mô tả chi tiết quán ăn (giờ mở cửa, phong cách, không gian, món nổi bật, v.v.).
+                        Phần này chỉ là placeholder UI – nội dung thật sẽ do nhóm nhập hoặc lấy từ backend.
+                    </p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="{{ url_for('results_page') }}" class="secondary-btn">← Quay lại kết quả</a>
+                </div>
+            </div>
+
+            <!-- CỘT BÊN PHẢI: MAP + ACTION -->
+            <div>
+                <div class="detail-section-title">Bản đồ & chỉ đường</div>
+                <p class="detail-text" style="margin-bottom: 8px;">
+                    Nhấn nút bên dưới để mở Google Maps và xem đường đi tới quán.
+                </p>
+
+                <a class="primary-btn"
+                   href="https://www.google.com/maps/dir/?api=1&destination={{ restaurant.lat }},{{ restaurant.lng }}"
+                   target="_blank">
+                    Mở Google Maps 🗺️
+                </a>
+
+                <div style="margin-top: 16px;">
+                    <div class="detail-section-title">Tag quán</div>
+                    <div class="tags">
+                        {% for t in restaurant.tags %}
+                        <span class="tag">{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if similar_restaurants %}
+                <div style="margin-top: 16px;">
+                    <div class="detail-section-title">Quán cùng khu vực (demo)</div>
+                    {% for r in similar_restaurants %}
+                    <div class="restaurant-meta" style="margin-bottom: 4px;">
+                        • <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
+                        – {{ r.place }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

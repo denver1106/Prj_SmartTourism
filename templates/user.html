@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ sơ người dùng – SmartFood</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+
+        <!-- NAVBAR -->
+        <header class="navbar">
+            <div class="nav-logo">
+                <span class="icon">🍽️</span>
+                <span class="brand-name">SmartFood</span>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Trang chủ</a>
+                <a href="{{ url_for('user_page') }}" class="nav-link active">Người dùng</a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout">Đăng xuất</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-text">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Hồ sơ & lịch sử ăn uống
+                </div>
+                <h1>Xin chào, {{ user.name if user else "User demo" }}</h1>
+                <p class="subtitle">
+                    Trang này hiển thị <b>UI quản lý người dùng</b>: thông tin cơ bản, các quán đã ghé thăm
+                    hoặc được hệ thống gợi ý, và sở thích ăn uống. Backend sẽ lưu trữ dữ liệu thực tế;
+                    giao diện này là template trình bày và mô phỏng thao tác chỉnh sửa (demo).
+                </p>
+            </div>
+        </section>
+
+        <section class="card user-grid">
+
+            <!-- CỘT TRÁI: THÔNG TIN + SỞ THÍCH -->
+            <div>
+                <!-- Thông tin người dùng -->
+                <div class="section-title">
+                    <span class="icon">👤</span>
+                    Thông tin người dùng
+                </div>
+
+                <p class="detail-text" style="margin-bottom: 10px;">
+                    Tên: <b>{{ user.name if user else "User demo" }}</b><br>
+                    Email: {{ user.email if user else "demo@example.com" }}<br>
+                    ID: {{ user.id if user else "user1" }}
+                </p>
+
+                <!-- Form cập nhật nhanh (demo UI) -->
+                <div class="card" style="padding: 12px; margin-bottom: 12px;">
+                    <div class="detail-section-title" style="margin-bottom: 6px;">
+                        Cập nhật nhanh (demo UI)
+                    </div>
+                    <form id="profileForm" onsubmit="handleProfileSave(event)">
+                        <div style="margin-bottom:8px;">
+                            <label class="detail-section-title">Tên hiển thị</label>
+                            <input type="text"
+                                   id="nameInput"
+                                   value="{{ user.name if user else 'User demo' }}"
+                                   style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #e5e7eb; font-size:13px; margin-top:2px;">
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label class="detail-section-title">Email</label>
+                            <input type="email"
+                                   id="emailInput"
+                                   value="{{ user.email if user else 'demo@example.com' }}"
+                                   style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #e5e7eb; font-size:13px; margin-top:2px;">
+                        </div>
+                        <button type="submit" class="primary-btn" style="padding-inline:14px; font-size:13px;">
+                            Lưu thông tin (demo)
+                        </button>
+                    </form>
+                    <p class="restaurant-meta" style="margin-top:6px;">
+                        *Nút này chỉ minh họa UI. Việc lưu dữ liệu thật sẽ do backend xử lý.
+                    </p>
+                </div>
+
+                <!-- Sở thích hiện tại -->
+                <div style="margin-top: 4px;">
+                    <div class="detail-section-title">Sở thích (tags yêu thích)</div>
+                    <div class="tags" style="margin-bottom: 6px;">
+                        {% for t in liked_tags %}
+                        <span class="tag">{{ t }}</span>
+                        {% else %}
+                        <span class="restaurant-meta">Chưa có dữ liệu.</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="detail-section-title">Không thích</div>
+                    <div class="tags" style="margin-bottom: 6px;">
+                        {% for t in disliked_tags %}
+                        <span class="tag">{{ t }}</span>
+                        {% else %}
+                        <span class="restaurant-meta">Chưa có dữ liệu.</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Khu chỉnh sửa sở thích (demo UI) -->
+                <div class="card" style="padding: 12px; margin-top: 10px;">
+                    <div class="detail-section-title" style="margin-bottom: 4px;">
+                        Chỉnh sửa sở thích (demo)
+                    </div>
+                    <p class="restaurant-meta" style="margin-bottom: 6px;">
+                        Chọn những tag phù hợp với khẩu vị của bạn. Khi nhấn "Lưu sở thích", hệ thống sẽ hiển thị
+                        danh sách tag đã chọn (demo). Backend thật có thể sử dụng những tag này để cá nhân hóa gợi ý.
+                    </p>
+
+                    <div id="prefChips" class="chips-row" style="margin-bottom: 8px;">
+                        <div class="chip" data-tag="noodle">Mì / Bún</div>
+                        <div class="chip" data-tag="soup">Món nước</div>
+                        <div class="chip" data-tag="rice">Cơm</div>
+                        <div class="chip" data-tag="fast_food">Fast food</div>
+                        <div class="chip" data-tag="bbq">Nướng / BBQ</div>
+                        <div class="chip" data-tag="spicy">Cay</div>
+                        <div class="chip" data-tag="healthy">Healthy</div>
+                    </div>
+
+                    <button type="button" class="secondary-btn" onclick="handlePrefSave()">
+                        Lưu sở thích (demo)
+                    </button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: LỊCH SỬ -->
+            <div>
+                <div class="section-title">
+                    <span class="icon">🕒</span>
+                    Quán đã ghé thăm
+                </div>
+
+                {% if not history %}
+                <p class="subtitle">Chưa có dữ liệu – đây là lịch sử demo.</p>
+                {% else %}
+                {% for r in history %}
+                <article class="restaurant-card">
+                    <div class="restaurant-thumbnail">🍽️</div>
+                    <div class="restaurant-main">
+                        <div class="restaurant-name-row">
+                            <div class="restaurant-name">
+                                <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
+                            </div>
+                            <div class="restaurant-distance">
+                                {{ "%.1f"|format(r.distance_km) }} km
+                            </div>
+                        </div>
+                        <div class="restaurant-meta">
+                            {{ r.place }} • Giá: {{ r.price_level }}
+                        </div>
+                        <div class="tags">
+                            {% for t in r.tags %}
+                            <span class="tag">{{ t }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        // Toggle active trên chip sở thích
+        const prefChips = document.getElementById("prefChips");
+        if (prefChips) {
+            prefChips.addEventListener("click", (e) => {
+                const chip = e.target.closest(".chip");
+                if (!chip) return;
+                chip.classList.toggle("active");
+            });
+        }
+
+        function handleProfileSave(event) {
+            event.preventDefault();
+            const name = document.getElementById("nameInput").value.trim();
+            const email = document.getElementById("emailInput").value.trim();
+
+            alert(
+                "Demo UI – thông tin sẽ được gửi lên backend:\n\n" +
+                "Tên hiển thị: " + name + "\n" +
+                "Email: " + email + "\n\n" +
+                "(Hiện tại chỉ minh hoạ, chưa lưu vào cơ sở dữ liệu.)"
+            );
+        }
+
+        function handlePrefSave() {
+            const active = Array.from(document.querySelectorAll("#prefChips .chip.active"))
+                .map(chip => chip.dataset.tag);
+
+            if (active.length === 0) {
+                alert("Demo UI – bạn chưa chọn sở thích nào.");
+                return;
+            }
+
+            alert(
+                "Demo UI – danh sách tag sẽ gửi lên backend:\n\n" +
+                active.join(", ") +
+                "\n\n(Hiện tại chỉ minh hoạ, chưa lưu vào cơ sở dữ liệu.)"
+            );
+        }
+    </script>
+</body>
+</html>

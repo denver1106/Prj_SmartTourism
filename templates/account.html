@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký – SmartFood</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+
+        <!-- NAVBAR (chỉ logo, không có đăng xuất) -->
+        <header class="navbar">
+            <div class="nav-logo">
+                <span class="icon">🍽️</span>
+                <span class="brand-name">SmartFood</span>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-text">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Bước 1 · Đăng ký tài khoản
+                </div>
+                <h1>Tạo tài khoản để bắt đầu sử dụng SmartFood</h1>
+                <p class="subtitle">
+                    Đây là giao diện <b>đăng ký bắt buộc</b>. Sau khi nhập Email, Tên đăng nhập và Mật khẩu,
+                    bạn sẽ được đưa vào trang chính của hệ thống gợi ý quán ăn. Việc lưu trữ tài khoản thực tế
+                    sẽ do backend triển khai.
+                </p>
+            </div>
+        </section>
+
+        <section class="account-wrapper">
+            <div class="card account-card">
+                <div class="section-title">
+                    <span class="icon">🔐</span>
+                    Đăng ký tài khoản SmartFood
+                </div>
+
+                {% if error %}
+                <p class="status error" style="margin-bottom: 8px;">
+                    <span class="status-dot"></span>
+                    {{ error }}
+                </p>
+                {% endif %}
+
+                <form method="post">
+                    <div class="filter-group" style="margin-bottom: 10px;">
+                        <label>Email</label>
+                        <input type="email" name="email" required placeholder="you@example.com">
+                    </div>
+                    <div class="filter-group" style="margin-bottom: 10px;">
+                        <label>Tên đăng nhập</label>
+                        <input type="text" name="username" required placeholder="Tên bạn muốn hiển thị trong hệ thống">
+                    </div>
+                    <div class="filter-group" style="margin-bottom: 4px;">
+                        <label>Mật khẩu</label>
+                        <input type="password" name="password" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="primary-btn" style="width: 100%; justify-content: center; margin-top: 8px;">
+                        Đăng ký & vào SmartFood
+                    </button>
+                </form>
+
+                <p class="restaurant-meta" style="margin-top: 10px;">
+                    *Form này mô phỏng luồng đăng ký. Trong bản triển khai đầy đủ, hệ thống sẽ kiểm tra trùng email,
+                    mã hoá mật khẩu, lưu CSDL và hỗ trợ đăng nhập lại nhiều lần.
+                </p>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
