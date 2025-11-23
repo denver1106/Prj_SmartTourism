@@ -1,10 +1,2568 @@
-﻿[
-  {
-    "id": "history_001",
-    "userId": "demo_user",
-    "foodId": "pho_bo",
-    "restaurantId": "pho_thin_lo_duc",
-    "query": "muốn ăn món nước buổi sáng",
-    "timestamp": "2025-11-15T09:30:00Z"
-  }
+[
+    {
+        "id": "hist_0000",
+        "user_id": "user_039",
+        "target_id": "vit_quay_tuyen_quang",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-13T12:32:42.572763"
+    },
+    {
+        "id": "hist_0001",
+        "user_id": "user_041",
+        "target_id": "res_157",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-27T11:32:42.572763"
+    },
+    {
+        "id": "hist_0002",
+        "user_id": "user_004",
+        "target_id": "thang_co",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-22T02:32:42.572763"
+    },
+    {
+        "id": "hist_0003",
+        "user_id": "user_028",
+        "target_id": "res_184",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-13T11:32:42.572763"
+    },
+    {
+        "id": "hist_0004",
+        "user_id": "user_013",
+        "target_id": "hat_dieu",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-27T17:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0005",
+        "user_id": "user_048",
+        "target_id": "goi_la",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-11T08:32:42.573760"
+    },
+    {
+        "id": "hist_0006",
+        "user_id": "user_031",
+        "target_id": "res_133",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-01T02:32:42.573760"
+    },
+    {
+        "id": "hist_0007",
+        "user_id": "user_008",
+        "target_id": "res_205",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-11T03:32:42.573760"
+    },
+    {
+        "id": "hist_0008",
+        "user_id": "user_006",
+        "target_id": "banh_dau_xanh",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-25T07:32:42.573760",
+        "rating": 4,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0009",
+        "user_id": "user_015",
+        "target_id": "res_089",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-23T09:32:42.573760"
+    },
+    {
+        "id": "hist_0010",
+        "user_id": "user_009",
+        "target_id": "bun_ken",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-26T21:32:42.573760"
+    },
+    {
+        "id": "hist_0011",
+        "user_id": "user_001",
+        "target_id": "banh_trang_tron",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-30T04:32:42.573760"
+    },
+    {
+        "id": "hist_0012",
+        "user_id": "user_004",
+        "target_id": "banh_trang_tron",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-23T08:32:42.573760"
+    },
+    {
+        "id": "hist_0013",
+        "user_id": "user_011",
+        "target_id": "res_224",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-11T02:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0014",
+        "user_id": "user_027",
+        "target_id": "banh_chung",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-17T15:32:42.573760"
+    },
+    {
+        "id": "hist_0015",
+        "user_id": "user_032",
+        "target_id": "res_173",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-09T04:32:42.573760"
+    },
+    {
+        "id": "hist_0016",
+        "user_id": "user_023",
+        "target_id": "goi_la",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-11T14:32:42.573760"
+    },
+    {
+        "id": "hist_0017",
+        "user_id": "user_040",
+        "target_id": "bun_dau_mam_tom",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-16T13:32:42.573760",
+        "rating": 4,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0018",
+        "user_id": "user_019",
+        "target_id": "res_073",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-19T22:32:42.573760"
+    },
+    {
+        "id": "hist_0019",
+        "user_id": "user_035",
+        "target_id": "res_075",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-15T23:32:42.573760"
+    },
+    {
+        "id": "hist_0020",
+        "user_id": "user_040",
+        "target_id": "res_044",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-17T21:32:42.573760",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0021",
+        "user_id": "user_012",
+        "target_id": "res_045",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-27T07:32:42.573760"
+    },
+    {
+        "id": "hist_0022",
+        "user_id": "user_001",
+        "target_id": "res_049",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-05T15:32:42.573760",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0023",
+        "user_id": "user_021",
+        "target_id": "res_031",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-10T13:32:42.573760"
+    },
+    {
+        "id": "hist_0024",
+        "user_id": "user_022",
+        "target_id": "res_066",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-13T13:32:42.573760"
+    },
+    {
+        "id": "hist_0025",
+        "user_id": "user_031",
+        "target_id": "res_137",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-30T17:32:42.573760",
+        "rating": 3,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0026",
+        "user_id": "user_042",
+        "target_id": "ga_dap_lu",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-21T21:32:42.573760"
+    },
+    {
+        "id": "hist_0027",
+        "user_id": "user_015",
+        "target_id": "pho_chua_cao_bang",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-22T10:32:42.573760"
+    },
+    {
+        "id": "hist_0028",
+        "user_id": "user_006",
+        "target_id": "res_128",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-25T14:32:42.573760"
+    },
+    {
+        "id": "hist_0029",
+        "user_id": "user_033",
+        "target_id": "chao_hai_san",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-08T10:32:42.573760"
+    },
+    {
+        "id": "hist_0030",
+        "user_id": "user_031",
+        "target_id": "res_056",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-10T19:32:42.573760"
+    },
+    {
+        "id": "hist_0031",
+        "user_id": "user_001",
+        "target_id": "res_063",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-19T03:32:42.573760"
+    },
+    {
+        "id": "hist_0032",
+        "user_id": "user_013",
+        "target_id": "res_130",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-17T01:32:42.573760"
+    },
+    {
+        "id": "hist_0033",
+        "user_id": "user_036",
+        "target_id": "khau_sli",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-01T17:32:42.573760"
+    },
+    {
+        "id": "hist_0034",
+        "user_id": "user_011",
+        "target_id": "res_175",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-08T17:32:42.573760",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0035",
+        "user_id": "user_019",
+        "target_id": "res_225",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-20T13:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0036",
+        "user_id": "user_028",
+        "target_id": "ga_sa_lot",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-03T12:32:42.573760",
+        "rating": 4,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0037",
+        "user_id": "user_028",
+        "target_id": "res_080",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-28T06:32:42.573760",
+        "rating": 3,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0038",
+        "user_id": "user_047",
+        "target_id": "bun_bo_hue",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-23T10:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0039",
+        "user_id": "user_027",
+        "target_id": "com_ga_xoi_mo",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-10T15:32:42.573760"
+    },
+    {
+        "id": "hist_0040",
+        "user_id": "user_018",
+        "target_id": "res_130",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-07T07:32:42.573760"
+    },
+    {
+        "id": "hist_0041",
+        "user_id": "user_036",
+        "target_id": "res_174",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-23T20:32:42.573760"
+    },
+    {
+        "id": "hist_0042",
+        "user_id": "user_032",
+        "target_id": "banh_loc",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-29T09:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0043",
+        "user_id": "user_044",
+        "target_id": "lai_thieu",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-05T10:32:42.573760"
+    },
+    {
+        "id": "hist_0044",
+        "user_id": "user_026",
+        "target_id": "res_005",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-11T06:32:42.573760"
+    },
+    {
+        "id": "hist_0045",
+        "user_id": "user_027",
+        "target_id": "suon_nuong",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-25T09:32:42.573760"
+    },
+    {
+        "id": "hist_0046",
+        "user_id": "user_022",
+        "target_id": "ca_thac_hoa",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-11T03:32:42.573760"
+    },
+    {
+        "id": "hist_0047",
+        "user_id": "user_004",
+        "target_id": "res_128",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-06T20:32:42.573760",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0048",
+        "user_id": "user_014",
+        "target_id": "nem_chua",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-05T08:32:42.573760"
+    },
+    {
+        "id": "hist_0049",
+        "user_id": "user_020",
+        "target_id": "res_111",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-10T12:32:42.573760"
+    },
+    {
+        "id": "hist_0050",
+        "user_id": "user_035",
+        "target_id": "nem_chua_thanh_hoa",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-31T21:32:42.573760"
+    },
+    {
+        "id": "hist_0051",
+        "user_id": "user_028",
+        "target_id": "res_042",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-20T23:32:42.573760",
+        "rating": 4,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0052",
+        "user_id": "user_037",
+        "target_id": "ga_sa_lot",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-10T06:32:42.573760"
+    },
+    {
+        "id": "hist_0053",
+        "user_id": "user_029",
+        "target_id": "dong_cuu_nuong",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-09T07:32:42.573760"
+    },
+    {
+        "id": "hist_0054",
+        "user_id": "user_004",
+        "target_id": "mi_quang",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-19T03:32:42.573760",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0055",
+        "user_id": "user_040",
+        "target_id": "res_174",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-13T02:32:42.573760"
+    },
+    {
+        "id": "hist_0056",
+        "user_id": "user_041",
+        "target_id": "res_140",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-08T07:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0057",
+        "user_id": "user_041",
+        "target_id": "hai_san_nuong",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-29T18:32:42.573760",
+        "rating": 4,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0058",
+        "user_id": "user_046",
+        "target_id": "ca_mai_tron",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-25T09:32:42.573760",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0059",
+        "user_id": "user_024",
+        "target_id": "res_089",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-19T01:32:42.573760"
+    },
+    {
+        "id": "hist_0060",
+        "user_id": "user_029",
+        "target_id": "banh_xeo",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-28T04:32:42.573760"
+    },
+    {
+        "id": "hist_0061",
+        "user_id": "user_017",
+        "target_id": "res_016",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-16T19:32:42.573760"
+    },
+    {
+        "id": "hist_0062",
+        "user_id": "user_043",
+        "target_id": "sua_chua_nep_cam",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-17T16:32:42.573760"
+    },
+    {
+        "id": "hist_0063",
+        "user_id": "user_039",
+        "target_id": "res_214",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-21T08:32:42.573760"
+    },
+    {
+        "id": "hist_0064",
+        "user_id": "user_017",
+        "target_id": "xoi_xeo",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-26T16:32:42.573760"
+    },
+    {
+        "id": "hist_0065",
+        "user_id": "user_041",
+        "target_id": "res_227",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-21T08:32:42.573760",
+        "rating": 3,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0066",
+        "user_id": "user_040",
+        "target_id": "cha_tom",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-02T22:32:42.573760"
+    },
+    {
+        "id": "hist_0067",
+        "user_id": "user_026",
+        "target_id": "res_048",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-21T06:32:42.573760"
+    },
+    {
+        "id": "hist_0068",
+        "user_id": "user_047",
+        "target_id": "banh_xeo",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-24T19:32:42.573760"
+    },
+    {
+        "id": "hist_0069",
+        "user_id": "user_007",
+        "target_id": "banh_canh",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-23T19:32:42.573760"
+    },
+    {
+        "id": "hist_0070",
+        "user_id": "user_014",
+        "target_id": "thang_co",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-04T07:32:42.573760"
+    },
+    {
+        "id": "hist_0071",
+        "user_id": "user_043",
+        "target_id": "res_031",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-02T11:32:42.573760"
+    },
+    {
+        "id": "hist_0072",
+        "user_id": "user_019",
+        "target_id": "res_111",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-21T22:32:42.573760"
+    },
+    {
+        "id": "hist_0073",
+        "user_id": "user_002",
+        "target_id": "res_144",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-25T17:32:42.573760"
+    },
+    {
+        "id": "hist_0074",
+        "user_id": "user_043",
+        "target_id": "cha_ca_quang_ngai",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-21T12:32:42.573760"
+    },
+    {
+        "id": "hist_0075",
+        "user_id": "user_032",
+        "target_id": "res_060",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-02T02:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0076",
+        "user_id": "user_001",
+        "target_id": "res_120",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-07T20:32:42.573760"
+    },
+    {
+        "id": "hist_0077",
+        "user_id": "user_001",
+        "target_id": "xoi_ngu_sac",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-16T10:32:42.573760"
+    },
+    {
+        "id": "hist_0078",
+        "user_id": "user_030",
+        "target_id": "res_086",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-05T01:32:42.573760"
+    },
+    {
+        "id": "hist_0079",
+        "user_id": "user_049",
+        "target_id": "res_086",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-23T17:32:42.573760"
+    },
+    {
+        "id": "hist_0080",
+        "user_id": "user_048",
+        "target_id": "res_146",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-14T05:32:42.573760"
+    },
+    {
+        "id": "hist_0081",
+        "user_id": "user_024",
+        "target_id": "suon_nuong",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-09T03:32:42.573760"
+    },
+    {
+        "id": "hist_0082",
+        "user_id": "user_026",
+        "target_id": "res_223",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-13T18:32:42.573760",
+        "rating": 5,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0083",
+        "user_id": "user_022",
+        "target_id": "pho_chua_cao_bang",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-27T02:32:42.573760"
+    },
+    {
+        "id": "hist_0084",
+        "user_id": "user_030",
+        "target_id": "vit_quay_tuyen_quang",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-26T17:32:42.573760"
+    },
+    {
+        "id": "hist_0085",
+        "user_id": "user_012",
+        "target_id": "res_006",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-05T12:32:42.573760"
+    },
+    {
+        "id": "hist_0086",
+        "user_id": "user_024",
+        "target_id": "lon_quay",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-12T06:32:42.573760"
+    },
+    {
+        "id": "hist_0087",
+        "user_id": "user_024",
+        "target_id": "res_074",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-07T01:32:42.573760"
+    },
+    {
+        "id": "hist_0088",
+        "user_id": "user_013",
+        "target_id": "banh_canh_ghe",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-31T22:32:42.573760",
+        "rating": 4,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0089",
+        "user_id": "user_046",
+        "target_id": "chao_ca_loc_rau_dang",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-31T04:32:42.573760"
+    },
+    {
+        "id": "hist_0090",
+        "user_id": "user_034",
+        "target_id": "lai_thieu",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-09T17:32:42.573760"
+    },
+    {
+        "id": "hist_0091",
+        "user_id": "user_017",
+        "target_id": "com_hen",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-05T23:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0092",
+        "user_id": "user_044",
+        "target_id": "thit_lon_muong",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-21T08:32:42.573760",
+        "rating": 4,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0093",
+        "user_id": "user_003",
+        "target_id": "res_186",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-12T17:32:42.573760",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0094",
+        "user_id": "user_002",
+        "target_id": "res_224",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-31T14:32:42.573760"
+    },
+    {
+        "id": "hist_0095",
+        "user_id": "user_027",
+        "target_id": "muoi_tom_tay_ninh",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-29T05:32:42.573760"
+    },
+    {
+        "id": "hist_0096",
+        "user_id": "user_009",
+        "target_id": "banh_re",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-17T20:32:42.573760"
+    },
+    {
+        "id": "hist_0097",
+        "user_id": "user_033",
+        "target_id": "oc_nui",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-12T10:32:42.573760"
+    },
+    {
+        "id": "hist_0098",
+        "user_id": "user_015",
+        "target_id": "res_096",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-03T03:32:42.573760"
+    },
+    {
+        "id": "hist_0099",
+        "user_id": "user_022",
+        "target_id": "res_142",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-18T22:32:42.573760"
+    },
+    {
+        "id": "hist_0100",
+        "user_id": "user_032",
+        "target_id": "khau_sli",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-29T09:32:42.573760"
+    },
+    {
+        "id": "hist_0101",
+        "user_id": "user_043",
+        "target_id": "res_072",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-26T04:32:42.573760"
+    },
+    {
+        "id": "hist_0102",
+        "user_id": "user_050",
+        "target_id": "thit_lon_muong",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-11T05:32:42.573760"
+    },
+    {
+        "id": "hist_0103",
+        "user_id": "user_031",
+        "target_id": "res_114",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-01T22:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0104",
+        "user_id": "user_011",
+        "target_id": "res_155",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-02T15:32:42.573760",
+        "rating": 3,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0105",
+        "user_id": "user_035",
+        "target_id": "res_156",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-24T01:32:42.573760"
+    },
+    {
+        "id": "hist_0106",
+        "user_id": "user_048",
+        "target_id": "res_110",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-02T21:32:42.573760"
+    },
+    {
+        "id": "hist_0107",
+        "user_id": "user_020",
+        "target_id": "res_035",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-10T03:32:42.573760",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0108",
+        "user_id": "user_043",
+        "target_id": "banh_xeo_tom_nhay",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-12T03:32:42.573760",
+        "rating": 4,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0109",
+        "user_id": "user_020",
+        "target_id": "hu_tieu_my_tho",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-21T14:32:42.573760"
+    },
+    {
+        "id": "hist_0110",
+        "user_id": "user_034",
+        "target_id": "bun_mam",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-17T22:32:42.573760"
+    },
+    {
+        "id": "hist_0111",
+        "user_id": "user_027",
+        "target_id": "res_029",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-27T00:32:42.573760"
+    },
+    {
+        "id": "hist_0112",
+        "user_id": "user_023",
+        "target_id": "res_176",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-03T20:32:42.573760"
+    },
+    {
+        "id": "hist_0113",
+        "user_id": "user_005",
+        "target_id": "hu_tieu",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-05T12:32:42.573760"
+    },
+    {
+        "id": "hist_0114",
+        "user_id": "user_016",
+        "target_id": "banh_gio",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-03T12:32:42.573760"
+    },
+    {
+        "id": "hist_0115",
+        "user_id": "user_020",
+        "target_id": "res_194",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-26T21:32:42.573760"
+    },
+    {
+        "id": "hist_0116",
+        "user_id": "user_032",
+        "target_id": "res_205",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-03T11:32:42.573760"
+    },
+    {
+        "id": "hist_0117",
+        "user_id": "user_007",
+        "target_id": "res_131",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-01T16:32:42.573760"
+    },
+    {
+        "id": "hist_0118",
+        "user_id": "user_035",
+        "target_id": "banh_dau_xanh",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-03T00:32:42.573760",
+        "rating": 3,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0119",
+        "user_id": "user_022",
+        "target_id": "banh_tet",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-23T19:32:42.573760"
+    },
+    {
+        "id": "hist_0120",
+        "user_id": "user_036",
+        "target_id": "banh_u_tro",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-12T23:32:42.573760"
+    },
+    {
+        "id": "hist_0121",
+        "user_id": "user_026",
+        "target_id": "ca_kho",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-29T21:32:42.573760"
+    },
+    {
+        "id": "hist_0122",
+        "user_id": "user_017",
+        "target_id": "sam_bien",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-09T13:32:42.573760",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0123",
+        "user_id": "user_018",
+        "target_id": "oc_bien",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-28T13:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0124",
+        "user_id": "user_035",
+        "target_id": "chao_ech_singapore",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-24T02:32:42.573760"
+    },
+    {
+        "id": "hist_0125",
+        "user_id": "user_033",
+        "target_id": "bun_ca",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-26T12:32:42.573760"
+    },
+    {
+        "id": "hist_0126",
+        "user_id": "user_002",
+        "target_id": "ca_ngu_dai_duong",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-03T22:32:42.573760"
+    },
+    {
+        "id": "hist_0127",
+        "user_id": "user_004",
+        "target_id": "de_nui_ninh_binh",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-25T06:32:42.573760"
+    },
+    {
+        "id": "hist_0128",
+        "user_id": "user_032",
+        "target_id": "res_018",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-19T03:32:42.573760",
+        "rating": 4,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0129",
+        "user_id": "user_024",
+        "target_id": "pizza_hcm",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-19T14:32:42.573760",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0130",
+        "user_id": "user_038",
+        "target_id": "res_142",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-02T07:32:42.573760"
+    },
+    {
+        "id": "hist_0131",
+        "user_id": "user_025",
+        "target_id": "xoi_xeo",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-07T02:32:42.573760"
+    },
+    {
+        "id": "hist_0132",
+        "user_id": "user_008",
+        "target_id": "res_183",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-03T00:32:42.573760"
+    },
+    {
+        "id": "hist_0133",
+        "user_id": "user_044",
+        "target_id": "ca_thac_hoa",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-15T10:32:42.573760"
+    },
+    {
+        "id": "hist_0134",
+        "user_id": "user_026",
+        "target_id": "res_184",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-30T04:32:42.573760"
+    },
+    {
+        "id": "hist_0135",
+        "user_id": "user_016",
+        "target_id": "bun_ca_sua",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-06T15:32:42.573760"
+    },
+    {
+        "id": "hist_0136",
+        "user_id": "user_022",
+        "target_id": "res_119",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-15T12:32:42.573760",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0137",
+        "user_id": "user_006",
+        "target_id": "ca_ro_kho",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-03T14:32:42.573760"
+    },
+    {
+        "id": "hist_0138",
+        "user_id": "user_015",
+        "target_id": "res_169",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-22T08:32:42.573760",
+        "rating": 4,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0139",
+        "user_id": "user_021",
+        "target_id": "banh_loc",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-02T17:32:42.573760"
+    },
+    {
+        "id": "hist_0140",
+        "user_id": "user_015",
+        "target_id": "res_070",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-08T05:32:42.573760"
+    },
+    {
+        "id": "hist_0141",
+        "user_id": "user_018",
+        "target_id": "res_227",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-14T12:32:42.573760"
+    },
+    {
+        "id": "hist_0142",
+        "user_id": "user_031",
+        "target_id": "res_168",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-16T13:32:42.573760"
+    },
+    {
+        "id": "hist_0143",
+        "user_id": "user_048",
+        "target_id": "res_184",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-02T09:32:42.573760",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0144",
+        "user_id": "user_049",
+        "target_id": "ca_lang",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-27T17:32:42.573760"
+    },
+    {
+        "id": "hist_0145",
+        "user_id": "user_017",
+        "target_id": "banh_khoi",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-22T18:32:42.573760",
+        "rating": 5,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0146",
+        "user_id": "user_023",
+        "target_id": "res_038",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-25T11:32:42.573760"
+    },
+    {
+        "id": "hist_0147",
+        "user_id": "user_007",
+        "target_id": "bo_gac_bep",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-25T08:32:42.573760"
+    },
+    {
+        "id": "hist_0148",
+        "user_id": "user_001",
+        "target_id": "res_212",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-22T09:32:42.573760"
+    },
+    {
+        "id": "hist_0149",
+        "user_id": "user_005",
+        "target_id": "res_206",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-29T13:32:42.573760",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0150",
+        "user_id": "user_038",
+        "target_id": "banh_dau_xanh",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-09T18:32:42.573760"
+    },
+    {
+        "id": "hist_0151",
+        "user_id": "user_049",
+        "target_id": "res_220",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-04T09:32:42.573760",
+        "rating": 3,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0152",
+        "user_id": "user_005",
+        "target_id": "res_061",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-08T23:32:42.573760"
+    },
+    {
+        "id": "hist_0153",
+        "user_id": "user_003",
+        "target_id": "res_201",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-01T00:32:42.573760"
+    },
+    {
+        "id": "hist_0154",
+        "user_id": "user_004",
+        "target_id": "bun_rieu_cua",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-29T11:32:42.573760"
+    },
+    {
+        "id": "hist_0155",
+        "user_id": "user_006",
+        "target_id": "res_015",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-01T16:32:42.573760"
+    },
+    {
+        "id": "hist_0156",
+        "user_id": "user_008",
+        "target_id": "res_204",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-08T09:32:42.573760"
+    },
+    {
+        "id": "hist_0157",
+        "user_id": "user_048",
+        "target_id": "res_175",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-01T16:32:42.573760"
+    },
+    {
+        "id": "hist_0158",
+        "user_id": "user_035",
+        "target_id": "res_104",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-27T12:32:42.573760",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0159",
+        "user_id": "user_041",
+        "target_id": "banh_cong",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-21T07:32:42.573760"
+    },
+    {
+        "id": "hist_0160",
+        "user_id": "user_027",
+        "target_id": "res_215",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-06T19:32:42.573760",
+        "rating": 4,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0161",
+        "user_id": "user_001",
+        "target_id": "res_205",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-25T15:32:42.573760"
+    },
+    {
+        "id": "hist_0162",
+        "user_id": "user_029",
+        "target_id": "res_138",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-05T14:32:42.573760"
+    },
+    {
+        "id": "hist_0163",
+        "user_id": "user_033",
+        "target_id": "res_228",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-17T20:32:42.573760"
+    },
+    {
+        "id": "hist_0164",
+        "user_id": "user_025",
+        "target_id": "res_039",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-26T15:32:42.573760",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0165",
+        "user_id": "user_017",
+        "target_id": "banh_re",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-04T15:32:42.573760",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0166",
+        "user_id": "user_009",
+        "target_id": "banh_can",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-08T22:32:42.573760",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0167",
+        "user_id": "user_022",
+        "target_id": "don_quang_ngai",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-25T22:32:42.573760"
+    },
+    {
+        "id": "hist_0168",
+        "user_id": "user_039",
+        "target_id": "sam_bien",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-20T08:32:42.573760"
+    },
+    {
+        "id": "hist_0169",
+        "user_id": "user_008",
+        "target_id": "banh_trang_nuong",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-01T18:32:42.574918",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0170",
+        "user_id": "user_001",
+        "target_id": "res_014",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-26T19:32:42.574918"
+    },
+    {
+        "id": "hist_0171",
+        "user_id": "user_017",
+        "target_id": "res_097",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-08T15:32:42.574918"
+    },
+    {
+        "id": "hist_0172",
+        "user_id": "user_043",
+        "target_id": "res_040",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-12T19:32:42.574918",
+        "rating": 3,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0173",
+        "user_id": "user_041",
+        "target_id": "banh_da_keo",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-13T05:32:42.574918"
+    },
+    {
+        "id": "hist_0174",
+        "user_id": "user_023",
+        "target_id": "goi_la",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-20T07:32:42.574918"
+    },
+    {
+        "id": "hist_0175",
+        "user_id": "user_025",
+        "target_id": "goi_ca",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-27T08:32:42.574918"
+    },
+    {
+        "id": "hist_0176",
+        "user_id": "user_011",
+        "target_id": "pho_kho_gia_lai",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-29T03:32:42.574918"
+    },
+    {
+        "id": "hist_0177",
+        "user_id": "user_017",
+        "target_id": "res_091",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-12T23:32:42.574918"
+    },
+    {
+        "id": "hist_0178",
+        "user_id": "user_020",
+        "target_id": "tra_sua",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-13T22:32:42.574918"
+    },
+    {
+        "id": "hist_0179",
+        "user_id": "user_050",
+        "target_id": "xoi_xeo",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-30T03:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0180",
+        "user_id": "user_041",
+        "target_id": "res_131",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-29T22:32:42.574918"
+    },
+    {
+        "id": "hist_0181",
+        "user_id": "user_009",
+        "target_id": "res_147",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-03T02:32:42.574918",
+        "rating": 4,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0182",
+        "user_id": "user_046",
+        "target_id": "res_223",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-11T15:32:42.574918",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0183",
+        "user_id": "user_016",
+        "target_id": "res_193",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-01T07:32:42.574918"
+    },
+    {
+        "id": "hist_0184",
+        "user_id": "user_015",
+        "target_id": "res_093",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-18T11:32:42.574918"
+    },
+    {
+        "id": "hist_0185",
+        "user_id": "user_013",
+        "target_id": "bun_nuoc_leo",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-17T02:32:42.574918",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0186",
+        "user_id": "user_002",
+        "target_id": "res_149",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-14T10:32:42.574918"
+    },
+    {
+        "id": "hist_0187",
+        "user_id": "user_029",
+        "target_id": "ga_ran",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-26T18:32:42.574918"
+    },
+    {
+        "id": "hist_0188",
+        "user_id": "user_030",
+        "target_id": "chao_ca_loc_rau_dang",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-18T23:32:42.574918"
+    },
+    {
+        "id": "hist_0189",
+        "user_id": "user_005",
+        "target_id": "res_144",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-09T00:32:42.574918"
+    },
+    {
+        "id": "hist_0190",
+        "user_id": "user_034",
+        "target_id": "res_015",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-27T12:32:42.574918"
+    },
+    {
+        "id": "hist_0191",
+        "user_id": "user_009",
+        "target_id": "res_096",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-15T08:32:42.574918"
+    },
+    {
+        "id": "hist_0192",
+        "user_id": "user_003",
+        "target_id": "res_097",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-07T05:32:42.574918"
+    },
+    {
+        "id": "hist_0193",
+        "user_id": "user_011",
+        "target_id": "oc_nui",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-14T07:32:42.574918"
+    },
+    {
+        "id": "hist_0194",
+        "user_id": "user_041",
+        "target_id": "com_chay",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-16T07:32:42.574918",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0195",
+        "user_id": "user_003",
+        "target_id": "ca_bien_nuong",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-12T09:32:42.574918"
+    },
+    {
+        "id": "hist_0196",
+        "user_id": "user_035",
+        "target_id": "res_094",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-24T16:32:42.574918"
+    },
+    {
+        "id": "hist_0197",
+        "user_id": "user_003",
+        "target_id": "cha_ca_quang_ngai",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-21T07:32:42.574918"
+    },
+    {
+        "id": "hist_0198",
+        "user_id": "user_019",
+        "target_id": "banh_troi",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-29T16:32:42.574918"
+    },
+    {
+        "id": "hist_0199",
+        "user_id": "user_008",
+        "target_id": "cha_ca_quang_ngai",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-19T22:32:42.574918"
+    },
+    {
+        "id": "hist_0200",
+        "user_id": "user_015",
+        "target_id": "lon_quay",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-20T10:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0201",
+        "user_id": "user_030",
+        "target_id": "res_216",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-16T14:32:42.574918"
+    },
+    {
+        "id": "hist_0202",
+        "user_id": "user_030",
+        "target_id": "chao_can",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-03T01:32:42.574918",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0203",
+        "user_id": "user_016",
+        "target_id": "res_185",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-03T09:32:42.574918"
+    },
+    {
+        "id": "hist_0204",
+        "user_id": "user_021",
+        "target_id": "hat_dieu",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-25T18:32:42.574918",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0205",
+        "user_id": "user_030",
+        "target_id": "res_226",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-23T00:32:42.574918"
+    },
+    {
+        "id": "hist_0206",
+        "user_id": "user_029",
+        "target_id": "res_189",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-08T06:32:42.574918"
+    },
+    {
+        "id": "hist_0207",
+        "user_id": "user_003",
+        "target_id": "res_223",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-15T07:32:42.574918",
+        "rating": 4,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0208",
+        "user_id": "user_021",
+        "target_id": "banh_khot",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-01T01:32:42.574918"
+    },
+    {
+        "id": "hist_0209",
+        "user_id": "user_040",
+        "target_id": "res_124",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-30T04:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0210",
+        "user_id": "user_011",
+        "target_id": "banh_day",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-09T16:32:42.574918"
+    },
+    {
+        "id": "hist_0211",
+        "user_id": "user_018",
+        "target_id": "com_ga_xoi_mo",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-18T18:32:42.574918",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0212",
+        "user_id": "user_017",
+        "target_id": "res_009",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-31T15:32:42.574918"
+    },
+    {
+        "id": "hist_0213",
+        "user_id": "user_018",
+        "target_id": "ruou_can",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-05T07:32:42.574918"
+    },
+    {
+        "id": "hist_0214",
+        "user_id": "user_006",
+        "target_id": "res_091",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-14T10:32:42.574918"
+    },
+    {
+        "id": "hist_0215",
+        "user_id": "user_045",
+        "target_id": "res_213",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-04T01:32:42.574918",
+        "rating": 4,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0216",
+        "user_id": "user_045",
+        "target_id": "hai_san_nuong",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-02T15:32:42.574918"
+    },
+    {
+        "id": "hist_0217",
+        "user_id": "user_040",
+        "target_id": "banh_cay",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-15T10:32:42.574918",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0218",
+        "user_id": "user_046",
+        "target_id": "rau_cu_luoc_cham_kho_que",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-19T03:32:42.574918"
+    },
+    {
+        "id": "hist_0219",
+        "user_id": "user_045",
+        "target_id": "banh_day",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-16T08:32:42.574918",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0220",
+        "user_id": "user_037",
+        "target_id": "res_055",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-21T10:32:42.574918"
+    },
+    {
+        "id": "hist_0221",
+        "user_id": "user_003",
+        "target_id": "res_177",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-17T02:32:42.574918"
+    },
+    {
+        "id": "hist_0222",
+        "user_id": "user_007",
+        "target_id": "res_111",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-04T08:32:42.574918"
+    },
+    {
+        "id": "hist_0223",
+        "user_id": "user_011",
+        "target_id": "bun_bo",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-12T11:32:42.574918"
+    },
+    {
+        "id": "hist_0224",
+        "user_id": "user_016",
+        "target_id": "res_202",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-16T02:32:42.574918",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0225",
+        "user_id": "user_009",
+        "target_id": "sua_chua_tran_chau",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-09T03:32:42.574918",
+        "rating": 3,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0226",
+        "user_id": "user_017",
+        "target_id": "res_095",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-28T19:32:42.574918",
+        "rating": 3,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0227",
+        "user_id": "user_037",
+        "target_id": "banh_beo_binh_duong",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-17T05:32:42.574918"
+    },
+    {
+        "id": "hist_0228",
+        "user_id": "user_019",
+        "target_id": "chao_hai_san",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-29T05:32:42.574918"
+    },
+    {
+        "id": "hist_0229",
+        "user_id": "user_027",
+        "target_id": "banh_cong",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-13T12:32:42.574918"
+    },
+    {
+        "id": "hist_0230",
+        "user_id": "user_028",
+        "target_id": "cao_lau",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-29T17:32:42.574918"
+    },
+    {
+        "id": "hist_0231",
+        "user_id": "user_023",
+        "target_id": "goi_la",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-06T18:32:42.574918"
+    },
+    {
+        "id": "hist_0232",
+        "user_id": "user_016",
+        "target_id": "res_224",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-15T01:32:42.574918"
+    },
+    {
+        "id": "hist_0233",
+        "user_id": "user_044",
+        "target_id": "com_tam",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-10-28T13:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0234",
+        "user_id": "user_038",
+        "target_id": "res_178",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-12T10:32:42.574918"
+    },
+    {
+        "id": "hist_0235",
+        "user_id": "user_013",
+        "target_id": "vit_quay_tuyen_quang",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-21T03:32:42.574918"
+    },
+    {
+        "id": "hist_0236",
+        "user_id": "user_039",
+        "target_id": "chao_luon",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-12T16:32:42.574918"
+    },
+    {
+        "id": "hist_0237",
+        "user_id": "user_033",
+        "target_id": "res_162",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-05T01:32:42.574918"
+    },
+    {
+        "id": "hist_0238",
+        "user_id": "user_047",
+        "target_id": "hu_tieu_my_tho",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-09T16:32:42.574918",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0239",
+        "user_id": "user_004",
+        "target_id": "res_128",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-24T21:32:42.574918"
+    },
+    {
+        "id": "hist_0240",
+        "user_id": "user_046",
+        "target_id": "res_160",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-06T20:32:42.574918"
+    },
+    {
+        "id": "hist_0241",
+        "user_id": "user_008",
+        "target_id": "res_007",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-10T18:32:42.574918",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0242",
+        "user_id": "user_006",
+        "target_id": "res_008",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-04T00:32:42.574918"
+    },
+    {
+        "id": "hist_0243",
+        "user_id": "user_024",
+        "target_id": "res_036",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-13T06:32:42.574918"
+    },
+    {
+        "id": "hist_0244",
+        "user_id": "user_041",
+        "target_id": "bun_ca_sua",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-12T05:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0245",
+        "user_id": "user_017",
+        "target_id": "res_171",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-05T14:32:42.574918"
+    },
+    {
+        "id": "hist_0246",
+        "user_id": "user_037",
+        "target_id": "banh_cay",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-21T12:32:42.574918"
+    },
+    {
+        "id": "hist_0247",
+        "user_id": "user_033",
+        "target_id": "res_130",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-06T16:32:42.574918",
+        "rating": 5,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0248",
+        "user_id": "user_027",
+        "target_id": "bun_cha",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-06T08:32:42.574918"
+    },
+    {
+        "id": "hist_0249",
+        "user_id": "user_008",
+        "target_id": "banh_cuon_thanh_hoa",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-21T13:32:42.574918"
+    },
+    {
+        "id": "hist_0250",
+        "user_id": "user_021",
+        "target_id": "ruou_ngon",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-17T13:32:42.574918"
+    },
+    {
+        "id": "hist_0251",
+        "user_id": "user_001",
+        "target_id": "ca_ngu_dai_duong",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-21T04:32:42.574918"
+    },
+    {
+        "id": "hist_0252",
+        "user_id": "user_041",
+        "target_id": "res_121",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-21T09:32:42.574918",
+        "rating": 3,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0253",
+        "user_id": "user_021",
+        "target_id": "chao_hai_san",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-10-26T00:32:42.574918"
+    },
+    {
+        "id": "hist_0254",
+        "user_id": "user_023",
+        "target_id": "res_088",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-30T22:32:42.574918"
+    },
+    {
+        "id": "hist_0255",
+        "user_id": "user_001",
+        "target_id": "ca_sui_nuong",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-10T05:32:42.574918"
+    },
+    {
+        "id": "hist_0256",
+        "user_id": "user_023",
+        "target_id": "res_075",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-27T00:32:42.574918"
+    },
+    {
+        "id": "hist_0257",
+        "user_id": "user_047",
+        "target_id": "lon_cap_nach",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-13T01:32:42.574918"
+    },
+    {
+        "id": "hist_0258",
+        "user_id": "user_049",
+        "target_id": "nem_chua_thanh_hoa",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-23T07:32:42.574918"
+    },
+    {
+        "id": "hist_0259",
+        "user_id": "user_017",
+        "target_id": "res_088",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-21T01:32:42.574918",
+        "rating": 3,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0260",
+        "user_id": "user_037",
+        "target_id": "pizza_hcm",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-13T09:32:42.574918"
+    },
+    {
+        "id": "hist_0261",
+        "user_id": "user_010",
+        "target_id": "res_064",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-27T10:32:42.574918"
+    },
+    {
+        "id": "hist_0262",
+        "user_id": "user_036",
+        "target_id": "bun_ca",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-04T14:32:42.574918",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0263",
+        "user_id": "user_045",
+        "target_id": "res_220",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-10-28T02:32:42.574918"
+    },
+    {
+        "id": "hist_0264",
+        "user_id": "user_013",
+        "target_id": "res_082",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-07T06:32:42.574918"
+    },
+    {
+        "id": "hist_0265",
+        "user_id": "user_044",
+        "target_id": "banh_gai",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-03T21:32:42.574918",
+        "rating": 5,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0266",
+        "user_id": "user_014",
+        "target_id": "res_123",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-10-29T20:32:42.574918"
+    },
+    {
+        "id": "hist_0267",
+        "user_id": "user_034",
+        "target_id": "lau_mam",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-05T12:32:42.574918",
+        "rating": 4,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0268",
+        "user_id": "user_014",
+        "target_id": "thit_trau_gac_bep",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-09T20:32:42.574918",
+        "rating": 3,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0269",
+        "user_id": "user_030",
+        "target_id": "res_010",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-19T01:32:42.574918"
+    },
+    {
+        "id": "hist_0270",
+        "user_id": "user_036",
+        "target_id": "res_199",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-21T11:32:42.574918",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0271",
+        "user_id": "user_010",
+        "target_id": "res_103",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-07T22:32:42.574918",
+        "rating": 3,
+        "comment": "Bình thường"
+    },
+    {
+        "id": "hist_0272",
+        "user_id": "user_042",
+        "target_id": "res_178",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-13T20:32:42.574918"
+    },
+    {
+        "id": "hist_0273",
+        "user_id": "user_013",
+        "target_id": "hu_tieu_my_tho",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-02T19:32:42.574918"
+    },
+    {
+        "id": "hist_0274",
+        "user_id": "user_046",
+        "target_id": "hat_dieu",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-18T15:32:42.574918"
+    },
+    {
+        "id": "hist_0275",
+        "user_id": "user_032",
+        "target_id": "pho_kho_gia_lai",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-18T02:32:42.574918"
+    },
+    {
+        "id": "hist_0276",
+        "user_id": "user_021",
+        "target_id": "res_203",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-12T15:32:42.574918"
+    },
+    {
+        "id": "hist_0277",
+        "user_id": "user_013",
+        "target_id": "res_159",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-11-09T18:32:42.574918",
+        "rating": 3,
+        "comment": "Ngon tuyệt!"
+    },
+    {
+        "id": "hist_0278",
+        "user_id": "user_048",
+        "target_id": "bun_ca_sua",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-11T13:32:42.574918"
+    },
+    {
+        "id": "hist_0279",
+        "user_id": "user_047",
+        "target_id": "ca_suoi",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-11-09T17:32:42.574918"
+    },
+    {
+        "id": "hist_0280",
+        "user_id": "user_032",
+        "target_id": "chao_hai_san",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-11-19T12:32:42.574918"
+    },
+    {
+        "id": "hist_0281",
+        "user_id": "user_022",
+        "target_id": "res_037",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-31T02:32:42.574918"
+    },
+    {
+        "id": "hist_0282",
+        "user_id": "user_004",
+        "target_id": "res_079",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-19T12:32:42.574918"
+    },
+    {
+        "id": "hist_0283",
+        "user_id": "user_045",
+        "target_id": "res_047",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-03T05:32:42.574918"
+    },
+    {
+        "id": "hist_0284",
+        "user_id": "user_025",
+        "target_id": "res_039",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-27T02:32:42.574918"
+    },
+    {
+        "id": "hist_0285",
+        "user_id": "user_029",
+        "target_id": "res_180",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-20T21:32:42.574918"
+    },
+    {
+        "id": "hist_0286",
+        "user_id": "user_004",
+        "target_id": "hai_san_nuong",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-31T10:32:42.574918"
+    },
+    {
+        "id": "hist_0287",
+        "user_id": "user_048",
+        "target_id": "res_035",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-20T10:32:42.574918"
+    },
+    {
+        "id": "hist_0288",
+        "user_id": "user_006",
+        "target_id": "res_179",
+        "target_type": "restaurant",
+        "action": "rate",
+        "timestamp": "2025-10-26T03:32:42.574918",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0289",
+        "user_id": "user_026",
+        "target_id": "res_146",
+        "target_type": "restaurant",
+        "action": "view",
+        "timestamp": "2025-11-05T22:32:42.574918"
+    },
+    {
+        "id": "hist_0290",
+        "user_id": "user_048",
+        "target_id": "res_030",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-11-13T20:32:42.574918"
+    },
+    {
+        "id": "hist_0291",
+        "user_id": "user_049",
+        "target_id": "res_161",
+        "target_type": "restaurant",
+        "action": "like",
+        "timestamp": "2025-10-27T08:32:42.574918"
+    },
+    {
+        "id": "hist_0292",
+        "user_id": "user_032",
+        "target_id": "ca_bong_song_da",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-16T15:32:42.574918",
+        "rating": 3,
+        "comment": "Quán đẹp"
+    },
+    {
+        "id": "hist_0293",
+        "user_id": "user_007",
+        "target_id": "banh_bot_loc",
+        "target_type": "food",
+        "action": "view",
+        "timestamp": "2025-10-27T16:32:42.574918"
+    },
+    {
+        "id": "hist_0294",
+        "user_id": "user_005",
+        "target_id": "nhan_long",
+        "target_type": "food",
+        "action": "check_in",
+        "timestamp": "2025-10-24T04:32:42.574918"
+    },
+    {
+        "id": "hist_0295",
+        "user_id": "user_017",
+        "target_id": "res_218",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-02T05:32:42.574918"
+    },
+    {
+        "id": "hist_0296",
+        "user_id": "user_039",
+        "target_id": "banh_mi_que",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-22T07:32:42.574918",
+        "rating": 5,
+        "comment": "Không hợp khẩu vị lắm"
+    },
+    {
+        "id": "hist_0297",
+        "user_id": "user_011",
+        "target_id": "banh_te",
+        "target_type": "food",
+        "action": "rate",
+        "timestamp": "2025-11-17T12:32:42.574918",
+        "rating": 5,
+        "comment": "Sẽ quay lại"
+    },
+    {
+        "id": "hist_0298",
+        "user_id": "user_047",
+        "target_id": "res_087",
+        "target_type": "restaurant",
+        "action": "check_in",
+        "timestamp": "2025-11-03T11:32:42.574918"
+    },
+    {
+        "id": "hist_0299",
+        "user_id": "user_050",
+        "target_id": "bun_dau_mam_tom",
+        "target_type": "food",
+        "action": "like",
+        "timestamp": "2025-11-16T22:32:42.574918"
+    }
 ]

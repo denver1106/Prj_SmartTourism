@@ -34,3 +34,6 @@ data/**/labels/
 *.rar
 *.tar
 *.tar.gz
+venv/ 
+__pycache__/ 
+*.pyc 

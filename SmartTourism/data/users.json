@@ -1,16 +1,715 @@
 [
-  {
-    "id": "demo_user",
-    "displayName": "User demo",
-
-    "preferencesTags": [ "mon_nuoc", "fast_food" ],
-    "favoritesFoods": [ "pho_bo", "bun_cha" ],
-    "favoritesRestaurants": [ "pho_thin_lo_duc" ],
-
-    "dislikedTags": [ "cay" ],
-    "dislikedFoods": [ "ca_kho_to" ],
-
-    "maxDistanceKm": 3,
-    "priceRange": "medium"
-  }
+    {
+        "id": "user_000",
+        "username": "admin",
+        "password": "scrypt:32768:8:1$UmSCoQsOw3adBMG9$18ed0555a2c52b6c5e276a764993ec9315f4909f1fb61321b62da26fbc47e443965a4588c32d3d6f0bfcd99369cb175189dd614834ba9885550167eb10faf7ab",
+        "full_name": "Quản Trị Viên",
+        "email": "admin@smarttourism.com",
+        "avatar": "https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff",
+        "role": "admin",
+        "preferences": [
+            "Tất cả"
+        ],
+        "created_at": "2025-11-23T10:32:38.831821"
+    },
+    {
+        "id": "user_001",
+        "username": "thảohuỳnh7319",
+        "password": "scrypt:32768:8:1$Xm7IsMQw5L1Zxeyy$2d73055de5679a2834e62308e13bba345d714dac11f11ee00dd778f6d801c25daae10d65758e06dc3c2e96e8b247585f82cecfd1d6b8b1db55afd1effc927630",
+        "full_name": "Huỳnh Thảo",
+        "email": "thảohuỳnh7319@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Huỳnh+Thảo&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay"
+        ],
+        "created_at": "2025-10-21T10:32:38.903264"
+    },
+    {
+        "id": "user_002",
+        "username": "vinhđặng7874",
+        "password": "scrypt:32768:8:1$HJzX0GJpp0EVt9n4$95f8415267aecb9313e05cddcb1121b51b4ea1b98a2c32f7c5a13e17d5ebff6705eaa84d84d0306c48248f7561a8f19a2ab5761c52130f984d773e3ae07be171",
+        "full_name": "Đặng Vinh",
+        "email": "vinhđặng7874@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Vinh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam"
+        ],
+        "created_at": "2024-11-26T10:32:38.977595"
+    },
+    {
+        "id": "user_003",
+        "username": "uyênlê878",
+        "password": "scrypt:32768:8:1$mQZWJKkaaTI9kjRL$013f17e726f9cd87cce34ba07cf0c8ab3e6103837d76c6baf0ad8b4dfb10baa0d45c5d75d0f34d20fe666d903e2a33e62dc79c7db848595707a11b3bef350ce7",
+        "full_name": "Lê Uyên",
+        "email": "uyênlê878@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Uyên&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Huế"
+        ],
+        "created_at": "2025-05-08T10:32:39.051459"
+    },
+    {
+        "id": "user_004",
+        "username": "gianglê1867",
+        "password": "scrypt:32768:8:1$gr858zK8mtR91SCQ$99290a10e81ecfea09077a08df49845127c8f0c847ab9dd74a5bc448b1156fcc8aea857bd1ac68f7f9e0b57ac743cece7ba7f73a12ec0a0e283034932fbba2b8",
+        "full_name": "Lê Giang",
+        "email": "gianglê1867@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Huế",
+            "Món Nam",
+            "Không cay"
+        ],
+        "created_at": "2025-06-09T10:32:39.138359"
+    },
+    {
+        "id": "user_005",
+        "username": "khánhđỗ8466",
+        "password": "scrypt:32768:8:1$p1GVDlOKyhFE3uYH$fda8f6495c235ea0b21460270469ce9317e12baa20122fb4ab98e68e55f6c99bc435c14f9a92e9f609545f461841ec77b34b1e944982e269a423ecb84c6657ea",
+        "full_name": "Đỗ Khánh",
+        "email": "khánhđỗ8466@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đỗ+Khánh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món khô",
+            "Không cay",
+            "Món Nam"
+        ],
+        "created_at": "2025-04-13T10:32:39.215884"
+    },
+    {
+        "id": "user_006",
+        "username": "giangđặng5273",
+        "password": "scrypt:32768:8:1$2LQxPCapeJBgJcxU$0de74bd4b6e4c6742259f806bec0a5efe71dc5d49e3bf2848eb815ad4815f34a3d2252aaf09296fe9ec0ae2809fc0893ce5ae0ed144abc0cc0f75f8b9baa4855",
+        "full_name": "Đặng Giang",
+        "email": "giangđặng5273@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước",
+            "Món Bắc"
+        ],
+        "created_at": "2025-06-26T10:32:39.289150"
+    },
+    {
+        "id": "user_007",
+        "username": "phátphạm3325",
+        "password": "scrypt:32768:8:1$ioClZnQtHcNvJios$6c9014255745b00dd5b232efb5e0b9587cf948dfc13cc053288b9b6081909b4e64e28e826fc042f86d1b691239b19419c90d80e99e3071d9d907e3c3cc57c877",
+        "full_name": "Phạm Phát",
+        "email": "phátphạm3325@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Phát&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món khô",
+            "Cay",
+            "Món Nam"
+        ],
+        "created_at": "2025-08-28T10:32:39.364376"
+    },
+    {
+        "id": "user_008",
+        "username": "dươngvũ9196",
+        "password": "scrypt:32768:8:1$wYW4qY17uvQKx6Ai$f05e9e3ed9e69cc7118ff96250db393fb75024db2c84433a75dc819ff65eb3b416413a28f3e8ea735006a3a3ad977a43ef2216b20e0199264080783902d29c57",
+        "full_name": "Vũ Dương",
+        "email": "dươngvũ9196@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Vũ+Dương&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu",
+            "Cay"
+        ],
+        "created_at": "2025-07-08T10:32:39.437181"
+    },
+    {
+        "id": "user_009",
+        "username": "bìnhlê3660",
+        "password": "scrypt:32768:8:1$PI637gpsGoW33Fyp$30c61917182eaafbca69efb7d8b643ae3604f7f06a5fae86ac422058ba6cbaa85b43fac686509bb04d68b8390de6f0463a36d55b6b377572852a3e5dd026870c",
+        "full_name": "Lê Bình",
+        "email": "bìnhlê3660@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Bình&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu"
+        ],
+        "created_at": "2025-11-01T10:32:39.510623"
+    },
+    {
+        "id": "user_010",
+        "username": "dươngnguyễn9862",
+        "password": "scrypt:32768:8:1$wFn00kaNf4Zfa9IC$02268c5e602e74e660500281794bd5ffb8dda6926913c4f8f8e2ff98ca078214bc6c5b63296c29d870bdfaadae1077e0327bdfefa9315876aa656204ad14f3b4",
+        "full_name": "Nguyễn Dương",
+        "email": "dươngnguyễn9862@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Nguyễn+Dương&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay"
+        ],
+        "created_at": "2025-02-06T10:32:39.584468"
+    },
+    {
+        "id": "user_011",
+        "username": "giangphan6768",
+        "password": "scrypt:32768:8:1$0ZayS2J51ph46Vot$ccb6f792940f364d46585184f555ad46785d3e1817142138abb123c5a97943da16ef1cc7d27102a766d7fe7aff6e2d33e8ee785762c9aaf13117828f698b5436",
+        "full_name": "Phan Giang",
+        "email": "giangphan6768@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phan+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng",
+            "Không cay"
+        ],
+        "created_at": "2025-01-13T10:32:39.657022"
+    },
+    {
+        "id": "user_012",
+        "username": "giangđặng5975",
+        "password": "scrypt:32768:8:1$YVgFUnYQm7bPCb5B$0fa9d1548d997be8e4d1816eea2b14c1e43df43a84d8013ae25cab2bdbcb2e491dc03409f1b7014b53a176424911a0b177585467fa4648deb502197cfb75aa37",
+        "full_name": "Đặng Giang",
+        "email": "giangđặng5975@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay",
+            "Món Huế",
+            "Lẩu"
+        ],
+        "created_at": "2024-12-20T10:32:39.729270"
+    },
+    {
+        "id": "user_013",
+        "username": "bìnhnguyễn4241",
+        "password": "scrypt:32768:8:1$Ox6FnBbIs4FYEnKZ$88ab7d61c210098d0dea2438293a0e58a9afdfe3ed0457e3754c3a30379f859439fd3084ad11d49e15ba8d0f9c486ff68f42ef87d1385ff3a7ae9c3454c89f59",
+        "full_name": "Nguyễn Bình",
+        "email": "bìnhnguyễn4241@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Nguyễn+Bình&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng",
+            "Hải sản",
+            "Món Bắc"
+        ],
+        "created_at": "2025-11-14T10:32:39.801352"
+    },
+    {
+        "id": "user_014",
+        "username": "hưngphạm3118",
+        "password": "scrypt:32768:8:1$HmoVCq4qb8uhtJv2$bb009cb78477881761060a0d5798eee66a1c2ebc5e3858c313c0fc32fa20ea1d7e17c3917746abb441a63ce5801b24b30517118061d0733911a0ecf02594dbb1",
+        "full_name": "Phạm Hưng",
+        "email": "hưngphạm3118@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Hưng&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay",
+            "Món khô",
+            "Lẩu"
+        ],
+        "created_at": "2025-02-27T10:32:39.875528"
+    },
+    {
+        "id": "user_015",
+        "username": "giangphạm2915",
+        "password": "scrypt:32768:8:1$pQNbd6rKKxvxffex$5cbdfb7d6b9aab7d1a1b91a3a385ecf3872763ce48a4dae05d6375036d778af5836849e378a650305b1b622946761b109aed9d0d248a4c23e83310e294622761",
+        "full_name": "Phạm Giang",
+        "email": "giangphạm2915@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Hải sản",
+            "Món nước",
+            "Cay"
+        ],
+        "created_at": "2025-10-02T10:32:39.950035"
+    },
+    {
+        "id": "user_016",
+        "username": "dươngtrần729",
+        "password": "scrypt:32768:8:1$KI9jhpS33PWQXFEJ$9623e12f76ac7af1d592aecc399e1f03a1f8d88c5838a8d92d41c341dc3d1dd9757628bcc8a855fd6d26f7a0624f5933d3cf26e875120640e4378629742f7bb5",
+        "full_name": "Trần Dương",
+        "email": "dươngtrần729@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Trần+Dương&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Huế",
+            "Không cay"
+        ],
+        "created_at": "2025-04-20T10:32:40.025313"
+    },
+    {
+        "id": "user_017",
+        "username": "phátphan1177",
+        "password": "scrypt:32768:8:1$NzYmFfvmlnmPHntk$a6889c3c6efac76868e41f279a7d3a1a5420b52b8f2cdba38af5855a574b032f0b8f809f031f1aaf9906b9e035d165bd9914ebde292a21b990abe53dcfe016a6",
+        "full_name": "Phan Phát",
+        "email": "phátphan1177@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phan+Phát&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Bắc",
+            "Nướng"
+        ],
+        "created_at": "2025-07-04T10:32:40.097235"
+    },
+    {
+        "id": "user_018",
+        "username": "dươngbùi4441",
+        "password": "scrypt:32768:8:1$dICakX3LWoXXxNCK$12f6ed23f0909ab21f83e921bbdfd7eea6a50bf20ea2054d5bf76764955ba1ee20a3aaa5ed9e314b88076c9b1111070c91cd8fa943aa73375c51986316a330d0",
+        "full_name": "Bùi Dương",
+        "email": "dươngbùi4441@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Bùi+Dương&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam"
+        ],
+        "created_at": "2025-05-06T10:32:40.169229"
+    },
+    {
+        "id": "user_019",
+        "username": "thảobùi7023",
+        "password": "scrypt:32768:8:1$YTg4kex9iSnKHQL7$7bca9b4a556bedc6505d41d8178478f72e97f4c52b1d6a217eb32ebf3d3c79951a1f9729bd647c3df0beba65f4dcc16bb3e2a81ec2f7520d4dc558283d0cb42e",
+        "full_name": "Bùi Thảo",
+        "email": "thảobùi7023@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Bùi+Thảo&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Bắc",
+            "Món Huế",
+            "Hải sản"
+        ],
+        "created_at": "2025-01-22T10:32:40.240157"
+    },
+    {
+        "id": "user_020",
+        "username": "linhlê4300",
+        "password": "scrypt:32768:8:1$x9zslMMlKdtGZa0M$6a8e21991893b90a16e241e1fa9c79cb8074194b89417379fd67903cf74b0386165774a9e9937821a680ee305821af3b108febc2b8c78cbe70ed1091910310d5",
+        "full_name": "Lê Linh",
+        "email": "linhlê4300@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Linh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Không cay"
+        ],
+        "created_at": "2025-01-03T10:32:40.315262"
+    },
+    {
+        "id": "user_021",
+        "username": "bìnhlê2902",
+        "password": "scrypt:32768:8:1$SdJ3Ainiw0hgfNJH$51cf6a5d66344324561c1f53568c7a5ff4c5056dc0c200feff41e055912e2ab1bb4f817e1952f669e8a440077b3bbda6fe1ed36a069536ea3211c93bb8b6f052",
+        "full_name": "Lê Bình",
+        "email": "bìnhlê2902@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Bình&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu",
+            "Món Huế"
+        ],
+        "created_at": "2025-06-06T10:32:40.386631"
+    },
+    {
+        "id": "user_022",
+        "username": "giangvõ5715",
+        "password": "scrypt:32768:8:1$Z076RmOz0JzBOitG$58b66b3ad14a066a462c761986d168f82dcad9a3bde58e07026a097ecf39f8c1339bf948e9252017d8870de9dce7375b4f034c7b98952063ffd26edd2a554509",
+        "full_name": "Võ Giang",
+        "email": "giangvõ5715@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Võ+Giang&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay",
+            "Hải sản",
+            "Món nước"
+        ],
+        "created_at": "2025-02-17T10:32:40.460258"
+    },
+    {
+        "id": "user_023",
+        "username": "vinhhoàng2743",
+        "password": "scrypt:32768:8:1$fnbJqi2pe4q7f37D$1b75dba6aaf5e6cdc5ed2e71edc172153cf75b877068ec12824154d8af15b4235706516f390e732be2c6b89ba6033c8b6fabd5c44129d9b940708c010364d780",
+        "full_name": "Hoàng Vinh",
+        "email": "vinhhoàng2743@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Hoàng+Vinh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước",
+            "Hải sản",
+            "Cay"
+        ],
+        "created_at": "2025-02-27T10:32:40.550798"
+    },
+    {
+        "id": "user_024",
+        "username": "namđỗ9816",
+        "password": "scrypt:32768:8:1$vVNwbCkBLwQ8JKAO$0b3ffa53cccb7033edcfbb4956e6aa59315abfba592f0c88689e84f15fcbdf44ad95e60945f7b72cbaa2af32cbf2b93a14598381718f9eed37160df6b86bc693",
+        "full_name": "Đỗ Nam",
+        "email": "namđỗ9816@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đỗ+Nam&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay",
+            "Món nước"
+        ],
+        "created_at": "2025-01-20T10:32:40.627910"
+    },
+    {
+        "id": "user_025",
+        "username": "anhđặng1744",
+        "password": "scrypt:32768:8:1$vg2VcdniPSDPALdZ$70eef8bb0c45b4bd77023e61ad5f6cb3647ccc493bacc8238574880ae108db33e71082d1af1b44239f434639a4ff10fb1a916b5d85709e5af0601ae7740d2d8a",
+        "full_name": "Đặng Anh",
+        "email": "anhđặng1744@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Anh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam",
+            "Nướng",
+            "Món Huế"
+        ],
+        "created_at": "2025-05-15T10:32:40.698455"
+    },
+    {
+        "id": "user_026",
+        "username": "uyênhuỳnh8991",
+        "password": "scrypt:32768:8:1$O41WqtONjvbAUFeU$f8539b5bbe1e5dfd965d28d08de3dabd36cf165d1f9d2bad7742bfce57e035f161b788966a6f8a3c7b564aefa20d2039ed421d5bd7a85e2b19bad2bd0abe015c",
+        "full_name": "Huỳnh Uyên",
+        "email": "uyênhuỳnh8991@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Huỳnh+Uyên&background=random",
+        "role": "customer",
+        "preferences": [
+            "Không cay",
+            "Món khô",
+            "Nướng"
+        ],
+        "created_at": "2025-08-01T10:32:40.770870"
+    },
+    {
+        "id": "user_027",
+        "username": "emtrần3526",
+        "password": "scrypt:32768:8:1$LJxBO59VtgqSCaye$a4b1d1d42c229f45101602fb195ed4df2cf5b19fda2d739896a5c0b3a6f834d0bc89b1e362d7597c6c2de283041ee2fc4c322f13428745897de0e40f8d9e2335",
+        "full_name": "Trần Em",
+        "email": "emtrần3526@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Trần+Em&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Huế"
+        ],
+        "created_at": "2025-01-24T10:32:40.847155"
+    },
+    {
+        "id": "user_028",
+        "username": "quânhoàng8937",
+        "password": "scrypt:32768:8:1$kf0TjPFiJ16r1BJq$c108df1c646268d3f6ee22374d1d8f3529fa678ce0b70e7a6e86cd9b734477701e24b571c953c1da06403e8a6836d156a65ec7fd0fb41657c5f604885aff18e0",
+        "full_name": "Hoàng Quân",
+        "email": "quânhoàng8937@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Hoàng+Quân&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu",
+            "Hải sản",
+            "Không cay"
+        ],
+        "created_at": "2025-08-03T10:32:40.917814"
+    },
+    {
+        "id": "user_029",
+        "username": "quânphạm9439",
+        "password": "scrypt:32768:8:1$Egbx1vfjVWOhH2Pm$9e8b79b09d6bb784c49aa983aafc633aeb86d8b1774217a69c992ae3f41bf8a833992fafd711f240df637c7a6f2dc1127f71eb7262ed0bb6eb90639ac7fc7f29",
+        "full_name": "Phạm Quân",
+        "email": "quânphạm9439@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Quân&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam",
+            "Hải sản",
+            "Món khô"
+        ],
+        "created_at": "2025-06-01T10:32:40.988160"
+    },
+    {
+        "id": "user_030",
+        "username": "hảivũ3482",
+        "password": "scrypt:32768:8:1$3N9ErJyhGP6aKSOC$dd0a78b22c588b4d9abc329395844e63bdc5f9889de7e0cf774199f8617698bc6813aaad42b9407e2203d32fee6b530baeba607ea7cb1af642f53ab3576bc596",
+        "full_name": "Vũ Hải",
+        "email": "hảivũ3482@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Vũ+Hải&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam"
+        ],
+        "created_at": "2024-12-26T10:32:41.062560"
+    },
+    {
+        "id": "user_031",
+        "username": "châulê4198",
+        "password": "scrypt:32768:8:1$vpR6LIYEVWn2W1zV$9f51e3bc660c85780e17f54a8e5fcef778defd648ec59503b9e2f441d5287a1118be1136397a45e3cffac2a8e78378c1683bda1406c0bf6b06246de6481ee538",
+        "full_name": "Lê Châu",
+        "email": "châulê4198@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Châu&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng",
+            "Món Nam",
+            "Món Bắc"
+        ],
+        "created_at": "2025-04-27T10:32:41.133340"
+    },
+    {
+        "id": "user_032",
+        "username": "quânđặng8735",
+        "password": "scrypt:32768:8:1$43J9PThGyeLLsjpQ$492e569ce0e26f09bfd6b8a187e7211abe78ac296f6f77c5611e48bb2094252c8befc511a840fcca1b405ee316532cdf0bb023931dc2f1e71bbcad97be84b395",
+        "full_name": "Đặng Quân",
+        "email": "quânđặng8735@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Quân&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam",
+            "Cay"
+        ],
+        "created_at": "2024-12-04T10:32:41.202997"
+    },
+    {
+        "id": "user_033",
+        "username": "hảiđặng7519",
+        "password": "scrypt:32768:8:1$G2W8PB6RyuwW2YDk$086116e82b307d7a2b48439d93387a60bd619346ad5731d6a6459d2188d6e16869fea75326209af8083891ecde0c99adcdd4622ce06edc6670806f89462a48ae",
+        "full_name": "Đặng Hải",
+        "email": "hảiđặng7519@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Hải&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước",
+            "Món Bắc"
+        ],
+        "created_at": "2025-09-30T10:32:41.273589"
+    },
+    {
+        "id": "user_034",
+        "username": "nambùi5799",
+        "password": "scrypt:32768:8:1$jaPxkAeFnyzVOEpW$82aadcc96dfc805d2cbed809320732bd6d4f2490511c73988b3fff5ed057b5533af5702e76bebfa5e7013f13b54e08ae77e61123cfa5341427546a6c56419751",
+        "full_name": "Bùi Nam",
+        "email": "nambùi5799@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Bùi+Nam&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước"
+        ],
+        "created_at": "2025-10-06T10:32:41.347754"
+    },
+    {
+        "id": "user_035",
+        "username": "namđỗ7458",
+        "password": "scrypt:32768:8:1$9t4IUlCsgzNMDgFA$4464124f30343e11bbf2ff709d99d6512b7c6d9714c3c0f85115888bb8b640f112370fcc5a0a91715a79c7c287962242fb17fcf30eb308b0eafeb14849b781fd",
+        "full_name": "Đỗ Nam",
+        "email": "namđỗ7458@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đỗ+Nam&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món khô",
+            "Món Bắc",
+            "Cay"
+        ],
+        "created_at": "2024-12-20T10:32:41.419587"
+    },
+    {
+        "id": "user_036",
+        "username": "minhbùi8043",
+        "password": "scrypt:32768:8:1$OM6kQpjarVhQtN3l$2edcf7bf8459b7a378ea2224217839b9a2262fd865f70f42c3927e1224736bc1c58bf33823611a8dd51714e3b35ff348dd821d958fe277ab3dec2a00ef3da13b",
+        "full_name": "Bùi Minh",
+        "email": "minhbùi8043@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Bùi+Minh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Cay"
+        ],
+        "created_at": "2025-03-09T10:32:41.492042"
+    },
+    {
+        "id": "user_037",
+        "username": "namđặng737",
+        "password": "scrypt:32768:8:1$Bd4lqusr2zOGrAgv$265cafefe49df66bbc7b13ab5d6dc4b054f62fc425d6142b4818926c5bb9759166e075ff2773689868534acfecee43ed79d916fe0f26e3fe9a28428b6e1a4701",
+        "full_name": "Đặng Nam",
+        "email": "namđặng737@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đặng+Nam&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Bắc",
+            "Món Nam"
+        ],
+        "created_at": "2025-01-01T10:32:41.561855"
+    },
+    {
+        "id": "user_038",
+        "username": "thảolê4582",
+        "password": "scrypt:32768:8:1$2yqYYwGHKiefpzPS$8238b9e2409748e2adff96698486ab972d38834d6a06fc9ae3bdcc0b98352a668a2e99abfa18d271e34d9d85311d46a0e5e70d8d4209a7a6c69aa8d1b0b1eb8c",
+        "full_name": "Lê Thảo",
+        "email": "thảolê4582@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Lê+Thảo&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món khô"
+        ],
+        "created_at": "2025-04-27T10:32:41.632495"
+    },
+    {
+        "id": "user_039",
+        "username": "thảohoàng4076",
+        "password": "scrypt:32768:8:1$fnVgVvE8U4XZghYg$5349207e028281592038590e627e761bbf0cd75e4649c2d4e582d819fe56d73965571725308e64003b0df701d9e33243c1349182e7055eac24fba2ff2c3a2e60",
+        "full_name": "Hoàng Thảo",
+        "email": "thảohoàng4076@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Hoàng+Thảo&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước"
+        ],
+        "created_at": "2025-04-30T10:32:41.703686"
+    },
+    {
+        "id": "user_040",
+        "username": "uyênhoàng3017",
+        "password": "scrypt:32768:8:1$nXyGRalQMkaGW8Au$5ef533b02e13725cc537d3bb54e2c773a24bb0e66d45660a93ccb484ead41a96cebf077d6b8dfe1578a0dac4a26162cc33f48aa2319dc378185f0f5d6d0368f4",
+        "full_name": "Hoàng Uyên",
+        "email": "uyênhoàng3017@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Hoàng+Uyên&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu",
+            "Nướng",
+            "Món nước"
+        ],
+        "created_at": "2025-07-22T10:32:41.773264"
+    },
+    {
+        "id": "user_041",
+        "username": "emhuỳnh2230",
+        "password": "scrypt:32768:8:1$YhwLa14lIFdshGCT$abf3015a17ea4e7b958781579891e0aeb7d5e781d49f8dd2dd7b925c72bcdf3fa26aa88013d92cd65acf47841f085ede4aad230fb50066d691fe9e80d1ec5e92",
+        "full_name": "Huỳnh Em",
+        "email": "emhuỳnh2230@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Huỳnh+Em&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam"
+        ],
+        "created_at": "2025-04-21T10:32:41.845339"
+    },
+    {
+        "id": "user_042",
+        "username": "minhhuỳnh4633",
+        "password": "scrypt:32768:8:1$ic7H5LmWPMBRkcJl$c16ca8e9f6336a4f8990815ef3c18a1a97b33cd2d0e1cc693e7828f902a469f2bb6af1a31ac69fd413cf0204a32114d25074be8547e2f43d978b0aaa721993b9",
+        "full_name": "Huỳnh Minh",
+        "email": "minhhuỳnh4633@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Huỳnh+Minh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng"
+        ],
+        "created_at": "2025-06-04T10:32:41.920485"
+    },
+    {
+        "id": "user_043",
+        "username": "yếnphạm8701",
+        "password": "scrypt:32768:8:1$upqZsffcBWJjRfYz$95d5b35946608e3959bd168a64583d094564b54d6e36828d3cde71852f86e07cabdbc7efbd01295724f6488e008765ab5b7aab66dfe9029a722ddb92f58a77d5",
+        "full_name": "Phạm Yến",
+        "email": "yếnphạm8701@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Yến&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng",
+            "Món Nam",
+            "Lẩu"
+        ],
+        "created_at": "2025-03-06T10:32:42.004242"
+    },
+    {
+        "id": "user_044",
+        "username": "uyênđỗ7894",
+        "password": "scrypt:32768:8:1$qMrJDN4zI3wWsS2l$b7bf009c07fee40f05962cb62a74a6151c82d9d03a31c571c7be5dbaf2ea3e0f010ca0c2f4e9696913ea139ad5f264bbd9b95f4f28bc55f252c4f792a4fa8d89",
+        "full_name": "Đỗ Uyên",
+        "email": "uyênđỗ7894@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đỗ+Uyên&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước"
+        ],
+        "created_at": "2025-03-18T10:32:42.115809"
+    },
+    {
+        "id": "user_045",
+        "username": "hảivũ2947",
+        "password": "scrypt:32768:8:1$3prsfY6qX0xgTEXX$0f8c031532d50b44bfaa0e103889f2a7ff4fa0b48609ba5d2d2efe769f7f98a414368e8cd7b390ae1e6ca666f30b12805447ffaacd8fc9bdc13829794d3c9a90",
+        "full_name": "Vũ Hải",
+        "email": "hảivũ2947@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Vũ+Hải&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món Nam"
+        ],
+        "created_at": "2025-03-07T10:32:42.196203"
+    },
+    {
+        "id": "user_046",
+        "username": "quânphạm1961",
+        "password": "scrypt:32768:8:1$qCISkKOC0yJxzcCT$9a6c36979c46d75134d5dabc372d54772c719b7afc2384081b71d03b8605d18413ebf21486985e4cf5f9f61e148486e60f1429b28e67e2aad1d1186559cf4f4d",
+        "full_name": "Phạm Quân",
+        "email": "quânphạm1961@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Phạm+Quân&background=random",
+        "role": "customer",
+        "preferences": [
+            "Lẩu",
+            "Món Bắc",
+            "Hải sản"
+        ],
+        "created_at": "2025-02-06T10:32:42.274658"
+    },
+    {
+        "id": "user_047",
+        "username": "emnguyễn728",
+        "password": "scrypt:32768:8:1$qbvPPRn02LzdKWs8$4f8903a03a0b9ce25763fd482e8dbc5418855a8b613e567f1459578dff121629f1549dcc7809d6cd7e976a14c635e506b9c758129299d9ac63ff817a737497b5",
+        "full_name": "Nguyễn Em",
+        "email": "emnguyễn728@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Nguyễn+Em&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước",
+            "Không cay",
+            "Hải sản"
+        ],
+        "created_at": "2025-04-28T10:32:42.350362"
+    },
+    {
+        "id": "user_048",
+        "username": "vinhbùi3415",
+        "password": "scrypt:32768:8:1$5c7FCjsGlEZD0s5R$e1a5a4a7d209565f606dd817bea6aeab22a987d18d27c83dd4af78b74fccc0f00d7d06132756776d4aec92e11a323781933cdc017fce0fa69449d0b1751902ce",
+        "full_name": "Bùi Vinh",
+        "email": "vinhbùi3415@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Bùi+Vinh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Nướng"
+        ],
+        "created_at": "2024-12-08T10:32:42.424142"
+    },
+    {
+        "id": "user_049",
+        "username": "namđỗ9748",
+        "password": "scrypt:32768:8:1$Ji5eWrIsKratzWyN$4cc968f14a82615d57f4092eefa9e50d290af52add6bdb452095576e70338405745e722426ac21b43627db8413bab1eb30f2d2100eea227a5230dac34b216586",
+        "full_name": "Đỗ Nam",
+        "email": "namđỗ9748@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Đỗ+Nam&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món khô"
+        ],
+        "created_at": "2025-03-08T10:32:42.495930"
+    },
+    {
+        "id": "user_050",
+        "username": "anhhuỳnh4141",
+        "password": "scrypt:32768:8:1$SSbdF8y8pZe0vCmZ$c6cd9ab600024e804c9810e9fe74726c86328383b6372682049d80c8a38297e202a957b283cdbe2dafea97b5239756a080e54aa3893138a4d92c1ccf735abdfc",
+        "full_name": "Huỳnh Anh",
+        "email": "anhhuỳnh4141@gmail.com",
+        "avatar": "https://ui-avatars.com/api/?name=Huỳnh+Anh&background=random",
+        "role": "customer",
+        "preferences": [
+            "Món nước"
+        ],
+        "created_at": "2024-11-27T10:32:42.572763"
+    }
 ]
