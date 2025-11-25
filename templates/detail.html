@@ -44,6 +44,29 @@
                         Phần này chỉ là placeholder UI – nội dung thật sẽ do nhóm nhập hoặc lấy từ backend.
                     </p>
                 </div>
+                
+                <div id="nutrition-analysis-section" style="margin-top: 20px;">
+                    <div class="detail-section-title">✨ Phân tích Dinh dưỡng Món ăn</div>
+                    
+                    <p class="detail-text" style="margin-bottom: 8px;">
+                        Nhập các thành phần của món ăn bạn quan tâm (ví dụ: 100g white rice, 200g salmon) và bấm Phân tích.
+                    </p>
+                    
+                    <textarea id="ingredients_input" rows="3" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc;">
+                        1 cup cooked white rice, 150g grilled chicken breast
+                    </textarea>
+                    
+                    <button id="analyze_button" class="primary-btn" style="margin-top: 8px;">
+                        Phân tích Dinh dưỡng ngay
+                    </button>
+                    
+                    <div id="nutrition_results" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                        <div class="detail-section-title" style="margin-bottom: 5px;">Kết quả:</div>
+                        <pre id="results_display" style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; overflow-x: auto;">
+                            Bấm nút "Phân tích Dinh dưỡng ngay" để xem chi tiết.
+                        </pre>
+                    </div>
+                </div>
 
                 <div style="margin-top: 16px;">
                     <a href="{{ url_for('results_page') }}" class="secondary-btn">← Quay lại kết quả</a>
@@ -89,3 +112,63 @@
     </div>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const analyzeButton = document.getElementById('analyze_button');
+        const ingredientsInput = document.getElementById('ingredients_input');
+        const resultsDisplay = document.getElementById('results_display');
+
+        // Kiểm tra xem các phần tử có tồn tại không
+        if (!analyzeButton || !ingredientsInput || !resultsDisplay) {
+            console.error("Lỗi: Không tìm thấy các phần tử cần thiết (button, input, display).");
+            return; // Dừng lại nếu không tìm thấy
+        }
+
+        analyzeButton.addEventListener('click', async () => {
+            const ingredientsText = ingredientsInput.value.trim();
+            
+            if (!ingredientsText) {
+                resultsDisplay.textContent = 'Vui lòng nhập thành phần món ăn trước khi phân tích.';
+                return;
+            }
+
+            resultsDisplay.textContent = 'Đang gửi yêu cầu phân tích dinh dưỡng...';
+            
+            try {
+                const response = await fetch('/api/analyze_nutrition', {
+                    method: 'POST', // Đảm bảo phương thức là POST
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        // Tên key 'ingredients_text' phải KHỚP với tên key backend Flask mong đợi
+                        ingredients_text: ingredientsText 
+                    })
+                });
+
+                // Nếu response thành công
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // --- HIỂN THỊ KẾT QUẢ ---
+                    // Tạm thời hiển thị JSON thô để xác nhận API hoạt động
+                    resultsDisplay.textContent = JSON.stringify(data, null, 2);
+                    
+                    // TODO: Sau này, thay dòng trên bằng hàm formatDataToHTML(data) để hiển thị đẹp hơn
+
+                } else {
+                    // Xử lý lỗi từ server (400, 500,...)
+                    const errorData = await response.json();
+                    const errorMessage = errorData.error || `Lỗi không xác định từ máy chủ (${response.status})`;
+                    resultsDisplay.textContent = `🚫 Phân tích thất bại: ${errorMessage}`;
+                    console.error('Lỗi API Dinh dưỡng:', errorData);
+                }
+
+            } catch (error) {
+                // Xử lý lỗi mạng/kết nối
+                resultsDisplay.textContent = '❌ Lỗi kết nối mạng. Vui lòng kiểm tra server Flask đang chạy.';
+                console.error('Lỗi Fetch/Mạng:', error);
+            }
+        });
+    });
+</script>

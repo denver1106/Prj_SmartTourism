@@ -1,5 +1,5 @@
-﻿from flask import Flask, render_template, request, redirect, url_for
-from core import data_manager, search_handler, service
+﻿from flask import Flask, render_template, request, redirect, url_for, jsonify
+from core import data_manager, search_handler, service, nutrition_service
 import os
 
 app = Flask(__name__)
@@ -12,6 +12,53 @@ tourism_service = service.SmartTourismService(weather_api_key=WEATHER_API_KEY)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/detail/<restaurant_id>') # <-- Thêm route này
+def detail_page(restaurant_id):
+    """
+    Hiển thị trang chi tiết của một quán ăn.
+    """
+    # Lấy thông tin quán ăn dựa trên ID
+    restaurant = db_manager.get_restaurant_by_id(restaurant_id) 
+    
+    if not restaurant:
+        return "Không tìm thấy quán ăn này.", 404
+        
+    # Giả định bạn có thể lấy thêm các quán tương tự (optional)
+    similar_restaurants = db_manager.get_similar_restaurants(restaurant_id) 
+
+    # Render template detail.html và truyền dữ liệu quán ăn vào
+    return render_template(
+        'detail.html', 
+        restaurant=restaurant, 
+        similar_restaurants=similar_restaurants
+    )
+
+# --- ROUTE MỚI: API PHÂN TÍCH DINH DƯỠNG ---
+@app.route('/api/analyze_nutrition', methods=['POST'])
+def analyze_nutrition_endpoint():
+    """
+    Endpoint nhận dữ liệu thành phần và trả về kết quả phân tích dinh dưỡng 
+    bằng cách gọi hàm từ core.nutrition_service.
+    """
+    data = request.get_json()
+    ingredients = data.get('ingredients_text') # Lấy chuỗi thành phần từ request JSON
+
+    if not ingredients:
+        return jsonify({"error": "Vui lòng cung cấp thành phần để phân tích."}), 400
+
+    # Gọi hàm service đã được định nghĩa trong core/nutrition_service.py
+    # Sử dụng nutrition_service.get_nutrition_analysis (giả định import được)
+    nutrition_data = nutrition_service.get_nutrition_analysis(ingredients)
+
+    # Kiểm tra nếu service trả về lỗi (có key "error" trong dict)
+    if "error" in nutrition_data:
+        # Sử dụng mã lỗi 500 nếu là lỗi nội bộ/API, hoặc mã lỗi cụ thể nếu có
+        status_code = nutrition_data.get('status_code', 500)
+        return jsonify(nutrition_data), status_code
+
+    return jsonify(nutrition_data) # Trả về dữ liệu dinh dưỡng thành công
+# ---------------------------------------------
 
 @app.route('/results')
 def results_page():

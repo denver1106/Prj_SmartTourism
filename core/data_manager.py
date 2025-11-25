@@ -41,6 +41,20 @@ class DataManager:
             "foods": None,
             "places": None
         }
+        # --- KHẮC PHỤC LỖI Attribute ERROR: Khởi tạo dữ liệu quán ăn ---
+        # Gọi hàm tải dữ liệu để đảm bảo self._cache["restaurants"] có giá trị 
+        # (và nó được dùng trong get_restaurant_by_id)
+        # Tắt mock data khi tải ban đầu để tránh tạo quá nhiều mock mỗi lần khởi động
+        self.restaurants_data = self.get_all_restaurants(
+            use_cache=False, 
+            enable_mock=False
+        )
+        # Lưu ý: Vì get_all_restaurants lưu vào self._cache["restaurants"], 
+        # nên nếu bạn muốn dùng self.restaurants_data, phải gán lại như trên.
+        # Hoặc bạn có thể dùng thẳng self._cache["restaurants"] trong get_restaurant_by_id.
+        # Tôi sẽ gán vào cả hai để đảm bảo các hàm sau hoạt động:
+        # self.restaurants_data = self._cache["restaurants"] 
+        # (Dòng trên không cần thiết vì get_all_restaurants đã làm)
 
     # ---------------- 1. HÀM LẤY ĐẶC SẢN TỪ FIREBASE ----------------
     def get_place_specialties(self, place_name: str) -> List[str]:
@@ -282,3 +296,17 @@ class DataManager:
             ref = self.db.collection("users").document(user_id)
             ref.set({"history": firestore.ArrayUnion([str(new_food).lower()])}, merge=True)
         except: pass
+    # --- THÊM PHƯƠNG THỨC MỚI NÀY ---
+    def get_restaurant_by_id(self, restaurant_id):
+        """
+        Tìm và trả về dữ liệu quán ăn dựa trên ID.
+        """
+        for r in self.restaurants_data:
+            if r.get("id") == restaurant_id:
+                return r  # Trả về đối tượng quán ăn khi tìm thấy
+        return None  # Trả về None nếu không tìm thấy quán ăn nào
+    
+    def get_similar_restaurants(self, restaurant_id):
+        # Hàm giả định để tránh lỗi ở app.py, bạn có thể implement logic thật sau
+        return [r for r in self.restaurants_data if r['id'] != restaurant_id][:2]
+    # ---------------------------------
