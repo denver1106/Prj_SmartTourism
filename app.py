@@ -3,146 +3,54 @@ from core import data_manager, search_handler, service
 import os
 
 app = Flask(__name__)
+# Secret key để dùng session (lưu tên user, v.v.)
+app.secret_key = os.environ.get("SMARTFOOD_SECRET_KEY", "dev-secret-smartfood")
 
-# SECRET KEY để dùng session (bắt buộc phải có)
-app.secret_key = "smartfood-secret-key-demo"
-
+# API key thời tiết (demo)
 WEATHER_API_KEY = "DUMMY_API_KEY_FOR_NOW"
 
-# Khởi tạo các "Data Res" layer
+# Khởi tạo các lớp xử lý dữ liệu / tìm kiếm / auto filter
 db_manager = data_manager.DataManager()
 search_engine = search_handler.SearchHandler()
 tourism_service = service.SmartTourismService(weather_api_key=WEATHER_API_KEY)
 
 
-# ================== HÀM CHUẨN HÓA DỮ LIỆU -> FRONT ==================
-
-def normalize_restaurants(raw_list):
-    """
-    Chuẩn hoá dữ liệu quán ăn từ DataManager / SmartTourismService
-    về cùng một format mà results.html có thể hiển thị:
-
-    {
-        "id": ...,
-        "name": ...,
-        "address": ...,
-        "place": ...,
-        "price_level": ...,
-        "distance_km": ...,
-        "tags": [...],
-        "dishes": [...],
-        "lat": ...,
-        "lng": ...,
-        "description": ...
-    }
-    """
-    normalized = []
-
-    for r in raw_list:
-        if not isinstance(r, dict):
-            continue
-
-        name = r.get("name", "Tên chưa cập nhật")
-        address = r.get("address", "Địa chỉ đang cập nhật")
-        place = r.get("place") or r.get("area") or address
-        price_level = r.get("price_level", "?")
-
-        try:
-            distance_km = float(r.get("distance_km", 0.0))
-        except (TypeError, ValueError):
-            distance_km = 0.0
-
-        tags = r.get("tags") or []
-        dishes = r.get("foods") or r.get("menu") or []
-
-        lat = r.get("lat")
-        lng = r.get("lng")
-        description = r.get("description", "Chưa có mô tả.")
-
-        normalized.append({
-            "id": r.get("id"),
-            "name": name,
-            "address": address,
-            "place": place,
-            "price_level": price_level,
-            "distance_km": distance_km,
-            "tags": tags,
-            "dishes": dishes,
-            "lat": lat,
-            "lng": lng,
-            "description": description
-        })
-
-    return normalized
-
-
-# ================== AUTH / ACCOUNT (ĐĂNG NHẬP / ĐĂNG KÝ) ==================
-
-@app.route("/account", methods=["GET", "POST"])
-def account():
-    """
-    Trang đăng ký / đăng nhập (account.html).
-    - GET  : hiển thị form
-    - POST : nhận dữ liệu form, lưu vào session và chuyển sang trang chủ
-    """
-    if request.method == "POST":
-        user_name = request.form.get("user_name") or "Bạn"
-        email = request.form.get("email") or ""
-        # Ở đây chưa kiểm tra mật khẩu, vì phần này thuộc backend / bảo mật
-
-        # Lưu thông tin cơ bản vào session
-        session["user_name"] = user_name
-        session["email"] = email
-
-        # Đăng nhập xong -> vào trang chủ
-        return redirect(url_for("index"))
-
-    # Nếu đã đăng nhập rồi mà vẫn gõ /account -> cho về trang chủ
-    if "user_name" in session:
-        return redirect(url_for("index"))
-
-    # Lần đầu hoặc chưa đăng nhập -> hiển thị form account
-    return render_template("account.html")
-
-
-# ================== ROUTES FRONTEND CHÍNH ==================
-
+# ========================= TRANG CHỦ =========================
 @app.route("/")
 def index():
     """
-    Trang chủ SmartFood (index.html).
-    Bắt buộc phải đăng nhập trước:
-    - Nếu chưa có session["user_name"] -> chuyển về /account
-    - Nếu có rồi -> render trang chủ
+    Trang chủ: hiển thị UI tìm kiếm + bộ lọc.
+    Nếu đã có user_name trong session thì show lên, không thì để trống.
     """
-    if "user_name" not in session:
-        return redirect(url_for("account"))
-
-    return render_template("index.html", user_name=session.get("user_name"))
+    user_name = session.get("user_name")  # có thể được set từ trang account/login
+    return render_template("index.html", user_name=user_name)
 
 
+# ========================= KẾT QUẢ TÌM KIẾM THỦ CÔNG =========================
 @app.route("/results")
 def results_page():
     """
-    Route xử lý tìm kiếm và lọc khoảng cách.
-    Connect Data Res - Front:
-    - Gọi DataManager + SearchHandler để lấy dữ liệu (Data Res)
-    - Chuẩn hoá => normalize_restaurants
-    - Truyền vào results.html để hiển thị (Front)
+    Route xử lý tìm kiếm & lọc thủ công.
+    - Nhận query (tên món / địa điểm)
+    - Nhận các filter: max_distance, price_level, tag, cravings_text
+    - Lấy dữ liệu từ DataManager + SearchHandler
+    - Tính khoảng cách, lọc theo khoảng cách, trả về results.html
     """
-    if "user_name" not in session:
-        return redirect(url_for("account"))
-
     query = request.args.get("query", "").strip()
 
-    # Lấy tham số lọc khoảng cách (nếu có)
+    # Lọc khoảng cách (km)
     try:
         max_distance_str = request.args.get("max_distance")
         max_distance = float(max_distance_str) if max_distance_str else None
     except ValueError:
         max_distance = None
 
-    # Lấy toạ độ user (nếu front có truyền)
+    # Các filter khác (chưa dùng nhiều nhưng vẫn đọc để sau này có backend xử lý)
+    price_level = request.args.get("price_level") or ""
+    tag = request.args.get("tag") or ""
+    cravings_text = request.args.get("cravings_text") or ""
+
+    # Toạ độ user (nếu có từ index.html gửi lên)
     try:
         user_lat = float(request.args.get("lat"))
         user_lon = float(request.args.get("lon"))
@@ -150,97 +58,119 @@ def results_page():
         user_lat = None
         user_lon = None
 
-    # 1. Lấy dữ liệu (bao gồm Mock Data gần user_lat/lon nếu DataManager hỗ trợ)
+    # 1. Lấy dữ liệu quán ăn (bao gồm Mock Data gần user_lat/lon)
     all_restaurants = db_manager.get_all_restaurants(
         use_cache=False,
         user_lat=user_lat,
         user_lon=user_lon
     )
 
-    # 2. Tìm kiếm theo từ khóa
+    # 2. Tìm kiếm theo từ khóa (SearchHandler có thể dùng query + cravings_text, tag, ...)
     results = search_engine.search(all_restaurants, query)
 
-    # 3. Tính khoảng cách và LỌC THEO MAX DISTANCE
+    # 3. Tính khoảng cách và LỌC THEO MAX DISTANCE (nếu có toạ độ)
     final_results = []
     if user_lat is not None and user_lon is not None:
         for r in results:
-            if r.get("distance_km", 0) == 0 and r.get("lat") is not None and r.get("lng") is not None:
-                dist = ((r["lat"] - user_lat) ** 2 + (r["lng"] - user_lon) ** 2) ** 0.5 * 111
-                r["distance_km"] = dist
+            # Tính khoảng cách nếu chưa có
+            if r.get("distance_km", 0) == 0 and r.get("lat") and r.get("lng"):
+                r["distance_km"] = (
+                    (r["lat"] - user_lat) ** 2 + (r["lng"] - user_lon) ** 2
+                ) ** 0.5 * 111  # xấp xỉ km
 
-            current_dist = r.get("distance_km", 0) or 0
+            current_dist = r.get("distance_km", 0)
+
+            # Nếu có max_distance và khoảng cách > max thì bỏ
             if max_distance is not None and current_dist > max_distance:
                 continue
 
             final_results.append(r)
+
+        # Sắp xếp kết quả theo khoảng cách tăng dần cho đẹp
+        final_results.sort(key=lambda x: x.get("distance_km", 0))
     else:
+        # Không có toạ độ -> không lọc theo khoảng cách
         final_results = results
 
-    # 4. Chuẩn hoá data trước khi gửi ra giao diện
-    restaurants_for_front = normalize_restaurants(final_results)
-
-    # 5. Truyền sang template
+    # Render ra template
     return render_template(
         "results.html",
-        restaurants=restaurants_for_front,
-        query=query
+        restaurants=final_results,
+        query=query,
+        # gửi thêm info filter nếu bạn muốn show lại trên UI
+        max_distance=max_distance,
+        price_level=price_level,
+        tag=tag,
+        cravings_text=cravings_text,
+        context=None,  # context chỉ dùng cho auto-filter
     )
 
 
+# ========================= GỢI Ý TỰ ĐỘNG (AUTO FILTER) =========================
 @app.route("/recommend")
 def recommend_page():
     """
-    Route demo gợi ý thông minh (SmartTourismService).
-    Cũng connect Data Res -> Front qua normalize_restaurants.
+    Route LỌC MẶC ĐỊNH (auto filters):
+    - Được gọi khi user bấm nút "✨ Gợi ý thông minh theo vị trí & thời tiết".
+    - Nhận lat, lon từ query string (JS trên index.html gửi sang).
+    - Gọi SmartTourismService để:
+        + Xác định context (thời gian trong ngày, mùa, thời tiết, lịch sử dùng...)
+        + Sinh ra danh sách recommendations đã được sắp xếp & lọc.
+    - Trả về results.html với 'context' để giải thích lý do gợi ý.
     """
-    if "user_name" not in session:
-        return redirect(url_for("account"))
-
+    # Lấy toạ độ từ query; nếu lỗi thì dùng default HCM
     try:
         lat = float(request.args.get("lat"))
         lon = float(request.args.get("lon"))
     except (TypeError, ValueError):
-        return "Lỗi: Không nhận được tọa độ vị trí hợp lệ!", 400
+        # Fallback: nếu không có toạ độ hợp lệ thì dùng toạ độ mặc định
+        lat = 10.7769
+        lon = 106.7009
 
+    # Trong demo, user_id cứng; sau có thể lấy từ session
     user_id = "guest_user_001"
+
+    # Gọi tầng dịch vụ thông minh (SmartTourismService)
     service_output = tourism_service.process_user_input(user_id, lat, lon)
 
-    context_data = service_output["context"]
-    recommendations = service_output["recommendations"]
+    context_data = service_output.get("context", {})
+    recommendations = service_output.get("recommendations", [])
 
-    restaurants_for_front = normalize_restaurants(recommendations)
-    context_desc = f"Buổi {context_data.get('time_of_day')}, Mùa {context_data.get('season')}"
+    # (Optionally) bạn có thể chuẩn hoá lại fields cho frontend ở đây
+    auto_results = recommendations
+
+    # Chuẩn bị câu mô tả context hiển thị lên giao diện
+    context_desc = f"Buổi {context_data.get('time_of_day', '?')}, mùa {context_data.get('season', '?')}"
 
     return render_template(
         "results.html",
-        restaurants=restaurants_for_front,
+        restaurants=auto_results,
         context=context_desc,
-        query="Gợi ý thông minh"
+        query="Gợi ý tự động",
     )
 
 
+# ========================= TRANG NGƯỜI DÙNG =========================
 @app.route("/user")
 def user_page():
     """
-    Trang người dùng (user.html).
-    Cũng yêu cầu đăng nhập để xem.
+    Trang hồ sơ / lịch sử gợi ý của người dùng (UI demo).
     """
-    if "user_name" not in session:
-        return redirect(url_for("account"))
+    try:
+        return render_template("user.html")
+    except:
+        return "Trang User Profile"
 
-    # Tạm thời chỉ render UI demo, chưa nối data thật
-    return render_template("user.html")
 
-
+# ========================= ĐĂNG XUẤT =========================
 @app.route("/logout")
 def logout():
     """
-    Đăng xuất:
-    - Xoá session
-    - Quay lại trang đăng nhập (account.html)
+    Đăng xuất đơn giản: xoá tên user trong session rồi quay về trang chủ.
+    (Nếu nhóm bạn có login thật thì route này có thể xoá thêm token, v.v.)
     """
-    session.clear()
-    return redirect(url_for("account"))
+    session.pop("user_name", None)
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
