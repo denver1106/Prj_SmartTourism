@@ -130,39 +130,97 @@
 
             <!-- CỘT PHẢI: LỊCH SỬ -->
             <div>
-                <div class="section-title">
-                    <span class="icon">🕒</span>
-                    Quán đã ghé thăm
-                </div>
-
-                {% if not history %}
-                <p class="subtitle">Chưa có dữ liệu – đây là lịch sử demo.</p>
+                <div class="card" style="margin-bottom: 20px; padding: 15px;">
+                    <div class="section-title" style="margin-top: 0;">
+                        <span class="icon">❤️</span>
+                            Quán Yêu Thích
+                    </div>
+                {% if not favorites %}
+                <p class="subtitle">Bạn chưa thêm quán nào vào danh sách yêu thích.</p>
                 {% else %}
-                {% for r in history %}
+                {% for r in favorites %}
                 <article class="restaurant-card">
-                    <div class="restaurant-thumbnail">🍽️</div>
+                    <div class="restaurant-thumbnail">❤️</div>
                     <div class="restaurant-main">
                         <div class="restaurant-name-row">
                             <div class="restaurant-name">
-                                <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
-                            </div>
-                            <div class="restaurant-distance">
-                                {{ "%.1f"|format(r.distance_km) }} km
+                            <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
                             </div>
                         </div>
                         <div class="restaurant-meta">
                             {{ r.place }} • Giá: {{ r.price_level }}
-                        </div>
-                        <div class="tags">
-                            {% for t in r.tags %}
-                            <span class="tag">{{ t }}</span>
-                            {% endfor %}
                         </div>
                     </div>
                 </article>
                 {% endfor %}
                 {% endif %}
             </div>
+
+        <hr style="border-color: #eee;">
+
+        <div class="card" style="margin-bottom: 20px; padding: 15px;">
+            <div class="section-title" style="margin-top: 0;">
+                <span class="icon">🛒</span>
+                    Quán Đã Mua
+            </div>
+            {% if not purchased %}
+            <p class="subtitle">Bạn chưa đánh dấu quán nào là đã mua.</p>
+            {% else %}
+            {% for r in purchased %}
+            <article class="restaurant-card">
+                <div class="restaurant-thumbnail">🛒</div>
+                <div class="restaurant-main">
+                    <div class="restaurant-name-row">
+                        <div class="restaurant-name">
+                            <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
+                        </div>
+                    </div>
+                    <div class="restaurant-meta">
+                        {{ r.place }} • Giá: {{ r.price_level }}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <hr style="border-color: #eee;">
+
+        <div class="card" style="margin-bottom: 20px; padding: 15px;">
+            <div class="section-title" style="margin-top: 0;">
+                <span class="icon">🕒</span>
+                    Quán đã ghé thăm
+            </div>
+            {% if not history %}
+            <p class="subtitle">Chưa có dữ liệu – đây là lịch sử demo.</p>
+            {% else %}
+            {% for r in history %}
+            <article class="restaurant-card">
+                <div class="restaurant-thumbnail">🍽️</div>
+                <div class="restaurant-main">
+                    <div class="restaurant-name-row">
+                        <div class="restaurant-name">
+                            <a href="{{ url_for('detail_page', restaurant_id=r.id) }}">{{ r.name }}</a>
+                        </div>
+                        <div class="restaurant-distance">
+                            {{ "%.1f"|format(r.distance_km) }} km
+                        </div>
+                    </div>
+                    <div class="restaurant-meta">
+                        {{ r.place }} • Giá: {{ r.price_level }}
+                    </div>
+                    <div class="tags">
+                        {% for t in r.tags %}
+                        <span class="tag">{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+</div>
 
         </section>
 

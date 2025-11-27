@@ -75,6 +75,19 @@
 
             <!-- CỘT BÊN PHẢI: MAP + ACTION -->
             <div>
+                <div class="action-buttons" style="margin-bottom: 15px; display: flex; gap: 10px;">
+                    <button onclick="sendUserAction('favorites', '{{ restaurant.id }}')" class="secondary-btn" style="flex-grow: 1;">
+                        ❤️ Yêu thích
+                    </button>
+                    <button onclick="sendUserAction('history', '{{ restaurant.id }}')" class="secondary-btn" style="flex-grow: 1;">
+                        📍 Ghé thăm
+                    </button>
+                    <button onclick="sendUserAction('purchased', '{{ restaurant.id }}')" class="primary-btn" style="flex-grow: 1;">
+                        🛒 Đã mua
+                    </button>
+                </div>
+                <hr style="margin-bottom: 15px; border-color: #eee;">
+
                 <div class="detail-section-title">Bản đồ & chỉ đường</div>
                 <p class="detail-text" style="margin-bottom: 8px;">
                     Nhấn nút bên dưới để mở Google Maps và xem đường đi tới quán.
@@ -113,6 +126,33 @@
 </body>
 </html>
 <script>
+    // --- HÀM 1: GỬI HÀNH ĐỘNG CỦA NGƯỜI DÙNG ---
+    window.sendUserAction = async (type, restaurantId) => {
+        if (!restaurantId) {
+            alert("Lỗi: Không tìm thấy ID quán.");
+            return;
+        }
+    
+        try {
+            const response = await fetch('/api/user_action', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    type: type, // 'favorites', 'history', 'purchased'
+                    restaurant_id: restaurantId
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(`✅ Đã thêm vào ${type}. Xem trong trang Người dùng.`);
+            } else {
+            alert(`🚫 Lỗi: ${data.error || "Không thể lưu hành động."}`);
+            }
+        } catch (error) {
+            alert("❌ Lỗi mạng khi gửi hành động.");
+        }
+    };
     document.addEventListener('DOMContentLoaded', () => {
         const analyzeButton = document.getElementById('analyze_button');
         const ingredientsInput = document.getElementById('ingredients_input');

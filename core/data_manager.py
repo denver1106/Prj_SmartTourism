@@ -310,3 +310,61 @@ class DataManager:
         # Hàm giả định để tránh lỗi ở app.py, bạn có thể implement logic thật sau
         return [r for r in self.restaurants_data if r['id'] != restaurant_id][:2]
     # ---------------------------------
+    def update_user_list(self, user_id, list_type, restaurant_id):
+        """
+        list_type: 'favorites', 'history', hoặc 'purchased'
+        """
+        if not self.db: return False
+        try:
+            user_ref = self.db.collection("users").document(user_id)
+            # Dùng ArrayUnion để thêm vào mảng mà không bị trùng lặp
+            user_ref.set({
+                list_type: firestore.ArrayUnion([restaurant_id])
+            }, merge=True)
+            return True
+        except Exception as e:
+            print(f"Lỗi update user list: {e}")
+            return False
+
+    def get_user_full_profile(self, user_id):
+        """Lấy toàn bộ thông tin user để hiển thị trang profile"""
+        if not self.db: return {}
+        doc = self.db.collection("users").document(user_id).get()
+        if doc.exists:
+            return doc.to_dict()
+        return {}
+    
+    # ---------------- 5. CHỨC NĂNG QUẢN LÝ CACHE DINH DƯỠNG ----------------
+
+    def get_nutrition_cache(self, query: str) -> Optional[Dict[str, Any]]:
+        """
+        Đọc kết quả phân tích dinh dưỡng từ collection 'nutrition_cache' dựa trên query.
+        """
+        if not self.db: return None
+        try:
+            doc_ref = self.db.collection("nutrition_cache").document(query.replace(" ", "_"))
+            doc = doc_ref.get()
+            if doc.exists:
+                # Trả về data (payload) đã lưu, không trả về toàn bộ doc
+                return doc.to_dict().get("data")
+        except Exception as e:
+            print(f"Lỗi đọc cache dinh dưỡng: {e}")
+        return None
+
+    def set_nutrition_cache(self, query: str, data: Dict[str, Any]) -> bool:
+        """
+        Ghi kết quả phân tích dinh dưỡng vào collection 'nutrition_cache'.
+        """
+        if not self.db: return False
+        try:
+            doc_ref = self.db.collection("nutrition_cache").document(query.replace(" ", "_"))
+            payload = {
+                "query": query,
+                "data": data,
+                "timestamp": firestore.SERVER_TIMESTAMP # Lưu thời gian để quản lý TTL sau này
+            }
+            doc_ref.set(payload, merge=True)
+            return True
+        except Exception as e:
+            print(f"Lỗi ghi cache dinh dưỡng: {e}")
+            return False

@@ -1,5 +1,6 @@
 ﻿from flask import Flask, render_template, request, redirect, url_for, jsonify
 from core import data_manager, search_handler, service, nutrition_service
+from core.nutrition_service import get_nutrition_with_caching # <--- IMPORT HÀM CACHING
 import os
 
 app = Flask(__name__)
@@ -39,7 +40,7 @@ def detail_page(restaurant_id):
 def analyze_nutrition_endpoint():
     """
     Endpoint nhận dữ liệu thành phần và trả về kết quả phân tích dinh dưỡng 
-    bằng cách gọi hàm từ core.nutrition_service.
+    Sử dụng hàm get_nutrition_with_caching để kiểm tra cache trước khi gọi API.
     """
     data = request.get_json()
     ingredients = data.get('ingredients_text') # Lấy chuỗi thành phần từ request JSON
@@ -47,18 +48,23 @@ def analyze_nutrition_endpoint():
     if not ingredients:
         return jsonify({"error": "Vui lòng cung cấp thành phần để phân tích."}), 400
 
-    # Gọi hàm service đã được định nghĩa trong core/nutrition_service.py
-    # Sử dụng nutrition_service.get_nutrition_analysis (giả định import được)
-    nutrition_data = nutrition_service.get_nutrition_analysis(ingredients)
+    # GỌI HÀM CÓ CACHING VÀ TRUYỀN DB_MANAGER VÀO
+    nutrition_data = get_nutrition_with_caching(ingredients, db_manager)
 
-    # Kiểm tra nếu service trả về lỗi (có key "error" trong dict)
-    if "error" in nutrition_data:
-        # Sử dụng mã lỗi 500 nếu là lỗi nội bộ/API, hoặc mã lỗi cụ thể nếu có
-        status_code = nutrition_data.get('status_code', 500)
-        return jsonify(nutrition_data), status_code
+    # Kiểm tra nếu service trả về lỗi (có key "error" trong dict hoặc là None)
+    if not nutrition_data or "error" in nutrition_data:
+        # Lấy mã lỗi nếu có, mặc định là 500
+        status_code = nutrition_data.get('status_code', 500) if nutrition_data else 500
+        error_message = nutrition_data.get('error', "Lỗi không xác định khi phân tích dinh dưỡng.") if nutrition_data else "Lỗi service trả về rỗng."
+        
+        # In log để debug
+        print(f"Lỗi phân tích dinh dưỡng: {error_message}")
+        
+        # Trả về kết quả lỗi
+        return jsonify(nutrition_data if nutrition_data else {"error": error_message}), status_code
 
-    return jsonify(nutrition_data) # Trả về dữ liệu dinh dưỡng thành công
-# ---------------------------------------------
+    # Trả về dữ liệu dinh dưỡng thành công
+    return jsonify(nutrition_data)
 
 @app.route('/results')
 def results_page():
@@ -136,12 +142,56 @@ def recommend_page():
 
 @app.route('/user')
 def user_page():
-    try: return render_template('user.html') 
-    except: return "Trang User Profile"
+    # try: return render_template('user.html') 
+    # except: return "Trang User Profile"
+    # Giả định ID user là cố định 'guest_user_001'
+    user_id = "guest_user_001" 
+    
+    # 1. Lấy toàn bộ profile user (chứa các mảng ID)
+    profile = db_manager.get_user_full_profile(user_id) 
+    
+    # 2. Lấy danh sách ID
+    fav_ids = profile.get('favorites', [])
+    purchased_ids = profile.get('purchased', [])
+    history_ids = profile.get('history', [])
+    
+    # 3. Chuyển ID thành đối tượng quán ăn đầy đủ để hiển thị
+    # Ghi chú: get_restaurants_by_ids sẽ tự động giới hạn 10 quán đầu tiên
+    favorites = db_manager.get_restaurants_by_ids(fav_ids)
+    purchased = db_manager.get_restaurants_by_ids(purchased_ids)
+    history = db_manager.get_restaurants_by_ids(history_ids) 
+    
+    # 4. Render và truyền dữ liệu vào template
+    return render_template(
+        'user.html', 
+        user=profile, 
+        history=history,
+        favorites=favorites,
+        purchased=purchased,
+        # Giữ lại các biến demo tags cũ nếu cần
+        liked_tags=["noodle", "spicy"],
+        disliked_tags=["vegan"]
+    )
 
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
+@app.route('/api/user_action', methods=['POST'])
+def user_action_endpoint():
+    data = request.get_json()
+    user_id = "guest_user_001" # Tạm thời fix cứng, sau này bạn lấy từ session
+    action_type = data.get('type') # 'favorites', 'history', 'purchased'
+    res_id = data.get('restaurant_id')
+
+    if not action_type or not res_id:
+        return jsonify({"error": "Thiếu thông tin"}), 400
+
+    success = db_manager.update_user_list(user_id, action_type, res_id)
+    
+    if success:
+        return jsonify({"message": "Đã cập nhật thành công!"})
+    else:
+        return jsonify({"error": "Lỗi hệ thống"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
