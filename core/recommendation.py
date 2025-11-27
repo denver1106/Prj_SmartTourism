@@ -11,12 +11,9 @@ class Recommender:
         self.user_history = self.dm.get_user_history(user_id)
         self.user_preferences = self.dm.get_user_preferences(user_id)
 
-    # --- Haversine Distance ---
+    # --- haversine distance ---
     def haversine_distance(self, lat1, lon1, lat2, lon2):
-        if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
-            return 9999.0 
-
-        R = 6371 
+        R = 6371  # km
         dlat = radians(lat2 - lat1)
         dlon = radians(lon2 - lon1)
         a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
@@ -31,54 +28,51 @@ class Recommender:
     def filter_recent_foods(self, restaurants):
         return [r for r in restaurants if not any(food in self.user_history for food in r.get("foods", []))]
 
+    def filter_by_context(self, restaurants):
+        return [r for r in restaurants if self.matches_context(r)]
+
     def matches_context(self, restaurant):
         tags = restaurant.get("tags", [])
-        time_tag = self.context.get("time_of_day")
-        season_tag = self.context.get("season")
-        weekday_tag = self.context.get("weekday")
+        time = self.context.get("time")
+        season = self.context.get("season")
+        weather = self.context.get("weather")
 
-        if not tags: return True
-        
-        # Luôn match cho các quán demo/mock để đảm bảo hiển thị
-        if "demo" in tags or "mock" in tags:
-            return True
-
-        context_values = [v for v in [time_tag, season_tag, weekday_tag] if v]
-        return any(tag in tags for tag in context_values)
+        # Nếu trùng bất kỳ tag nào → match
+        return any(tag in tags for tag in [time, season, weather]) or not tags
 
     # --- Compute score ---
     def compute_score(self, restaurant):
         score = 0
+        # like_tags
         preferred_tags = self.user_preferences.get("like_tags", [])
         if any(tag in preferred_tags for tag in restaurant.get("tags", [])):
-            score += 2
+            score += 1
+        # chưa ăn gần đây
         if not any(food in self.user_history for food in restaurant.get("foods", [])):
             score += 1
+        # context match
         if self.matches_context(restaurant):
-            score += 3
+            score += 1
         return score
 
-    # --- Generate ---
+    # --- Generate recommendation ---
     def generate(self, top_n=10):
-        # QUAN TRỌNG: Gọi hàm lấy quán gần user (đã bao gồm mock data nếu thiếu quán thật)
-        restaurants = self.dm.get_restaurants_near_user(self.user_lat, self.user_lon)
+        restaurants = self.dm.get_all_restaurants()
 
-        # 1. Filter
+        # 1. Auto filter
         restaurants = self.filter_unwanted(restaurants)
         restaurants = self.filter_recent_foods(restaurants)
+        restaurants = self.filter_by_context(restaurants)
 
-        # 2. Score & Distance
+        # 2. Compute score + distance
         for r in restaurants:
             r["score"] = self.compute_score(r)
-            
-            r_lat = r.get("lat")
-            r_lon = r.get("lon") if r.get("lon") is not None else r.get("lng")
-            
-            # Tính lại khoảng cách chính xác
-            dist = self.haversine_distance(self.user_lat, self.user_lon, r_lat, r_lon)
-            r["distance_km"] = dist
+            r["distance_km"] = self.haversine_distance(
+                self.user_lat, self.user_lon, r["lat"], r["lon"]
+            )
 
-        # 3. Sort (Ưu tiên điểm cao -> khoảng cách gần)
+        # 3. Sort: score giảm, distance tăng
         restaurants.sort(key=lambda x: (-x["score"], x["distance_km"]))
 
+        # 4. Return top_n
         return restaurants[:top_n]

@@ -1,3 +1,4 @@
+# core/__init__.py
 import importlib
 
 # --- Lazy loader function ---
@@ -8,27 +9,24 @@ class _LazyModule:
 
     def __getattr__(self, item):
         if self._module is None:
-            # Import module khi cần thiết (runtime)
+            # import bằng tên đầy đủ
             self._module = importlib.import_module(self._module_name)
         return getattr(self._module, item)
 
 
 # --- Core modules (lazy) ---
-# Các module này chưa tạo, cứ để đó khi nào dùng thì tạo file
-config = _LazyModule("core.config")               
-database = _LazyModule("core.database")           
-models = _LazyModule("core.models")               
-utils = _LazyModule("core.utils")                 
-ai_assistant = _LazyModule("core.ai_assistant")   
+config = _LazyModule("core.config")               # nếu có
+database = _LazyModule("core.database")           # nếu có
+models = _LazyModule("core.models")               # nếu có
+utils = _LazyModule("core.utils")                 # helper functions
+ai_assistant = _LazyModule("core.ai_assistant")   # SmartAssistant AI module
 
-# Các module đã hoàn thiện trong dự án
+# Các module mới/đã sửa
 context_utils = _LazyModule("core.context_utils")
 data_manager = _LazyModule("core.data_manager")
 search_handler = _LazyModule("core.search_handler")
 recommendation = _LazyModule("core.recommendation")
-
-# Lưu ý: File thực tế là 'services.py', mình map biến 'service' vào đó
-service = _LazyModule("core.services")
+service = _LazyModule("core.service")
 
 __all__ = [
     "config",
