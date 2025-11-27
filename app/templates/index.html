@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Tải ảnh lên để Nhận diện</h1>
+
+<form method="POST" action="{{ url_for('main.upload_image') }}" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*" required>
+    <input type="submit" value="Phân Tích">
+</form>
+
+{% endblock %}

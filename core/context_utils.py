@@ -1,3 +1,4 @@
+# core/context_utils.py
 from datetime import datetime
 from typing import Dict, Optional
 
@@ -11,11 +12,9 @@ class ContextUtils:
         hour = now.hour
         if 5 <= hour < 10:
             time_of_day = "morning"
-        elif 10 <= hour < 14: # Điều chỉnh nhẹ: 10h-14h là trưa (noon)
+        elif 10 <= hour < 15:
             time_of_day = "noon"
-        elif 14 <= hour < 18: # 14h-18h là chiều (afternoon - hoặc gộp vào evening tùy logic)
-            time_of_day = "afternoon" 
-        elif 18 <= hour < 22:
+        elif 15 <= hour < 22:
             time_of_day = "evening"
         else:
             time_of_day = "late"
@@ -30,7 +29,7 @@ class ContextUtils:
         else:
             season = "autumn"
 
-        weekday = now.strftime("%A").lower() 
+        weekday = now.strftime("%A")
 
         return {
             "time_of_day": time_of_day,
@@ -40,7 +39,6 @@ class ContextUtils:
 
     @staticmethod
     def merge_context(search_filters: dict, user_history: list, user_pref: dict) -> dict:
-        """Hàm tiện ích để gộp thông tin nếu cần mở rộng sau này"""
         ctx = ContextUtils.get_time_context()
         ctx.update({
             "search_filters": search_filters or {},
