@@ -6,8 +6,7 @@ import random
 class DataManager:
     """
     Quản lý kết nối Firestore, chuẩn hóa dữ liệu và tạo dữ liệu giả THÔNG MINH.
-    Hỗ trợ: Mock data theo vị trí, lấy đặc sản vùng miền, context mô tả phong phú.
-    CẬP NHẬT: Đã hỗ trợ lấy group_type và vibe.
+    CẬP NHẬT: Đã hỗ trợ lấy group_type, vibe, cuisine, amenities, rating, images.
     """
     def __init__(self, cred_path: str = "firebase-key.json", use_app_name: Optional[str] = None):
         # --- Logic khởi tạo Firebase an toàn ---
@@ -76,10 +75,10 @@ class DataManager:
             
         return specialties
 
-    # ---------------- 2. MOCK GENERATOR (FULL CONTEXT) ----------------
-    def _generate_mock_data(self, user_lat: float, user_lon: float, count: int = 10, special_foods: List[str] = None) -> List[Dict[str, Any]]:
+    # ---------------- 2. MOCK GENERATOR (CẬP NHẬT FULL OPTIONS) ----------------
+    def _generate_mock_data(self, user_lat: float, user_lon: float, count: int = 20, special_foods: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Sinh dữ liệu giả bao gồm cả group_type và vibe để test bộ lọc.
+        Sinh dữ liệu giả bao gồm cả group_type, vibe, amenities, cuisine... để test bộ lọc.
         """
         mocks = []
         
@@ -95,21 +94,8 @@ class DataManager:
         ]
         
         suffixes = ["Gia Truyền", "Bà Ba", "Chú Tư", "Sài Gòn", "Phố Cổ", "Vỉa Hè", "Ngon", "Gốc", "Luxury"]
-        
-        # Danh sách các nhóm và vibe để random cho dữ liệu giả
         mock_groups = ["alone", "family", "friends", "dating", "company", "couple"]
         mock_vibes = ["street_food", "luxury", "cozy", "vintage", "modern"]
-
-        descriptions_pool = [
-            "Hương vị hài hòa, cân bằng giữa mặn — ngọt — chua.",
-            "Thành phần tươi ngon, chế biến tinh tế.",
-            "Món ăn đậm đà, kích thích vị giác ngay từ miếng đầu tiên.",
-            "Phù hợp để chia sẻ cùng gia đình và bạn bè.",
-            "Trình bày tinh tế, bắt mắt, ăn trước đã thấy ngon.",
-            "Đầy đặn, ngon miệng — no lâu, bổ dưỡng.",
-            "Không gian thoáng mát, phục vụ nhanh.",
-            "Món ăn đường phố nổi tiếng, đậm đà bản sắc.",
-        ]
 
         source_categories = default_categories
         
@@ -136,8 +122,12 @@ class DataManager:
             
             dist_approx = ((mock_lat - user_lat)**2 + (mock_lng - user_lon)**2)**0.5 * 111
 
-            # Random 1-3 nhóm phù hợp cho mỗi quán giả
             random_groups = random.sample(mock_groups, k=random.randint(1, 3))
+            vibe = random.choice(mock_vibes)
+            
+            # Mock Amenities & Cuisine
+            amenities = ["wifi", "ac"] if vibe in ["luxury", "modern"] else ["parking_free"]
+            cuisine = "vietnamese"
 
             mocks.append({
                 "id": f"mock_special_{i}",
@@ -148,31 +138,44 @@ class DataManager:
                 "tags": ["demo", "mock"] + cat["tags"],
                 "menu": cat["menu"],
                 "foods": cat["menu"], 
-                "price_level": random.choice(["30k", "50k", "100k"]),
-                "description": random.choice(descriptions_pool),
+                "price_level": random.choice(["cheap", "medium", "expensive"]),
+                "price_range": "30k - 100k",
+                "rating": 4.5,
+                "total_reviews": 100,
+                "images": [], # Không có ảnh
+                "calories": "500 kcal",
+                "description": "Quán ngon giả lập để test giao diện.",
                 "distance_km": dist_approx,
                 
-                # 🔥 [MỚI] THÊM DỮ LIỆU GIẢ CHO GROUP VÀ VIBE
+                # Full Fields
                 "group_type": random_groups,
-                "vibe": random.choice(mock_vibes)
+                "vibe": vibe,
+                "amenities": amenities,
+                "cuisine": cuisine
             })
             
         return mocks
 
-    # ---------------- 3. MAIN LOADER (LẤY DỮ LIỆU) ----------------
+    # ---------------- 3. MAIN LOADER (ĐÃ TỐI ƯU & LẤY ĐỦ TRƯỜNG) ----------------
     def get_all_restaurants(self, use_cache: bool = True, user_lat: float = None, user_lon: float = None, 
                           enable_mock: bool = True, place_scope: str = None) -> List[Dict[str, Any]]:
         """
         Lấy quán ăn từ DB + Mock Data.
         """
+        # Trả về cache nếu có
+        if use_cache and self._cache["restaurants"]:
+            return self._cache["restaurants"]
+
         restaurants = []
         
         # 1. Lấy dữ liệu thật từ Firebase
         if self.db:
             try:
-                # Đảm bảo lấy từ bảng 'restaurants'
                 ref = self.db.collection("restaurants")
-                docs = ref.stream()
+                
+                # 🔥 LIMIT: Chỉ lấy 500 quán để load nhanh và tiết kiệm quota
+                docs = ref.limit(500).stream() 
+                
                 for doc in docs:
                     raw_data = doc.to_dict() or {}
                     
@@ -184,9 +187,13 @@ class DataManager:
                             lat = geo.latitude
                             lng = geo.longitude
                     
-                    raw_foods = raw_data.get("foods") or raw_data.get("menu") or []
-                    if not isinstance(raw_foods, list): raw_foods = [str(raw_foods)]
-                    clean_menu = [str(m).lower() for m in raw_foods]
+                    # Gộp foods và menu để tìm kiếm tốt hơn
+                    list_foods = raw_data.get("foods") or []
+                    list_menu = raw_data.get("menu") or []
+                    if not isinstance(list_foods, list): list_foods = [str(list_foods)]
+                    if not isinstance(list_menu, list): list_menu = [str(list_menu)]
+                    combined_menu = list(set(list_foods + list_menu))
+                    clean_menu = [str(m).lower() for m in combined_menu]
 
                     item = {
                         "id": doc.id,
@@ -195,23 +202,32 @@ class DataManager:
                         "tags": [str(t).lower() for t in raw_data.get("tags", [])],
                         "menu": clean_menu,       
                         "foods": clean_menu,      
+                        
+                        # --- CÁC TRƯỜNG QUAN TRỌNG MỚI (Lấy về từ DB) ---
                         "price_level": raw_data.get("price_level", "?"),
+                        "price_range": raw_data.get("price_range", "Đang cập nhật"),
+                        "rating": raw_data.get("rating", 4.0),
+                        "total_reviews": raw_data.get("total_reviews", 0),
+                        "images": raw_data.get("images", []),
+                        "calories": raw_data.get("calories", ""),
+                        "amenities": raw_data.get("amenities", []),
+                        "cuisine": raw_data.get("cuisine", ""),
+                        "group_type": raw_data.get("group_type", []), 
+                        "vibe": raw_data.get("vibe", ""),
+
                         "lat": float(lat) if lat is not None else None,
                         "lng": float(lng) if lng is not None else None,
                         "description": raw_data.get("description", "Chưa có mô tả."),
                         "distance_km": 0.0,
-                        
-                        # 🔥 [MỚI] LẤY TRƯỜNG group_type VÀ vibe TỪ DB
-                        "group_type": raw_data.get("group_type", []), # Mặc định là list rỗng
-                        "vibe": raw_data.get("vibe", "")              # Mặc định là chuỗi rỗng
                     }
                     restaurants.append(item)
             except Exception as e:
-                print(f"ERROR loading real data: {e}")
+                print(f"❌ ERROR loading real data: {e}")
 
-        # 2. Xử lý Mock Data
-        if enable_mock:
-            target_lat = user_lat if user_lat else 10.7769 
+        # 2. Xử lý Mock Data (Nếu cần)
+        if enable_mock and len(restaurants) == 0:
+            print("⚠️ Không lấy được data thật, đang dùng Mock Data...")
+            target_lat = user_lat if user_lat else 10.7628 
             target_lon = user_lon if user_lon else 106.7009
             
             special_foods = []

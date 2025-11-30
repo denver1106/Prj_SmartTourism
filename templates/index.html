@@ -63,19 +63,32 @@
                 <input type="hidden" name="lon" id="lonInput">
 
                 <div class="search-bar">
-                    <div class="search-input-wrap">
-                        <span>🔍</span>
-                        <input name="query"
-                               type="text"
-                               class="search-input"
-                               placeholder="Nhập tên món ăn (vd: 'phở bò', 'bánh mì') hoặc địa điểm (vd: 'Quận 5')..."
-                               >
-                    </div>
-                    <button type="submit" class="primary-btn" id="searchBtn">
-                        Tìm quán ăn
-                        <span>🍜</span>
-                    </button>
-                </div>
+    <div class="search-input-wrap">
+        <span>🔍</span>
+        <input name="query"
+               type="text"
+               class="search-input"
+               placeholder="Nhập tên món hoặc địa điểm...">
+        
+        <div style="border-left: 1px solid #cbd5e1; padding-left: 10px; margin-left: 5px;">
+            <form id="aiForm" action="{{ url_for('predict_route') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('aiForm').submit()" accept="image/*">
+                
+                <button type="button" 
+                        onclick="document.getElementById('fileInput').click()"
+                        style="background: transparent; border: none; cursor: pointer; font-size: 20px;"
+                        title="Chụp/Tải ảnh món ăn để tìm quán">
+                    📷
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <button type="submit" class="primary-btn" id="searchBtn">
+        Tìm quán ăn
+        <span>🍜</span>
+    </button>
+</div>
 
                 <div class="filters-grid">
                     <div class="filter-group">

@@ -1,38 +1,88 @@
 ﻿from flask import Flask, render_template, request, redirect, url_for
-from core import data_manager, search_handler, service
+from werkzeug.utils import secure_filename
+from core import data_manager, search_handler, service, ai_service
 import os
 
 app = Flask(__name__)
-# Key giả định, sau này thay bằng key thật nếu cần
+# Key giả định, sau này thay bằng key thật
 WEATHER_API_KEY = "DUMMY_API_KEY_FOR_NOW"
 
-# Khởi tạo các module xử lý
+# --- CẤU HÌNH UPLOAD ẢNH ---
+# Nơi lưu ảnh tạm thời khi người dùng upload lên
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+# Tự động tạo thư mục nếu chưa có
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# --- KHỞI TẠO CÁC MODULE (Bao gồm cả AI) ---
 db_manager = data_manager.DataManager()
 search_engine = search_handler.SearchHandler()
 tourism_service = service.SmartTourismService(weather_api_key=WEATHER_API_KEY)
+
+# Khởi động AI Engine (Load model 1 lần duy nhất lúc chạy server)
+print("⏳ Đang tải Model AI... Vui lòng đợi...")
+ai_engine = ai_service.AIService(model_dir='ml_models')
+print("✅ Model AI đã sẵn sàng!")
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# --- ROUTE XỬ LÝ NHẬN DIỆN ẢNH (MỚI) ---
+@app.route('/predict', methods=['POST'])
+def predict_route():
+    """
+    Nhận file ảnh từ người dùng -> Đưa qua AI -> Lấy tên món -> Tìm kiếm quán bán món đó.
+    """
+    if 'file' not in request.files:
+        return redirect(request.url)
+    
+    file = request.files['file']
+    if file.filename == '':
+        return redirect(request.url)
+
+    if file:
+        try:
+            # 1. Lưu ảnh tạm
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+
+            # 2. Gọi AI nhận diện
+            label, score = ai_engine.predict_image(filepath)
+            
+            # Xóa ảnh sau khi dùng xong để tiết kiệm dung lượng (Tùy chọn)
+            # os.remove(filepath)
+
+            # 3. Xử lý kết quả
+            if label and label != "Không nhận diện được":
+                print(f"🤖 AI Nhận diện: {label} ({score*100:.1f}%)")
+                # Chuyển hướng sang trang kết quả với từ khóa là tên món vừa đoán được
+                # Ví dụ: Đoán ra "Phở bò" -> Tự động tìm quán "Phở bò"
+                return redirect(url_for('results_page', query=label))
+            else:
+                # Nếu AI bó tay
+                return render_template('index.html', error="AI không nhận diện được món này. Thử ảnh khác nhé!")
+                
+        except Exception as e:
+            print(f"Lỗi xử lý ảnh: {e}")
+            return render_template('index.html', error="Có lỗi xảy ra khi xử lý ảnh.")
+
+    return redirect(url_for('index'))
+
+# --- CÁC ROUTE CŨ (GIỮ NGUYÊN) ---
 @app.route('/results')
 def results_page():
-    """
-    Hàm này xử lý tất cả: Tìm kiếm từ khóa, Lọc khoảng cách, Lọc nhóm (Ăn cùng ai), Lọc Vibe.
-    """
     # 1. LẤY DỮ LIỆU TỪ GIAO DIỆN
     query = request.args.get('query', '').strip().lower()
-    group_filter = request.args.get('group_filter') # Lấy filter Ăn cùng ai
-    vibe_filter = request.args.get('vibe_filter')   # Lấy filter Vibe
+    group_filter = request.args.get('group_filter')
+    vibe_filter = request.args.get('vibe_filter')
     
-    # Lấy tham số lọc khoảng cách
     try:
         max_distance_str = request.args.get('max_distance')
         max_distance = float(max_distance_str) if max_distance_str else None
     except ValueError:
         max_distance = None
 
-    # Lấy tọa độ user
     try:
         user_lat = float(request.args.get('lat'))
         user_lon = float(request.args.get('lon'))
@@ -40,61 +90,47 @@ def results_page():
         user_lat = None
         user_lon = None
 
-    # 2. LẤY DANH SÁCH QUÁN ĂN (Từ Database thông qua DataManager)
+    # 2. LẤY DỮ LIỆU
     all_restaurants = db_manager.get_all_restaurants(
         use_cache=False, 
         user_lat=user_lat, 
-        user_lon=user_lon
+        user_lon=user_lon,
+        enable_mock=False
     )
     
-    # 3. TÌM KIẾM THEO TÊN/MÓN (Dùng module search cũ của bạn)
-    # Bước này lọc sơ bộ những quán khớp từ khóa tìm kiếm
+    # 3. TÌM KIẾM
     if query:
-        # Nếu có nhập từ khóa -> Lọc theo tên
         temp_results = search_engine.search(all_restaurants, query)
     else:
-        # Nếu để trống -> Lấy tất cả quán (để sau đó lọc theo Tag)
         temp_results = all_restaurants
 
-    # 4. ÁP DỤNG CÁC BỘ LỌC NÂNG CAO (LOGIC MỚI)
+    # 4. LỌC NÂNG CAO
     final_results = []
-    
     for r in temp_results:
-        # --- A. LỌC KHOẢNG CÁCH ---
+        # Lọc khoảng cách
         if user_lat and user_lon:
-            # Tính khoảng cách (nếu chưa có sẵn trong data)
             if r.get("distance_km", 0) == 0 and r.get('lat') and r.get('lng'):
                 try:
                     r["distance_km"] = ((r['lat'] - user_lat)**2 + (r['lng'] - user_lon)**2)**0.5 * 111
                 except:
                     r["distance_km"] = 999 
-            
-            # Nếu quán xa hơn mức user chọn -> Bỏ qua
             if max_distance is not None and r.get("distance_km", 0) > max_distance:
                 continue 
         
-        # --- B. LỌC THEO NHÓM (ĂN CÙNG AI) ---
-        # Logic: Nếu user chọn filter, kiểm tra xem quán có tag đó trong mảng 'group_type' không
+        # Lọc nhóm
         if group_filter and group_filter not in ["", "all"]:
-            # Lấy danh sách group của quán (nếu không có thì trả về list rỗng)
             res_groups = r.get('group_type', [])
-            
-            # Nếu quán không có tag này -> Bỏ qua
-            # (Ví dụ: Tìm 'alone' mà quán chỉ có ['family'] -> Bị loại)
             if not isinstance(res_groups, list) or group_filter not in res_groups:
                 continue 
 
-        # --- C. LỌC THEO VIBE ---
-        # Logic: Nếu user chọn filter, kiểm tra xem 'vibe' của quán có khớp không
+        # Lọc vibe
         if vibe_filter and vibe_filter not in ["", "all"]:
             res_vibe = r.get('vibe', '')
             if res_vibe != vibe_filter:
                 continue
 
-        # Nếu vượt qua mọi bài test -> Thêm vào kết quả cuối cùng
         final_results.append(r)
 
-    # 5. TRẢ VỀ GIAO DIỆN
     return render_template('results.html', 
                            restaurants=final_results, 
                            query=query,
@@ -103,7 +139,6 @@ def results_page():
 
 @app.route('/recommend')
 def recommend_page():
-    # Giữ nguyên logic gợi ý thông minh
     try:
         lat = float(request.args.get('lat'))
         lon = float(request.args.get('lon'))
@@ -112,7 +147,6 @@ def recommend_page():
 
     user_id = "guest_user_001"
     service_output = tourism_service.process_user_input(user_id, lat, lon)
-
     context_data = service_output.get('context', {})
     recommendations = service_output.get('recommendations', [])
     
@@ -120,12 +154,7 @@ def recommend_page():
     season = context_data.get('season', 'Unknown')
     context_desc = f"Buổi {time_of_day}, Mùa {season}"
 
-    return render_template(
-        'results.html', 
-        restaurants=recommendations, 
-        context=context_desc,
-        query="Gợi ý thông minh"
-    )
+    return render_template('results.html', restaurants=recommendations, context=context_desc, query="Gợi ý thông minh")
 
 @app.route('/user')
 def user_page():
@@ -137,5 +166,4 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # Chạy ở chế độ debug
     app.run(debug=True)
