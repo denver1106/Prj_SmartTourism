@@ -2,16 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Kết quả gợi ý – SmartTourism</title>
-    <!-- Link CSS -->
+    <title>Kết quả tìm kiếm – SmartFood</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Meta Viewport cho Mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="page">
-
-        <!-- NAVBAR -->
         <header class="navbar">
             <div class="nav-logo">
                 <span class="icon">🍽️</span>
@@ -20,104 +17,86 @@
             <nav class="nav-links">
                 <a href="{{ url_for('index') }}" class="nav-link">Trang chủ</a>
                 <a href="{{ url_for('user_page') }}" class="nav-link">Người dùng</a>
-                <a href="{{ url_for('logout') }}" class="nav-link logout">Đăng xuất</a>
             </nav>
         </header>
 
-        <!-- SUMMARY SECTION -->
-        <section class="card">
-            <div class="section-title">
-                <span class="icon">📍</span>
-                Kết quả gợi ý cho: <b>&nbsp;{{ query }}</b>
-            </div>
-            
-            <!-- HIỂN THỊ CONTEXT NẾU CÓ -->
-            {% if context %}
-            <div class="context-box" style="background: #e3f2fd; padding: 10px; border-radius: 8px; margin-top: 10px; border: 1px solid #90caf9;">
-                <span class="icon">🌤️</span>
-                <b>Thông tin môi trường:</b> {{ context }} 
-                <br>
-                <small style="color: #555;">(Hệ thống đã tự động chọn các món phù hợp với thời tiết và giờ giấc này)</small>
-            </div>
-            {% endif %}
-            
-            <p class="subtitle" style="margin-top: 10px;">
-                Dưới đây là danh sách được đề xuất cho bạn
-            </p>
-        </section>
-
-        <!-- DANH SÁCH KẾT QUẢ -->
         <section class="card">
             <div class="results-header">
                 <div class="section-title">
-                    <span class="icon">🍜</span>
-                    Danh sách quán ăn
+                    <span class="icon">📍</span>
+                    Kết quả cho: <b>{{ query if query else "Tất cả món" }}</b>
                 </div>
                 <div class="results-count">
-                    {% if restaurants %}
-                    Tìm thấy {{ restaurants|length }} quán.
-                    {% else %}
-                    Không tìm thấy quán phù hợp.
-                    {% endif %}
+                    Tìm thấy {{ restaurants|length }} quán
                 </div>
             </div>
 
-            <div id="resultsContainer">
+            {% if context %}
+            <div class="context-box">
+                💡 <b>Gợi ý thông minh:</b> {{ context }}
+            </div>
+            {% endif %}
+
+            <div class="restaurant-list">
                 {% if not restaurants %}
-                <p class="subtitle">Không có dữ liệu phù hợp.</p>
+                <div class="empty-state">
+                    <p>😢 Không tìm thấy quán nào phù hợp.</p>
+                    <a href="{{ url_for('index') }}" class="secondary-btn">Thử tìm lại</a>
+                </div>
                 {% else %}
+                
                 {% for r in restaurants %}
-                <article class="restaurant-card">
-                    <div class="restaurant-thumbnail">🍽️</div>
-                    <div class="restaurant-main">
-                        <div class="restaurant-name-row">
-                            <div class="restaurant-name">
-                                {{ r.name }}
+                <article class="res-card">
+                    <div class="res-img-box">
+                        {% if r.images and r.images|length > 0 %}
+                            <img src="{{ r.images[0] }}" alt="{{ r.name }}" class="res-img" onerror="this.src='https://placehold.co/150x150?text=No+Image'">
+                        {% else %}
+                            <div class="res-img-placeholder">🍽️</div>
+                        {% endif %}
+                        
+                        <div class="dist-badge">
+                            📍 {{ "%.1f"|format(r.distance_km | default(0)) }} km
+                        </div>
+                    </div>
+
+                    <div class="res-info">
+                        <div class="res-header">
+                            <h3 class="res-name">{{ r.name }}</h3>
+                            <div class="res-rating">
+                                <span class="star">⭐ {{ r.rating | default('4.0') }}</span>
+                                <span class="review-count">({{ r.total_reviews | default(10) }} đánh giá)</span>
                             </div>
-                            <div class="restaurant-distance">
-                                <!-- Hiển thị khoảng cách -->
-                                {{ "%.1f"|format(r.distance_km | default(0)) }} km
-                            </div>
                         </div>
 
-                        <div class="restaurant-meta">
-                            <!-- Địa chỉ -->
-                            📍 {{ r.address | default('Chưa có địa chỉ') }} 
-                            <br>
-                            💵 Giá: {{ r.price_level | default('Đang cập nhật') }}
+                        <div class="res-address">
+                            {{ r.address }}
                         </div>
 
-                        <!-- Tags -->
-                        <div class="tags">
-                            {% for t in r.tags %}
-                            <span class="tag">{{ t }}</span>
-                            {% endfor %}
-                        </div>
-
-                        <!-- Menu -->
-                        <div class="restaurant-meta">
-                            <b>Món phục vụ:</b> 
-                            {% if r.menu %}
-                                {{ r.menu|join(", ") }}
-                            {% else %}
-                                Đang cập nhật menu
+                        <div class="res-tags">
+                            <span class="tag vibe-tag">{{ r.vibe }}</span>
+                            
+                            {% if r.amenities %}
+                                {% if 'wifi' in r.amenities %}<span class="tag amenity" title="Wifi">📶 Wifi</span>{% endif %}
+                                {% if 'ac' in r.amenities %}<span class="tag amenity" title="Máy lạnh">❄️ AC</span>{% endif %}
+                                {% if 'parking_free' in r.amenities %}<span class="tag amenity" title="Giữ xe free">🅿️ Free</span>{% endif %}
+                                {% if 'credit_card' in r.amenities %}<span class="tag amenity" title="Thanh toán thẻ">💳 Card</span>{% endif %}
                             {% endif %}
                         </div>
 
-                        <!-- Mô tả -->
-                        <div class="restaurant-meta" style="margin-top: 8px; font-style: italic; color: #666;">
-                            "{{ r.description | default('Chưa có mô tả chi tiết.') }}"
+                        <div class="res-meta-row">
+                            <span class="meta-item">💵 {{ r.price_range | default('? - ?') }}</span>
+                            {% if r.calories %}
+                            <span class="meta-item fire">🔥 {{ r.calories }}</span>
+                            {% endif %}
                         </div>
 
-                        <!-- ACTION BUTTONS -->
-                        <div class="restaurant-actions">
-                            <!-- SỬA LẠI LINK MAP Ở ĐÂY -->
-                            <!-- Dùng destination=lat,lng để chỉ đường chính xác tới tọa độ ảo -->
-                            <a class="secondary-btn"
-                               href="https://www.google.com/maps/dir/?api=1&destination={{ r.lat }},{{ r.lng }}"
-                               target="_blank">
-                                Chỉ đường trên Maps 🗺️
+                        <div class="res-actions">
+                            <a href="http://maps.google.com/?q={{ r.lat }},{{ r.lng }}" target="_blank" class="btn-map">
+                                Chỉ đường
                             </a>
+                            <button class="btn-detail" onclick="alert('Tính năng xem chi tiết đang phát triển!')">
+                                Xem chi tiết →
+                            </button>
                         </div>
                     </div>
                 </article>
@@ -125,7 +104,6 @@
                 {% endif %}
             </div>
         </section>
-
     </div>
 </body>
 </html>

@@ -9,7 +9,6 @@
 <body>
     <div class="page">
 
-        <!-- NAVBAR -->
         <header class="navbar">
             <div class="nav-logo">
                 <span class="icon">🍽️</span>
@@ -22,7 +21,6 @@
             </nav>
         </header>
 
-        <!-- HERO -->
         <section class="hero">
             <div class="hero-text">
                 <div class="badge">
@@ -53,37 +51,46 @@
             </div>
         </section>
 
-        <!-- FORM TÌM KIẾM -->
         <section class="card">
             <div class="section-title">
                 <span class="icon">🔎</span>
                 Thanh tìm kiếm & bộ lọc
             </div>
 
-            <!-- Form có ID và onsubmit để xử lý logic vị trí -->
             <form action="{{ url_for('results_page') }}" method="get" id="searchForm" onsubmit="return handleSearch(event)">
                 
-                <!-- HAI Ô INPUT ẨN ĐỂ CHỨA TỌA ĐỘ -->
                 <input type="hidden" name="lat" id="latInput">
                 <input type="hidden" name="lon" id="lonInput">
 
                 <div class="search-bar">
-                    <div class="search-input-wrap">
-                        <span>🔍</span>
-                        <input name="query"
-                               type="text"
-                               class="search-input"
-                               placeholder="Nhập tên món ăn (vd: 'phở bò', 'bánh mì') hoặc địa điểm (vd: 'Quận 5')..."
-                               required>
-                    </div>
-                    <button type="submit" class="primary-btn" id="searchBtn">
-                        Tìm quán ăn
-                        <span>🍜</span>
-                    </button>
-                </div>
+    <div class="search-input-wrap">
+        <span>🔍</span>
+        <input name="query"
+               type="text"
+               class="search-input"
+               placeholder="Nhập tên món hoặc địa điểm...">
+        
+        <div style="border-left: 1px solid #cbd5e1; padding-left: 10px; margin-left: 5px;">
+            <form id="aiForm" action="{{ url_for('predict_route') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('aiForm').submit()" accept="image/*">
+                
+                <button type="button" 
+                        onclick="document.getElementById('fileInput').click()"
+                        style="background: transparent; border: none; cursor: pointer; font-size: 20px;"
+                        title="Chụp/Tải ảnh món ăn để tìm quán">
+                    📷
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <button type="submit" class="primary-btn" id="searchBtn">
+        Tìm quán ăn
+        <span>🍜</span>
+    </button>
+</div>
 
                 <div class="filters-grid">
-                    <!-- Khoảng cách & giá -->
                     <div class="filter-group">
                         <label>Khoảng cách tối đa (km)</label>
                         <input name="max_distance"
@@ -95,7 +102,7 @@
 
                         <label style="margin-top: 8px;">Mức giá</label>
                         <select name="price_level" id="priceLevelSelect">
-                            <option value="">Không chọn</option>
+                            <option value="">Tất cả</option>
                             <option value="cheap">Rẻ</option>
                             <option value="medium">Vừa</option>
                             <option value="expensive">Cao</option>
@@ -106,21 +113,10 @@
                         </div>
                     </div>
 
-                    <!-- Mô tả mong muốn (chỉ còn ô text) -->
-                    <div class="filter-group">
-                        <label>Mong muốn hiện tại / mô tả thêm</label>
-                        <textarea name="cravings_text"
-                                  id="cravingsInput"
-                                  rows="3"
-                                  placeholder="Ví dụ: đói quá, muốn món nước, tránh đồ chiên nhiều dầu, không muốn fast food..."></textarea>
-                        <small>Backend có thể đọc phần mô tả này để hiểu rõ hơn nhu cầu của user.</small>
-                    </div>
-
-                    <!-- Filter loại quán -->
                     <div class="filter-group">
                         <label>Loại quán (tags)</label>
                         <select name="tag" id="tagsSelect">
-                            <option value="">Không chọn</option>
+                            <option value="">Tất cả</option>
                             <option value="fast_food">Fast food</option>
                             <option value="noodle">Mì/Bún</option>
                             <option value="soup">Món nước</option>
@@ -128,22 +124,51 @@
                             <option value="lunch">Ăn trưa</option>
                             <option value="bbq">Nướng / BBQ</option>
                         </select>
-
                         <div class="tags" id="tagsDisplay" style="margin-top: 4px;">
                             <span class="restaurant-meta">Chưa chọn loại quán.</span>
                         </div>
 
-                        <small>Các tag này dùng để lọc theo loại quán. Việc xử lý chi tiết do backend quyết định.</small>
+                        <label style="margin-top: 8px;">Mô tả thêm</label>
+                        <textarea name="cravings_text"
+                                  id="cravingsInput"
+                                  rows="1"
+                                  style="resize: none;"
+                                  placeholder="Vd: không cay..."></textarea>
                     </div>
-                </div>
 
-                <!-- Hàng gợi ý cho bạn -->
+                   <div class="filter-group">
+    <label class="form-label fw-bold">Ăn cùng ai?</label>
+    
+   <select name="group_filter" id="groupSelect" class="form-select">
+    <option value="alone" selected>Một mình</option>
+    
+    <option value="family">Gia đình</option>
+    <option value="friends">Bạn bè</option>
+    <option value="dating">Hẹn hò</option>
+    <option value="couple">Cặp đôi</option>
+    <option value="company">Công ty / Nhóm</option>
+</select>
+    
+    <label style="margin-top: 8px;">Vibe quán</label>
+    <select name="vibe_filter" id="vibeSelect" class="form-select">
+        <option value="">Tất cả</option>
+        <option value="street_food">Bụi phố / Vỉa hè</option>
+        <option value="luxury">Sang trọng / Check-in</option>
+        <option value="cozy">Ấm cúng / Yên tĩnh</option>
+        <option value="vintage">Cổ điển / Hoài niệm</option>
+        <option value="modern">Hiện đại / Sôi động</option>
+    </select>
+    <div class="tags" id="vibeDisplay" style="margin-top: 4px;">
+        <span class="restaurant-meta">Chưa chọn.</span>
+    </div>
+</div>
+                    
+
                 <div class="suggest-row">
                     <button type="button" class="secondary-btn" id="suggestBtn">
                         Gợi ý món nhanh ✨
                     </button>
                     <div class="divider-vertical"></div>
-                    <!-- NÚT GỢI Ý THÔNG MINH (GPS) -->
                     <button type="button" onclick="getLocationAndRecommend()" class="smart-btn">
                         ✨ Gợi ý thông minh theo vị trí & thời tiết
                     </button>
@@ -159,7 +184,6 @@
             </div>
         </section>
 
-        <!-- ========= BỘ SƯU TẬP NỔI BẬT ========= -->
         <section class="card">
             <div class="section-title">
                 <span class="icon">📚</span>
@@ -170,7 +194,6 @@
             </p>
 
             <div class="collection-grid">
-                <!-- Cơm / món mặn -->
                 <div class="collection-card" style="background: linear-gradient(135deg,#4f46e5,#6366f1);">
                     <div class="collection-title">Cơm trưa no bụng</div>
                     <div class="collection-desc">
@@ -179,7 +202,6 @@
                     <div class="collection-tag">🍚 Khoảng 35k – 60k / người</div>
                 </div>
 
-                <!-- Ăn vặt -->
                 <div class="collection-card" style="background: linear-gradient(135deg,#ec4899,#f97316);">
                     <div class="collection-title">Ăn vặt cuối tuần</div>
                     <div class="collection-desc">
@@ -188,7 +210,6 @@
                     <div class="collection-tag">🍢 Phù hợp nhóm 3–5 người</div>
                 </div>
 
-                <!-- Món nước -->
                 <div class="collection-card" style="background: linear-gradient(135deg,#22c55e,#16a34a);">
                     <div class="collection-title">Món nước nóng ngày mưa</div>
                     <div class="collection-desc">
@@ -201,7 +222,6 @@
 
     </div>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-columns">
@@ -253,7 +273,6 @@
         // 1. LOGIC LẤY VỊ TRÍ (GEOLOCATION)
         // ==========================================
 
-        // Tự động lấy vị trí khi tải trang để điền vào ô ẩn
         window.onload = function() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -271,17 +290,11 @@
             }
         };
 
-        // Hàm xử lý khi bấm nút Tìm kiếm
-        // Nếu chưa có tọa độ, chặn submit để xin quyền vị trí trước
         function handleSearch(event) {
             const latInput = document.getElementById('latInput');
-            
-            // Nếu đã có tọa độ trong ô ẩn -> Cho phép submit ngay
             if (latInput && latInput.value) {
                 return true; 
             }
-
-            // Nếu chưa có -> Chặn submit để xin quyền
             event.preventDefault();
             
             if (navigator.geolocation) {
@@ -292,35 +305,27 @@
 
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        // Thành công -> Điền tọa độ và submit lại
                         document.getElementById('latInput').value = position.coords.latitude;
                         document.getElementById('lonInput').value = position.coords.longitude;
-                        
                         btn.innerHTML = oldText;
                         btn.disabled = false;
-                        
-                        // Submit form bằng code JS
                         document.getElementById('searchForm').submit();
                     }, 
                     (error) => {
-                        // Thất bại (User từ chối) -> Submit luôn (Backend sẽ dùng tọa độ mặc định)
                         console.log("User từ chối vị trí, dùng mặc định.");
                         btn.innerHTML = oldText;
                         btn.disabled = false;
                         document.getElementById('searchForm').submit();
                     },
-                    { timeout: 5000 } // Chờ tối đa 5s
+                    { timeout: 5000 }
                 );
             } else {
-                // Trình duyệt không hỗ trợ -> Submit luôn
                 return true;
             }
         }
 
-        // Hàm cho nút "Gợi ý thông minh"
         function getLocationAndRecommend() {
             if (navigator.geolocation) {
-                // alert("Đang phân tích vị trí & thời tiết...");
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         window.location.href = `/recommend?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
@@ -339,79 +344,86 @@
         }
 
         // ==========================================
-        // 2. LOGIC GIAO DIỆN (SUGGESTION & UI)
+        // 2. LOGIC GIAO DIỆN (UI UPDATE)
         // ==========================================
 
-        const suggestBtn = document.getElementById("suggestBtn");
-        const suggestText = document.getElementById("suggestText");
-        const queryInput = document.querySelector('input[name="query"]');
-        const tagsSelect = document.getElementById("tagsSelect");
-        const cravingsInput = document.getElementById("cravingsInput");
-
-        const SUGGESTIONS = [
-            { q: "phở bò", tag: "noodle", note: "Muốn món nước, ấm bụng, buổi sáng hoặc tối nhẹ nhàng." },
-            { q: "bánh mì", tag: "fast_food", note: "Cần ăn nhanh, mang đi được, phù hợp buổi sáng vội." },
-            { q: "hủ tiếu nam vang", tag: "noodle", note: "Món nước đậm đà, muốn đổi gió so với phở." },
-            { q: "bún bò huế", tag: "noodle", note: "Thích món cay cay, đậm vị." }
-        ];
-
-        if (suggestBtn) {
-            suggestBtn.addEventListener("click", () => {
-                const s = SUGGESTIONS[Math.floor(Math.random() * SUGGESTIONS.length)];
-                if (queryInput) queryInput.value = s.q;
-                if (cravingsInput) cravingsInput.value = s.note;
-
-                if (tagsSelect) {
-                    tagsSelect.value = s.tag || "";
-                    updateTagDisplay();
-                }
-
-                if (suggestText) {
-                    suggestText.textContent = "Gợi ý: " + s.note;
-                }
-            });
-        }
-
-        // ---------- HIỂN THỊ PILL MỨC GIÁ & LOẠI QUÁN ----------
+        // --- Cập nhật Text khi chọn Dropdown (Để đẹp hơn) ---
         const priceSelect = document.getElementById("priceLevelSelect");
         const priceDisplay = document.getElementById("priceLevelDisplay");
+        
+        const tagsSelect = document.getElementById("tagsSelect");
         const tagsDisplay = document.getElementById("tagsDisplay");
 
+        // [MỚI] Khai báo thêm cho 2 bộ lọc mới
+        const groupSelect = document.getElementById("groupSelect");
+        const groupDisplay = document.getElementById("groupDisplay");
+
+        const vibeSelect = document.getElementById("vibeSelect");
+        const vibeDisplay = document.getElementById("vibeDisplay");
+
+        // Label map (Ánh xạ giá trị sang tiếng Việt hiển thị đẹp)
         const PRICE_LABELS = { "cheap": "Rẻ", "medium": "Vừa", "expensive": "Cao" };
         const TAG_LABELS = { 
             "fast_food": "Fast food", "noodle": "Mì/Bún", "soup": "Món nước", 
             "breakfast": "Ăn sáng", "lunch": "Ăn trưa", "bbq": "Nướng / BBQ" 
         };
+        const GROUP_LABELS = {
+            "family": "Gia đình", "friends": "Bạn bè", "dating": "Hẹn hò", 
+            "company": "Công ty", "alone": "Một mình"
+        };
+        const VIBE_LABELS = {
+            "street_food": "Bụi / Vỉa hè", "luxury": "Sang chảnh", "cozy": "Ấm cúng", 
+            "vintage": "Cổ điển", "modern": "Hiện đại"
+        };
 
-        function updatePriceDisplay() {
-            if (!priceDisplay || !priceSelect) return;
-            const val = priceSelect.value;
+        // Hàm chung cập nhật hiển thị
+        function updateDisplay(selectElem, displayElem, labelMap, defaultText) {
+            if (!displayElem || !selectElem) return;
+            const val = selectElem.value;
             if (!val) {
-                priceDisplay.innerHTML = '<span class="restaurant-meta">Chưa chọn mức giá.</span>';
+                displayElem.innerHTML = `<span class="restaurant-meta">${defaultText}</span>`;
                 return;
             }
-            const label = PRICE_LABELS[val] || val;
-            priceDisplay.innerHTML = '<span class="tag">' + label + '</span>';
+            const label = labelMap[val] || val;
+            displayElem.innerHTML = `<span class="tag">${label}</span>`;
         }
 
-        function updateTagDisplay() {
-            if (!tagsDisplay || !tagsSelect) return;
-            const val = tagsSelect.value;
-            if (!val) {
-                tagsDisplay.innerHTML = '<span class="restaurant-meta">Chưa chọn loại quán.</span>';
-                return;
-            }
-            const label = TAG_LABELS[val] || val;
-            tagsDisplay.innerHTML = '<span class="tag">' + label + '</span>';
-        }
+        // Gán sự kiện
+        if (priceSelect) priceSelect.addEventListener("change", () => updateDisplay(priceSelect, priceDisplay, PRICE_LABELS, "Chưa chọn mức giá."));
+        if (tagsSelect) tagsSelect.addEventListener("change", () => updateDisplay(tagsSelect, tagsDisplay, TAG_LABELS, "Chưa chọn loại quán."));
+        
+        // [MỚI] Sự kiện cho 2 bộ lọc mới
+        if (groupSelect) groupSelect.addEventListener("change", () => updateDisplay(groupSelect, groupDisplay, GROUP_LABELS, "Chưa chọn đối tượng."));
+        if (vibeSelect) vibeSelect.addEventListener("change", () => updateDisplay(vibeSelect, vibeDisplay, VIBE_LABELS, "Chưa chọn vibe."));
 
-        if (priceSelect) {
-            priceSelect.addEventListener("change", updatePriceDisplay);
-            updatePriceDisplay();
-        }
-        if (tagsSelect) {
-            tagsSelect.addEventListener("change", updateTagDisplay);
-            updateTagDisplay();
+        // Chạy lần đầu khi load trang
+        updateDisplay(priceSelect, priceDisplay, PRICE_LABELS, "Chưa chọn mức giá.");
+        updateDisplay(tagsSelect, tagsDisplay, TAG_LABELS, "Chưa chọn loại quán.");
+        // [MỚI]
+        if (groupSelect) updateDisplay(groupSelect, groupDisplay, GROUP_LABELS, "Chưa chọn đối tượng.");
+        if (vibeSelect) updateDisplay(vibeSelect, vibeDisplay, VIBE_LABELS, "Chưa chọn vibe.");
+
+        // Nút gợi ý nhanh (cập nhật để random luôn cả bộ lọc mới nếu muốn)
+        const suggestBtn = document.getElementById("suggestBtn");
+        if (suggestBtn) {
+            suggestBtn.addEventListener("click", () => {
+                const SUGGESTIONS = [
+                    { q: "phở bò", tag: "noodle", vibe: "street_food", grp: "alone", note: "Muốn món nước, ấm bụng." },
+                    { q: "bánh mì", tag: "fast_food", vibe: "street_food", grp: "friends", note: "Cần ăn nhanh, mang đi được." },
+                    { q: "lẩu thái", tag: "soup", vibe: "modern", grp: "family", note: "Tụ tập gia đình cuối tuần." },
+                ];
+                const s = SUGGESTIONS[Math.floor(Math.random() * SUGGESTIONS.length)];
+                
+                document.querySelector('input[name="query"]').value = s.q;
+                document.getElementById("cravingsInput").value = s.note;
+                if (tagsSelect) { tagsSelect.value = s.tag; updateDisplay(tagsSelect, tagsDisplay, TAG_LABELS, ""); }
+                
+                // [MỚI] Random luôn 2 cái mới cho xịn
+                if (vibeSelect && s.vibe) { vibeSelect.value = s.vibe; updateDisplay(vibeSelect, vibeDisplay, VIBE_LABELS, ""); }
+                if (groupSelect && s.grp) { groupSelect.value = s.grp; updateDisplay(groupSelect, groupDisplay, GROUP_LABELS, ""); }
+
+                document.getElementById("suggestText").textContent = "Gợi ý: " + s.note;
+            });
         }
     </script>
 </body>

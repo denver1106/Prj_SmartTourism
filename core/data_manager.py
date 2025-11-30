@@ -6,7 +6,7 @@ import random
 class DataManager:
     """
     Quản lý kết nối Firestore, chuẩn hóa dữ liệu và tạo dữ liệu giả THÔNG MINH.
-    Hỗ trợ: Mock data theo vị trí, lấy đặc sản vùng miền, context mô tả phong phú.
+    CẬP NHẬT: Đã hỗ trợ lấy group_type, vibe, cuisine, amenities, rating, images.
     """
     def __init__(self, cred_path: str = "firebase-key.json", use_app_name: Optional[str] = None):
         # --- Logic khởi tạo Firebase an toàn ---
@@ -44,10 +44,6 @@ class DataManager:
 
     # ---------------- 1. HÀM LẤY ĐẶC SẢN TỪ FIREBASE ----------------
     def get_place_specialties(self, place_name: str) -> List[str]:
-        """
-        Tra cứu đặc sản của địa phương từ collection 'place_specialties'.
-        VD: input "An Giang" -> return ["lẩu mắm", "cá linh kho"...]
-        """
         if not self.db or not place_name:
             return []
         
@@ -55,7 +51,6 @@ class DataManager:
         specialties = []
 
         try:
-            # Cách 1: Query theo normalizedPlace
             coll_ref = self.db.collection("place_specialties")
             docs = coll_ref.where("normalizedPlace", "==", clean_name).stream()
             
@@ -67,7 +62,6 @@ class DataManager:
                 if isinstance(foods, list):
                     specialties.extend(foods)
             
-            # Cách 2: Nếu query không ra, thử tìm theo ID (ví dụ: an_giang)
             if not found:
                 doc_id = clean_name.replace(" ", "_")
                 doc = coll_ref.document(doc_id).get()
@@ -81,94 +75,59 @@ class DataManager:
             
         return specialties
 
-    # ---------------- 2. MOCK GENERATOR (FULL CONTEXT) ----------------
-    def _generate_mock_data(self, user_lat: float, user_lon: float, count: int = 10, special_foods: List[str] = None) -> List[Dict[str, Any]]:
+    # ---------------- 2. MOCK GENERATOR (CẬP NHẬT FULL OPTIONS) ----------------
+    def _generate_mock_data(self, user_lat: float, user_lon: float, count: int = 20, special_foods: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Sinh dữ liệu giả. 
-        Nếu có special_foods (đặc sản), sẽ ưu tiên tạo quán bán các món đó.
+        Sinh dữ liệu giả bao gồm cả group_type, vibe, amenities, cuisine... để test bộ lọc.
         """
         mocks = []
         
-        # Danh sách mặc định (dùng khi không có đặc sản)
         default_categories = [
-            {"base": "Phở Bò", "menu": ["phở tái", "phở nạm", "quẩy", "trứng trần"], "tags": ["sáng", "nóng"]},
-            {"base": "Cơm Tấm", "menu": ["cơm sườn", "bì", "chả", "trứng ốp la"], "tags": ["trưa", "no"]},
-            {"base": "Bún Bò Huế", "menu": ["bún bò", "giò heo", "chả cua"], "tags": ["sáng", "cay"]},
-            {"base": "Trà Sữa", "menu": ["trà sữa trân châu", "hồng trà", "flan"], "tags": ["chiều"]},
-            {"base": "Bún Đậu", "menu": ["bún đậu", "mắm tôm", "dồi sụn"], "tags": ["trưa"]},
-            {"base": "Pizza", "menu": ["pizza hải sản", "mỳ ý", "salad"], "tags": ["tối", "Âu"]},
-            {"base": "Bánh Mì", "menu": ["bánh mì thịt", "bánh mì chảo", "xíu mại"], "tags": ["nhanh", "sáng"]},
-            {"base": "Lẩu Nướng", "menu": ["ba chỉ bò", "nầm nướng", "lẩu thái"], "tags": ["tối", "nhậu"]},
+            {"base": "Phở Bò", "menu": ["phở tái", "phở nạm", "quẩy"], "tags": ["sáng", "nóng"]},
+            {"base": "Cơm Tấm", "menu": ["cơm sườn", "bì", "chả"], "tags": ["trưa", "no"]},
+            {"base": "Bún Bò Huế", "menu": ["bún bò", "giò heo"], "tags": ["sáng", "cay"]},
+            {"base": "Trà Sữa", "menu": ["trà sữa trân châu", "hồng trà"], "tags": ["chiều"]},
+            {"base": "Bún Đậu", "menu": ["bún đậu", "mắm tôm"], "tags": ["trưa"]},
+            {"base": "Pizza", "menu": ["pizza hải sản", "mỳ ý"], "tags": ["tối", "Âu"]},
+            {"base": "Bánh Mì", "menu": ["bánh mì thịt", "bánh mì chảo"], "tags": ["nhanh", "sáng"]},
+            {"base": "Lẩu Nướng", "menu": ["ba chỉ bò", "nầm nướng"], "tags": ["tối", "nhậu"]},
         ]
         
         suffixes = ["Gia Truyền", "Bà Ba", "Chú Tư", "Sài Gòn", "Phố Cổ", "Vỉa Hè", "Ngon", "Gốc", "Luxury"]
-        
-        # DANH SÁCH 30 CONTEXT MÔ TẢ PHONG PHÚ
-        descriptions_pool = [
-            "Hương vị hài hòa, cân bằng giữa mặn — ngọt — chua.",
-            "Thành phần tươi ngon, chế biến tinh tế.",
-            "Món ăn đậm đà, kích thích vị giác ngay từ miếng đầu tiên.",
-            "Cách nêm nếm truyền thống kết hợp phong cách hiện đại.",
-            "Textures phong phú: mềm — giòn — béo hài hòa.",
-            "Phục vụ nóng hổi, giữ nguyên hương thơm tự nhiên.",
-            "Thành phần từ nguồn địa phương, an toàn và sạch.",
-            "Món nhẹ nhàng, thích hợp cho mọi bữa ăn.",
-            "Phù hợp để chia sẻ cùng gia đình và bạn bè.",
-            "Trình bày tinh tế, bắt mắt, ăn trước đã thấy ngon.",
-            "Đầy đặn, ngon miệng — no lâu, bổ dưỡng.",
-            "Hương thơm thoang thoảng, đánh thức khứu giác.",
-            "Chế biến cầu kỳ nhưng vẫn giữ được vị nguyên bản.",
-            "Sự hòa quyện của gia vị tạo nên điểm nhấn riêng.",
-            "Phù hợp với người ăn chay/ăn mặn (ghi chú khi cần).",
-            "Món ăn cân bằng dinh dưỡng — phù hợp cho mọi lứa tuổi.",
-            "Vị nhẹ nhàng, dễ ăn, phù hợp cho cả trẻ em.",
-            "Một lựa chọn tinh tế cho bữa trưa vội hay tối ấm cúng.",
-            "Cảm giác ấm áp, quen thuộc như bữa cơm nhà.",
-            "Món ăn tươi sống, chế biến nhanh, giữ vitamin.",
-            "Vị cay/không cay có thể điều chỉnh theo yêu cầu.",
-            "Phù hợp kết hợp với nhiều loại đồ uống.",
-            "Hương vị phong phú, mỗi miếng là một trải nghiệm.",
-            "Món ăn truyền cảm hứng từ ẩm thực địa phương.",
-            "Độ mặn vừa phải, không lấn át nguyên liệu chính.",
-            "Món cổ điển được làm mới bằng kỹ thuật hiện đại.",
-            "Hương vị nhẹ nhàng nhưng ấn tượng, dễ nhớ.",
-            "Tinh tế trong cách cân gia vị và xử lý nguyên liệu.",
-            "Được chế biến theo tiêu chuẩn vệ sinh thực phẩm nghiêm ngặt.",
-            "Một lựa chọn hoàn hảo cho những ai yêu ẩm thực tinh tế."
-        ]
+        mock_groups = ["alone", "family", "friends", "dating", "company", "couple"]
+        mock_vibes = ["street_food", "luxury", "cozy", "vintage", "modern"]
 
-        # --- XỬ LÝ LOGIC ĐẶC SẢN ---
         source_categories = default_categories
         
         if special_foods and len(special_foods) > 0:
-            # Nếu có đặc sản, tạo category mới từ đặc sản đó
             custom_categories = []
             for food in special_foods:
-                food_name = food.replace("_", " ").title() # vd: "lau_mam" -> "Lau Mam"
+                food_name = food.replace("_", " ").title()
                 custom_categories.append({
-                    "base": food_name, # Tên quán sẽ là "Lau Mam Bà Ba"
-                    "menu": [food_name, food_name + " đặc biệt", "Món ngon " + food_name],
+                    "base": food_name,
+                    "menu": [food_name, food_name + " đặc biệt"],
                     "tags": ["đặc sản", "địa phương", "ngon"]
                 })
-            source_categories = custom_categories # Ghi đè danh sách nguồn
+            source_categories = custom_categories
 
         for i in range(count):
             cat = random.choice(source_categories)
             suffix = random.choice(suffixes)
-            
-            # Ghép tên quán
             name = f"{cat['base']} {suffix}"
             
-            # Random vị trí gần user (1-2km) để map chỉ đường đẹp
-            # Hệ số 0.035 tương đương bán kính ~1.5km - 2km
             offset_lat = (random.random() - 0.5) * 0.035 
             offset_lon = (random.random() - 0.5) * 0.035
-            
             mock_lat = user_lat + offset_lat
             mock_lng = user_lon + offset_lon
             
-            # Tính khoảng cách sơ bộ (Pythagore)
             dist_approx = ((mock_lat - user_lat)**2 + (mock_lng - user_lon)**2)**0.5 * 111
+
+            random_groups = random.sample(mock_groups, k=random.randint(1, 3))
+            vibe = random.choice(mock_vibes)
+            
+            # Mock Amenities & Cuisine
+            amenities = ["wifi", "ac"] if vibe in ["luxury", "modern"] else ["parking_free"]
+            cuisine = "vietnamese"
 
             mocks.append({
                 "id": f"mock_special_{i}",
@@ -179,32 +138,47 @@ class DataManager:
                 "tags": ["demo", "mock"] + cat["tags"],
                 "menu": cat["menu"],
                 "foods": cat["menu"], 
-                "price_level": random.choice(["30k", "50k", "100k"]),
-                "description": random.choice(descriptions_pool),
-                "distance_km": dist_approx
+                "price_level": random.choice(["cheap", "medium", "expensive"]),
+                "price_range": "30k - 100k",
+                "rating": 4.5,
+                "total_reviews": 100,
+                "images": [], # Không có ảnh
+                "calories": "500 kcal",
+                "description": "Quán ngon giả lập để test giao diện.",
+                "distance_km": dist_approx,
+                
+                # Full Fields
+                "group_type": random_groups,
+                "vibe": vibe,
+                "amenities": amenities,
+                "cuisine": cuisine
             })
             
         return mocks
 
-    # ---------------- 3. MAIN LOADER (LẤY DỮ LIỆU) ----------------
+    # ---------------- 3. MAIN LOADER (ĐÃ TỐI ƯU & LẤY ĐỦ TRƯỜNG) ----------------
     def get_all_restaurants(self, use_cache: bool = True, user_lat: float = None, user_lon: float = None, 
                           enable_mock: bool = True, place_scope: str = None) -> List[Dict[str, Any]]:
         """
         Lấy quán ăn từ DB + Mock Data.
-        place_scope: Tên địa điểm user đang tìm (VD: 'an giang'). Nếu có, sẽ lấy đặc sản vùng đó.
-        enable_mock: True/False để bật tắt chế độ dữ liệu giả.
         """
+        # Trả về cache nếu có
+        if use_cache and self._cache["restaurants"]:
+            return self._cache["restaurants"]
+
         restaurants = []
         
         # 1. Lấy dữ liệu thật từ Firebase
         if self.db:
             try:
                 ref = self.db.collection("restaurants")
-                docs = ref.stream()
+                
+                # 🔥 LIMIT: Chỉ lấy 500 quán để load nhanh và tiết kiệm quota
+                docs = ref.limit(500).stream() 
+                
                 for doc in docs:
                     raw_data = doc.to_dict() or {}
                     
-                    # --- Chuẩn hóa Tọa độ ---
                     lat = raw_data.get("lat")
                     lng = raw_data.get("lng")
                     if lat is None or lng is None:
@@ -213,11 +187,13 @@ class DataManager:
                             lat = geo.latitude
                             lng = geo.longitude
                     
-                    # --- Chuẩn hóa Menu ---
-                    # Ưu tiên 'foods' rồi đến 'menu'
-                    raw_foods = raw_data.get("foods") or raw_data.get("menu") or []
-                    if not isinstance(raw_foods, list): raw_foods = [str(raw_foods)]
-                    clean_menu = [str(m).lower() for m in raw_foods]
+                    # Gộp foods và menu để tìm kiếm tốt hơn
+                    list_foods = raw_data.get("foods") or []
+                    list_menu = raw_data.get("menu") or []
+                    if not isinstance(list_foods, list): list_foods = [str(list_foods)]
+                    if not isinstance(list_menu, list): list_menu = [str(list_menu)]
+                    combined_menu = list(set(list_foods + list_menu))
+                    clean_menu = [str(m).lower() for m in combined_menu]
 
                     item = {
                         "id": doc.id,
@@ -226,31 +202,38 @@ class DataManager:
                         "tags": [str(t).lower() for t in raw_data.get("tags", [])],
                         "menu": clean_menu,       
                         "foods": clean_menu,      
+                        
+                        # --- CÁC TRƯỜNG QUAN TRỌNG MỚI (Lấy về từ DB) ---
                         "price_level": raw_data.get("price_level", "?"),
+                        "price_range": raw_data.get("price_range", "Đang cập nhật"),
+                        "rating": raw_data.get("rating", 4.0),
+                        "total_reviews": raw_data.get("total_reviews", 0),
+                        "images": raw_data.get("images", []),
+                        "calories": raw_data.get("calories", ""),
+                        "amenities": raw_data.get("amenities", []),
+                        "cuisine": raw_data.get("cuisine", ""),
+                        "group_type": raw_data.get("group_type", []), 
+                        "vibe": raw_data.get("vibe", ""),
+
                         "lat": float(lat) if lat is not None else None,
                         "lng": float(lng) if lng is not None else None,
                         "description": raw_data.get("description", "Chưa có mô tả."),
-                        "distance_km": 0.0 
+                        "distance_km": 0.0,
                     }
                     restaurants.append(item)
             except Exception as e:
-                print(f"ERROR loading real data: {e}")
+                print(f"❌ ERROR loading real data: {e}")
 
-        # 2. Xử lý Mock Data thông minh
-        if enable_mock:
-            # Nếu user truyền tọa độ -> dùng tọa độ đó. 
-            # Nếu không -> dùng mặc định TP.HCM (thay vì Hà Nội để phù hợp context bạn test)
-            target_lat = user_lat if user_lat else 10.7769 
+        # 2. Xử lý Mock Data (Nếu cần)
+        if enable_mock and len(restaurants) == 0:
+            print("⚠️ Không lấy được data thật, đang dùng Mock Data...")
+            target_lat = user_lat if user_lat else 10.7628 
             target_lon = user_lon if user_lon else 106.7009
             
-            # --- KEY POINT: Lấy đặc sản nếu đang tìm theo địa điểm ---
             special_foods = []
             if place_scope:
-                # print(f"DEBUG: Đang tìm đặc sản cho vùng: {place_scope}")
                 special_foods = self.get_place_specialties(place_scope)
             
-            # Truyền danh sách đặc sản vào hàm tạo mock
-            # Luôn tạo 20 quán giả để đảm bảo kết quả tìm kiếm không bị trống
             mock_data = self._generate_mock_data(target_lat, target_lon, count=20, special_foods=special_foods)
             restaurants.extend(mock_data)
 
@@ -258,7 +241,6 @@ class DataManager:
         return restaurants
 
     def get_restaurants_near_user(self, lat: float, lng: float, radius_km: float = 10.0) -> List[Dict[str, Any]]:
-        """Wrapper cho chức năng Gợi ý (Luôn bật Mock)"""
         return self.get_all_restaurants(use_cache=False, user_lat=lat, user_lon=lng, enable_mock=True)
     
     # ---------------- 4. USER HELPERS ----------------
