@@ -1,21 +1,5 @@
-﻿"""
-Module: manual_filters.py
-Tính năng: LỌC THỦ CÔNG danh sách quán ăn dựa trên lựa chọn từ frontend.
-
-Ý tưởng:
-- Nhận vào 1 list các dict "restaurant" (định dạng giống DataManager.get_all_restaurants)
-- Áp dụng lần lượt các tiêu chí:
-    + max_distance (khoảng cách tối đa, km)
-    + price_level   (cheap / medium / expensive)
-    + tag           (fast_food / noodle / soup / breakfast / lunch / bbq)
-    + cravings_text (chuỗi mô tả nhu cầu hiện tại của user)
-    + people_count  (số lượng người trong nhóm – nếu có field max_people)
-
-File này ĐỘC LẬP, không phụ thuộc Flask.
-Có thể import vào app.py bằng:
-    from core.manual_filters import filter_restaurants
-"""
-
+﻿
+#core/manual_filters.py
 from typing import List, Dict, Any, Optional
 
 
