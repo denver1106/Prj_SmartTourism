@@ -42,29 +42,97 @@ class SearchHandler:
 
     # 2. Xử lý NL: Loại bỏ từ thừa & Phát hiện địa danh
     def parse_query(self, raw_query: str) -> dict:
-        clean_q = self.normalize(raw_query)
+        """
+        Tách query thành 2 phần:
+        - clean_query: từ khoá món ăn / nhu cầu (KHÔNG chứa địa danh)
+        - thông tin địa danh (TP.HCM / Hà Nội / ...)
+        Hỗ trợ:
+            - "phở"
+            - "Thành Phố Hồ Chí Minh"
+            - "phở Hà Nội"
+        """
+        if not raw_query:
+            return {
+                "clean_query": "",
+                "location_tags": [],
+                "is_location_search": False,
+                "raw_location_query": "",
+            }
+
+        raw_lower = raw_query.lower()
+        clean_q = self.normalize(raw_query)          # bỏ dấu, lowercase
         tokens = clean_q.split()
-        
-        # Lọc bỏ từ thừa
-        keywords = [w for w in tokens if w not in STOP_WORDS]
-        final_query = " ".join(keywords)
-        
-        # Check xem user có nhập tên tỉnh thành không?
-        detected_location_tags = []
-        is_location_search = False
-        
-        for city, specialties in PROVINCE_SPECIALTIES.items():
-            # Nếu tên tỉnh (đã normalize) nằm trong query của user
-            if self.normalize(city) in clean_q or city in clean_q:
-                # User tìm theo địa danh -> Gắn đặc sản vào
-                detected_location_tags.extend(specialties)
-                is_location_search = True
-        
-        return {
-            "clean_query": final_query,  # Chuỗi query tinh gọn (để fuzzy search)
-            "location_tags": detected_location_tags, # List món ăn nếu tìm theo tỉnh
-            "is_location_search": is_location_search
+
+        # ----- 1. Nhận diện địa danh -----
+        LOCATION_KEYWORDS = {
+            "hanoi": [
+                "hà nội", "ha noi", "hanoi",
+                "thành phố hà nội", "thanh pho ha noi",
+            ],
+            "hochiminh": [
+                "thành phố hồ chí minh", "thanh pho ho chi minh",
+                "ho chi minh", "tp.hcm", "tp hcm", "tphcm",
+                "sài gòn", "sai gon",
+            ],
+            # Sau này muốn thêm Đà Nẵng, Huế,... thì bổ sung ở đây
         }
+
+        location_key = None
+        location_phrase_norm = ""
+
+        for city_key, patterns in LOCATION_KEYWORDS.items():
+            for pat in patterns:
+                norm_pat = self.normalize(pat)
+                if norm_pat and norm_pat in clean_q:
+                    location_key = city_key
+                    location_phrase_norm = norm_pat      # ví dụ: "ho chi minh", "ha noi"
+                    break
+            if location_key:
+                break
+
+        is_location_search = location_key is not None
+
+        detected_location_tags = []
+        if is_location_search:
+            detected_location_tags.extend(
+                PROVINCE_SPECIALTIES.get(location_key, [])
+            )
+
+        # ----- 2. Xem query có nhắc tới món ăn không -----
+        FOOD_KEYWORDS = [
+            "phở", "pho",
+            "bún", "mì", "mi ", "mì quảng", "hu tieu", "hủ tiếu",
+            "cơm", "com", "cơm tấm", "com tam",
+            "bánh mì", "banh mi",
+            "lẩu", "lau",
+            "pizza", "burger", "kfc",
+        ]
+        has_food_word = any(word in raw_lower for word in FOOD_KEYWORDS)
+
+        # ----- 3. Tạo clean_query (chỉ phần món ăn / nhu cầu) -----
+        keywords = tokens.copy()
+
+        # Bỏ cụm từ địa danh ra khỏi tokens (nếu có)
+        if location_phrase_norm:
+            loc_tokens = location_phrase_norm.split()
+            keywords = [w for w in keywords if w not in loc_tokens]
+
+        # Bỏ stop words chung
+        keywords = [w for w in keywords if w not in STOP_WORDS]
+
+        final_query = " ".join(keywords).strip()
+
+        # Nếu query chỉ để chọn địa danh (không có món ăn)
+        if is_location_search and not has_food_word:
+            final_query = ""   # để phân biệt location-only
+
+        return {
+            "clean_query": final_query,               # vd: "pho"
+            "location_tags": detected_location_tags,  # list đặc sản của tỉnh
+            "is_location_search": is_location_search,
+            "raw_location_query": location_phrase_norm,  # vd: "ho chi minh", "ha noi"
+        }
+
 
     # 3. So khớp tương đối (Fuzzy Match)
     def fuzzy_ratio(self, query, text):
@@ -75,75 +143,106 @@ class SearchHandler:
     # MAIN SEARCH FUNCTION
     # ===============================================
     def search(self, restaurants: List[Dict[str, Any]], user_input: str) -> List[Dict[str, Any]]:
+        """
+        Tìm kiếm theo:
+        - q (món ăn / từ khoá)
+        - địa danh (nếu có)
+        Hỗ trợ:
+            + "phở"
+            + "Thành Phố Hồ Chí Minh"
+            + "phở Hà Nội"  -> bắt buộc match cả phở lẫn Hà Nội
+        """
         if not user_input or not user_input.strip():
             return restaurants
 
-        # Phân tích Input của user
         parsed = self.parse_query(user_input)
-        q = parsed["clean_query"]
-        loc_tags = parsed["location_tags"]
-        
-        results = []
+        q = self.normalize(parsed.get("clean_query", "")).strip()
+        loc_tags = parsed.get("location_tags", [])
+        is_location_search = parsed.get("is_location_search", False)
+        raw_loc = parsed.get("raw_location_query") or ""
+        loc_query_norm = self.normalize(raw_loc)
+
+        results: List[Dict[str, Any]] = []
 
         for r in restaurants:
-            # Lấy data của quán & chuẩn hóa
-            r_name = self.normalize(r.get("name", ""))
-            
-            # Xử lý tags (database trả về list hoặc str)
-            r_tags_list = r.get("tags", [])
-            if isinstance(r_tags_list, str): r_tags_list = [r_tags_list]
-            r_tags_str = " ".join([self.normalize(t) for t in r_tags_list])
-            
-            # Xử lý menu (database trả về list json)
-            r_menu = r.get("menu", [])
-            menu_str = ""
-            if isinstance(r_menu, list):
-                # Gộp tên các món trong menu thành 1 chuỗi dài để search
-                items = [self.normalize(str(x.get("name") if isinstance(x, dict) else x)) for x in r_menu]
-                menu_str = " ".join(items)
+            # Chuẩn hoá các field text
+            name_norm = self.normalize(str(r.get("name", "")))
+            addr_norm = self.normalize(str(r.get("address", "")))
 
+            tags = r.get("tags", []) or []
+            if isinstance(tags, str):
+                tags = [tags]
+            tags_norm = [self.normalize(str(t)) for t in tags]
+            tags_str = " ".join(tags_norm)
+
+            menu = r.get("menu", []) or []
+            if isinstance(menu, list):
+                menu_items = []
+                for m in menu:
+                    if isinstance(m, dict):
+                        menu_items.append(self.normalize(str(m.get("name", ""))))
+                    else:
+                        menu_items.append(self.normalize(str(m)))
+                menu_str = " ".join(menu_items)
+            else:
+                menu_str = self.normalize(str(menu))
+
+            # ----- Kiểm tra match LOCATION -----
+            loc_match = True
+            if is_location_search and loc_query_norm:
+                loc_match = (
+                    (loc_query_norm in addr_norm) or
+                    (loc_query_norm in name_norm)
+                )
+
+            # ----- Kiểm tra match MÓN ĂN / KEYWORD -----
+            dish_match = True
+            if q:
+                in_name = (q in name_norm) or (self.fuzzy_ratio(q, name_norm) > 0.65)
+                in_tags = q in tags_str
+                in_menu = q in menu_str
+                dish_match = in_name or in_tags or in_menu
+
+            # Nếu có địa danh thì phải match địa danh.
+            # Nếu có q thì phải match q.
+            if not loc_match or not dish_match:
+                continue
+
+            # ----- TÍNH ĐIỂM -----
             score = 0
 
-            # === LOGIC 1: TÌM THEO TÊN TỈNH/ĐỊA DANH ===
-            # Nếu user nhập "Hà Nội" -> Tìm quán có bán Phở, Bún chả... HOẶC tag hanoi
-            if parsed["is_location_search"]:
-                # 1. Check xem Tag quán có chứa đặc sản của tỉnh đó không
-                # ví dụ: quán bán 'pho' thì match với đặc sản 'pho' của hanoi
-                match_specialty = any(spec in r_tags_str or spec in menu_str for spec in loc_tags)
-                if match_specialty:
-                    score += 20 # Ưu tiên rất cao
-                
-                # 2. Check xem tên quán có chứa tên tỉnh không (VD: Phở Hà Nội)
-                # Dùng raw input để check (VD: "ha noi" in name)
-                user_geo_clean = self.normalize(user_input) 
-                if user_geo_clean in r_name:
-                    score += 15
+            # Ưu tiên đúng địa danh
+            if is_location_search and loc_query_norm:
+                if loc_query_norm in addr_norm:
+                    score += 20
+                if loc_query_norm in name_norm:
+                    score += 5
 
-            # === LOGIC 2: TÌM THEO KEYWORD TỰ NHIÊN (NL) ===
-            # VD: "Cơm ngon" -> q="cơm" (đã bỏ ngon)
+                # Bonus nếu menu/tags có món đặc sản vùng đó
+                for tag in loc_tags:
+                    t_norm = self.normalize(str(tag))
+                    if t_norm and (t_norm in tags_str or t_norm in menu_str):
+                        score += 3
+
+            # Ưu tiên match món ăn
             if q:
-                # Ưu tiên 1: Tên quán chứa từ khóa
-                if q in r_name: score += 10
-                elif self.fuzzy_ratio(q, r_name) > 0.65: score += 5
-                
-                # Ưu tiên 2: Tag quán chứa từ khóa
-                if q in r_tags_str: score += 8
-                
-                # Ưu tiên 3: Menu chứa món đó
-                if q in menu_str: score += 6
+                if q in name_norm:
+                    score += 10
+                elif self.fuzzy_ratio(q, name_norm) > 0.65:
+                    score += 6
 
-            # Nếu có điểm phù hợp thì thêm vào list
-            if score > 0:
-                r["search_score"] = score
-                # Gán thêm nhãn lý do (để frontend hiển thị nếu cần)
-                if parsed["is_location_search"]:
-                    r["search_reason"] = "Đặc sản vùng miền"
-                else:
-                    r["search_reason"] = "Khớp từ khóa"
-                results.append(r)
+                if q in tags_str:
+                    score += 4
+                if q in menu_str:
+                    score += 4
 
-        # Sort theo điểm khớp (giảm dần) -> Khoảng cách (tăng dần)
-        # Điểm cao nhất lên đầu, nếu điểm bằng nhau thì quán gần hơn lên đầu
-        results.sort(key=lambda x: (-x.get("search_score", 0), x.get("distance_km", 999)))
-        
+            if score <= 0:
+                score = 1
+
+            r["search_score"] = score
+            results.append(r)
+
+        results.sort(
+            key=lambda x: (-x.get("search_score", 0), x.get("distance_km", 999))
+        )
         return results

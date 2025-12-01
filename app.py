@@ -251,7 +251,6 @@ def user_page():
 @app.route("/results")
 @login_required
 def results_page():
-
     dm = get_dm()
 
     try:
@@ -268,11 +267,21 @@ def results_page():
     if not dm:
         return "Lỗi CSDL"
 
+    # Phân tích query để biết đây là search món ăn hay search tỉnh/thành
+    parsed = searcher.parse_query(query) if query else {"is_location_search": False}
+    is_location_search = parsed.get("is_location_search", False)
+    print("DEBUG_RESULT_PAGE: query =", query, "| is_location_search =", is_location_search)
+
+    # Lấy toàn bộ quán (đã tính distance_km)
     restaurants = dm.get_all_restaurants(use_cache=True, user_lat=lat, user_lon=lon)
+    print("DEBUG_RESULT_PAGE: len(all_restaurants) =", len(restaurants))
 
     # 1. SEARCH
-    if query:
+    # - Nếu là search món ăn / từ khóa -> dùng SearchHandler như cũ
+    # - Nếu là search tỉnh/thành -> KHÔNG search theo text nữa (giữ nguyên danh sách)
+    if query and not is_location_search:
         restaurants = searcher.search(restaurants, query)
+        print("DEBUG_RESULT_PAGE: len(after search) =", len(restaurants))
 
     # 2. FILTER
     try:
@@ -280,16 +289,22 @@ def results_page():
     except:
         max_dist_val = None
 
+    # Nếu là search tỉnh/thành -> không dùng cravings_text để lọc nữa
+    cravings_for_filter = None
+
     filtered = filter_restaurants(
         restaurants,
         max_distance=max_dist_val,
         price_level=price,
         tag=tag,
-        cravings_text=query
+        cravings_text=cravings_for_filter,
     )
 
-    if not query:
-        filtered.sort(key=lambda x: x["distance_km"])
+    print("DEBUG_RESULT_PAGE: len(after filter) =", len(filtered))
+
+    # Nếu không có query hoặc là search tỉnh/thành -> sort theo khoảng cách
+    if not query or is_location_search:
+        filtered.sort(key=lambda x: x.get("distance_km", 999))
 
     return render_template("result.html", restaurants=filtered[:40], query=query)
 
