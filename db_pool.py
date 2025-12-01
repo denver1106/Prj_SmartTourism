@@ -6,7 +6,7 @@ import os
 POOL_CONFIG = {
     'user': os.environ.get("DB_USER", "root"),
     'password': os.environ.get("DB_PASSWORD", "password"),
-    'host': os.environ.get("DB_HOST", "127.0.0.1"),
+    'host': os.environ.get("DB_HOST", "localhost"),
     'database': os.environ.get("DB_DATABASE", "smarttourism"),
     'pool_size': 10,  # Giữ tối đa 10 kết nối hoạt động
     'pool_name': "SmartFoodPool",

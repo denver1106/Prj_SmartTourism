@@ -15,7 +15,7 @@ import requests
 db = pymysql.connect(
     host="localhost",
     user="root",
-    password="Khoidmh1106",
+    password="Nhom4@36",
     database="smarttourism",
     charset="utf8mb4"
 )

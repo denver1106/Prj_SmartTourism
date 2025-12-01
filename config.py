@@ -1,7 +1,7 @@
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "password": "Khoidmh1106", 
+    "password": "Nhom4@36", 
     "database": "smarttourism",
     "port": 3306
 }

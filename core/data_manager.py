@@ -103,15 +103,21 @@ class DataManager:
     def get_user_history_full(self, user_id):
         try:
             with self.db.cursor() as cur:
-                # JOIN bảng lịch sử với bảng restaurants để lấy info chi tiết
-                # Dùng DISTINCT để tránh 1 quán hiện 10 lần nếu user bấm 10 lần
+                # SỬA TẠI ĐÂY: Bỏ DISTINCT, thêm điều kiện lọc action, thêm h.created_at
                 sql = """
-                    SELECT DISTINCT r.id, r.name, r.address, r.image_url, 
-                                    r.lat, r.lng, r.rating, r.price_level
+                    SELECT 
+                        r.id, r.name, r.address, r.image_url, 
+                        r.lat, r.lng, r.rating, r.price_level,
+                        MAX(h.created_at) AS latest_viewed_at, -- Lấy thời gian hoạt động mới nhất
+                        SUBSTRING_INDEX(GROUP_CONCAT(h.action ORDER BY h.created_at DESC), ',', 1) AS last_action -- Lấy hành động gần nhất
                     FROM user_history h
                     JOIN restaurants r ON h.restaurant_id = r.id
                     WHERE h.user_id = %s
-                    ORDER BY h.created_at DESC
+                        AND h.action IN ('view', 'visit') -- Chỉ lấy các hoạt động xem và ghé thăm
+                    GROUP BY 
+                        r.id, r.name, r.address, r.image_url, r.lat, r.lng, r.rating, r.price_level
+                    ORDER BY 
+                        latest_viewed_at DESC
                     LIMIT 20
                 """
                 cur.execute(sql, (user_id,))
@@ -126,8 +132,12 @@ class DataManager:
                     "address": r.get("address", ""),
                     "image_url": r.get("image_url", ""),
                     "rating": r.get("rating", 0),
-                    "price": r.get("price_level", "")
-                })
+                    "price": r.get("price_level", ""),
+                    # Sử dụng thời gian hoạt động mới nhất
+                    "created_at": r["latest_viewed_at"], 
+                    # (Tùy chọn) Thêm hành động gần nhất để bạn có thể hiển thị trong template
+                    "last_action": r["last_action"]
+             })
             return results
         except Exception as e:
             print(f"History Error: {e}")
@@ -136,12 +146,12 @@ class DataManager:
     def get_user_preferences(self, user_id) -> Dict[str, Any]:
         try:
             with self.db.cursor() as cur:
-                cur.execute("SELECT like_tags, dislike_tags FROM user_preferences WHERE user_id=%s", (user_id,))
+                cur.execute("SELECT liked_tags, disliked_tags FROM user_preferences WHERE user_id=%s", (user_id,))
                 row = cur.fetchone()
             if row: 
                 return {
-                    "like_tags": self._parse_json(row.get("like_tags")),
-                    "dislike_tags": self._parse_json(row.get("dislike_tags")) # Lấy thêm dislike
+                    "like_tags": self._parse_json(row.get("liked_tags")),
+                    "dislike_tags": self._parse_json(row.get("disliked_tags")) # Lấy thêm dislike
                 }
         except: pass
         return {"like_tags": [], "dislike_tags": []}
@@ -153,11 +163,11 @@ class DataManager:
                 val_dislike = json.dumps(disliked_list)
                 
                 sql = """
-                    INSERT INTO user_preferences (user_id, like_tags, dislike_tags) 
+                    INSERT INTO user_preferences (user_id, liked_tags, disliked_tags) 
                     VALUES (%s, %s, %s) 
                     ON DUPLICATE KEY UPDATE 
-                        like_tags = VALUES(like_tags),
-                        dislike_tags = VALUES(dislike_tags)
+                        liked_tags = VALUES(liked_tags),
+                        disliked_tags = VALUES(disliked_tags)
                 """
                 # Chú ý: Database phải có cột 'dislike_tags' (hoặc disliked_tags tùy lúc bạn create table)
                 # Nếu bảng cũ tạo là 'disliked_tags', hãy sửa tên biến cho khớp

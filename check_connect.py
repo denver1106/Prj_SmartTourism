@@ -11,7 +11,7 @@ print(" 🕵️‍♂️  CHẨN ĐOÁN KẾT NỐI DATABASE")
 print("="*40)
 
 # Lấy cấu hình
-db_host = os.getenv("DB_HOST", "127.0.0.1")
+db_host = os.getenv("DB_HOST", "localhost")
 db_user = os.getenv("DB_USER", "root")
 db_pass = os.getenv("DB_PASSWORD") # Không set default để check file env
 db_name = os.getenv("DB_DATABASE", "smarttourism")
