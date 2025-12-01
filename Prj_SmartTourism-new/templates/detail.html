@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ r.name }} - SmartFood</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Dùng FontAwesome cho icon đẹp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #ff6b00; --bg: #f8fafc; --text: #1e293b; --gray: #64748b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 60px;}
+        .container { max-width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+
+        /* COVER IMAGE & HEADER */
+        .cover-area { position: relative; height: 280px; overflow: hidden; background: #333; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+        .back-btn { 
+            position: absolute; top: 20px; left: 20px; 
+            background: rgba(255,255,255,0.9); width: 40px; height: 40px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: #333; font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .header-info { padding: 24px 20px; border-bottom: 1px solid #f1f5f9; position: relative; margin-top: -30px; border-radius: 30px 30px 0 0; background: white; z-index: 5;}
+        .r-name { font-size: 26px; font-weight: 700; margin: 0 0 8px 0; }
+        .r-address { font-size: 14px; color: var(--gray); display: flex; align-items: center; gap: 6px; }
+        
+        .badges-row { display: flex; gap: 10px; margin-top: 15px; }
+        .badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .badge.star { background: #fffbeb; color: #b45309; }
+        .badge.dist { background: #eff6ff; color: #1d4ed8; }
+        .badge.price { background: #f0fdf4; color: #15803d; }
+
+        /* CONTENT GRID */
+        .content-grid { padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;}
+        .desc-text { line-height: 1.6; color: #475569; font-size: 15px; margin-bottom: 20px;}
+
+        /* MENU STYLE */
+        .menu-list { display: flex; flex-direction: column; gap: 10px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; }
+        .menu-name { font-weight: 500; }
+        .menu-icon { color: #cbd5e1; }
+
+        /* ACTION BAR (Bottom Mobile or Sidebar Desktop) */
+        .action-card { background: #fff; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; height: fit-content; }
+        .action-btn { 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 14px; margin-bottom: 10px;
+            border-radius: 12px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; font-size: 15px;
+        }
+        .btn-map { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3); }
+        .btn-map:hover { background: #e65200; }
+        .btn-checkin { background: #e0f2fe; color: #0284c7; }
+        
+        /* TAGS */
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .tag { font-size: 12px; padding: 4px 10px; background: #f1f5f9; border-radius: 20px; color: var(--gray); }
+
+        @media (max-width: 768px) {
+            .content-grid { grid-template-columns: 1fr; padding: 15px; }
+            .cover-area { height: 220px; }
+            .r-name { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- COVER -->
+        <div class="cover-area">
+            <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            {% if r.image_url %}
+                <img src="{{ r.image_url }}" class="cover-img" alt="{{ r.name }}">
+            {% else %}
+                <!-- Ảnh placeholder đẹp nếu không có ảnh thật -->
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80" class="cover-img">
+            {% endif %}
+        </div>
+
+        <!-- INFO HEADER -->
+        <div class="header-info">
+            <h1 class="r-name">{{ r.name }}</h1>
+            <div class="r-address">
+                <i class="fa-solid fa-location-dot" style="color:#ef4444"></i> 
+                {{ r.address }}
+            </div>
+            
+            <div class="badges-row">
+                <div class="badge star"><i class="fa-solid fa-star"></i> {{ r.rating }} / 5.0</div>
+                
+                {% if r.distance_km < 9999 %}
+                <div class="badge dist"><i class="fa-solid fa-person-walking"></i> {{ "%.1f"|format(r.distance_km) }} km</div>
+                {% endif %}
+                
+                <div class="badge price"><i class="fa-solid fa-wallet"></i> {{ r.price_level or "???" }}</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- LEFT COLUMN: Description, Menu -->
+            <div>
+                {% if r.description %}
+                <div class="desc-text">
+                    {{ r.description }}
+                </div>
+                {% endif %}
+
+                <!-- SECTION: TAGS -->
+                {% if r.tags %}
+                <div style="margin-bottom: 25px;">
+                    <div class="tag-cloud">
+                        {% for t in r.tags %}
+                        <span class="tag">#{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- SECTION: MENU -->
+                <div class="section-title"><i class="fa-solid fa-utensils"></i> Thực đơn / Món nổi bật</div>
+                <div class="menu-list">
+                    {% if r.menu %}
+                        {# Menu có thể là list Strings hoặc list Dicts tùy data #}
+                        {% for item in r.menu %}
+                            <div class="menu-item">
+                                <div class="menu-name">
+                                    {# Kiểm tra kiểu dữ liệu để hiển thị #}
+                                    {% if item is string %}
+                                        {{ item }}
+                                    {% elif item.name is defined %}
+                                        {{ item.name }}
+                                        {% if item.price %} <span style="font-weight:400; font-size:13px; color:#888;">- {{ item.price }}</span> {% endif %}
+                                    {% else %}
+                                        {{ item }}
+                                    {% endif %}
+                                </div>
+                                <i class="fa-solid fa-circle-chevron-right menu-icon"></i>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="font-style: italic; color:#888;">Đang cập nhật thực đơn...</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Actions (Desktop) / Bottom (Mobile) -->
+            <div>
+                <div class="action-card">
+                    <div style="font-weight:700; margin-bottom:15px; color:#333;">Bạn muốn đến đây?</div>
+                    
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ r.lat }},{{ r.lng }}" 
+                       target="_blank" class="action-btn btn-map">
+                        <i class="fa-solid fa-diamond-turn-right"></i> Chỉ đường ngay
+                    </a>
+                    
+                    <button onclick="logVisit()" class="action-btn btn-checkin">
+                        <i class="fa-solid fa-check"></i> Check-in đã đến
+                    </button>
+                    
+                    <hr style="border-top:1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <!-- Phần đánh giá demo -->
+                    <div style="font-size:14px; font-weight:600;">Đánh giá của khách:</div>
+                    {% if r.reviews and r.reviews|length > 0 %}
+                         {% for rev in r.reviews[:2] %}
+                            <div style="margin-top:10px; font-size:13px; background:#f8fafc; padding:8px; border-radius:6px;">
+                                <div style="font-weight:700; font-size:12px; margin-bottom:2px;">User ẩn danh</div>
+                                "{{ rev if rev is string else rev.text }}"
+                            </div>
+                         {% endfor %}
+                    {% else %}
+                        <div style="font-size:13px; color:#888; margin-top:5px;">Chưa có đánh giá nào.</div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Handling -->
+    <script>
+        async function logVisit() {
+            // Xác nhận người dùng
+            if(!confirm("Xác nhận bạn đã đến quán ăn này?")) return;
+            
+            try {
+                const res = await fetch("/api/history/click", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({restaurant_id: "{{ r.id }}"})
+                });
+                
+                if (res.ok) {
+                    alert("✅ Đã check-in thành công! Món này sẽ được thêm vào lịch sử ăn uống của bạn.");
+                } else {
+                    alert("Lỗi server");
+                }
+            } catch(e) {
+                alert("Lỗi kết nối");
+            }
+        }
+    </script>
+</body>
+</html>
