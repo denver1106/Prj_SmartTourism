@@ -63,7 +63,7 @@ class DataManager:
             with self.db.cursor() as cursor:
                 cursor.execute("""
                     SELECT id, name, address, lat, lng, tags, menu, reviews,
-                           price_level, rating, description, image_url
+                           price_level, rating, description, image_url, province_name
                     FROM restaurants
                 """)
                 rows = cursor.fetchall()
@@ -83,6 +83,7 @@ class DataManager:
                     "rating": self._safe_float(r["rating"], 3.0),
                     "description": r["description"] or "",
                     "image_url": r["image_url"] or "",
+                    "province_name": r.get("province_name") or "",
                     "distance_km": 0.0
                 }
                 if user_lat and user_lon and item["lat"]:
