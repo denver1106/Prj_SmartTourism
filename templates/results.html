@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả gợi ý – SmartTourism</title>
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Meta Viewport cho Mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="page">
+
+        <!-- NAVBAR -->
+        <header class="navbar">
+            <div class="nav-logo">
+                <span class="icon">🍽️</span>
+                <span class="brand-name">SmartFood</span>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Trang chủ</a>
+                <a href="{{ url_for('user_page') }}" class="nav-link">Người dùng</a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout">Đăng xuất</a>
+            </nav>
+        </header>
+
+        <!-- SUMMARY SECTION -->
+        <section class="card">
+            <div class="section-title">
+                <span class="icon">📍</span>
+                Kết quả gợi ý cho: <b>&nbsp;{{ query }}</b>
+            </div>
+            
+            <!-- HIỂN THỊ CONTEXT NẾU CÓ -->
+            {% if context %}
+            <div class="context-box" style="background: #e3f2fd; padding: 10px; border-radius: 8px; margin-top: 10px; border: 1px solid #90caf9;">
+                <span class="icon">🌤️</span>
+                <b>Thông tin môi trường:</b> {{ context }} 
+                <br>
+                <small style="color: #555;">(Hệ thống đã tự động chọn các món phù hợp với thời tiết và giờ giấc này)</small>
+            </div>
+            {% endif %}
+            
+            <p class="subtitle" style="margin-top: 10px;">
+                Dưới đây là danh sách được đề xuất cho bạn
+            </p>
+        </section>
+
+        <!-- DANH SÁCH KẾT QUẢ -->
+        <section class="card">
+            <div class="results-header">
+                <div class="section-title">
+                    <span class="icon">🍜</span>
+                    Danh sách quán ăn
+                </div>
+                <div class="results-count">
+                    {% if restaurants %}
+                    Tìm thấy {{ restaurants|length }} quán.
+                    {% else %}
+                    Không tìm thấy quán phù hợp.
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="resultsContainer">
+                {% if not restaurants %}
+                <p class="subtitle">Không có dữ liệu phù hợp.</p>
+                {% else %}
+                {% for r in restaurants %}
+                <article class="restaurant-card">
+                    <div class="restaurant-thumbnail">🍽️</div>
+                    <div class="restaurant-main">
+                        <div class="restaurant-name-row">
+                            <div class="restaurant-name">
+                                {{ r.name }}
+                            </div>
+                            <div class="restaurant-distance">
+                                <!-- Hiển thị khoảng cách -->
+                                {{ "%.1f"|format(r.distance_km | default(0)) }} km
+                            </div>
+                        </div>
+
+                        <div class="restaurant-meta">
+                            <!-- Địa chỉ -->
+                            📍 {{ r.address | default('Chưa có địa chỉ') }} 
+                            <br>
+                            💵 Giá: {{ r.price_level | default('Đang cập nhật') }}
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="tags">
+                            {% for t in r.tags %}
+                            <span class="tag">{{ t }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Menu -->
+                        <div class="restaurant-meta">
+                            <b>Món phục vụ:</b> 
+                            {% if r.menu %}
+                                {{ r.menu|join(", ") }}
+                            {% else %}
+                                Đang cập nhật menu
+                            {% endif %}
+                        </div>
+
+                        <!-- Mô tả -->
+                        <div class="restaurant-meta" style="margin-top: 8px; font-style: italic; color: #666;">
+                            "{{ r.description | default('Chưa có mô tả chi tiết.') }}"
+                        </div>
+
+                        <!-- ACTION BUTTONS -->
+                        <div class="restaurant-actions">
+                            <a class="primary-btn"
+                               href="{{ url_for('detail_page', restaurant_id=r.id) }}"
+                               style="margin-right: 10px;">
+                                Xem Chi tiết & Phân tích Dinh dưỡng ✨
+                            </a>
+                            <!-- SỬA LẠI LINK MAP Ở ĐÂY -->
+                            <!-- Dùng destination=lat,lng để chỉ đường chính xác tới tọa độ ảo -->
+                            <a class="secondary-btn"
+                               href="https://www.google.com/maps/dir/?api=1&destination={{ r.lat }},{{ r.lng }}"
+                               target="_blank">
+                                Chỉ đường trên Maps 🗺️
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

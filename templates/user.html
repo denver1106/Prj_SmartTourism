@@ -141,8 +141,9 @@
                 {% endfor %}
 
                 <!-- Render custom tags đã nhập trước đó -->
+                {% set standard_likes = ['noodle','rice','fast_food','bbq','hotpot','seafood','sweet','healthy'] %}
                 {% for tag in likes %}
-                    {% if tag not in ['noodle','rice','fast_food','bbq','hotpot','seafood','sweet','healthy'] %}
+                    {% if tag and tag not in standard_likes %}
                     <div class="chip like active" data-val="{{ tag }}" onclick="toggleChip(this)">
                         {{ tag | capitalize }} <i class="fa-solid fa-xmark" style="margin-left:5px" onclick="removeTag(this, event)"></i>
                     </div>
@@ -173,13 +174,15 @@
                 {% endfor %}
 
                 <!-- Render custom dislikes -->
+                {% set standard_dislikes = ['spicy','onion','durian','fish','peanut'] %}
                 {% for tag in dislikes %}
-                    {% if tag not in ['spicy','onion','durian','fish','peanut'] %}
+                    {# Kiểm tra tag: Nếu tag không nằm trong danh sách gợi ý sẵn, hiển thị nó như Custom Tag #}
+                    {% if tag and tag not in standard_dislikes %}
                     <div class="chip dislike active" data-val="{{ tag }}" onclick="toggleChip(this)">
                         {{ tag | capitalize }} <i class="fa-solid fa-xmark" style="margin-left:5px" onclick="removeTag(this, event)"></i>
                     </div>
-                    {% endif %}
-                {% endfor %}
+                {% endif %}
+            {% endfor %}
             </div>
 
             <div class="input-group">

@@ -2,9 +2,9 @@ import mysql.connector
 from mysql.connector import pooling
 
 DB_CONFIG = {
-    "host": "127.0.0.1",
+    "host": "localhost",
     "user": "root",
-    "password": "Khoidmh1106",
+    "password": "Nhom4@36",
     "database": "smarttourism",
     "port": 3306,
     "charset": "utf8mb4"
