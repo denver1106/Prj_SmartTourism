@@ -2,12 +2,13 @@ import mysql.connector
 from mysql.connector import pooling
 
 DB_CONFIG = {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "user": "root",
     "password": "Nhom4@36",
     "database": "smarttourism",
     "port": 3306,
     "charset": "utf8mb4"
+    "auth_plugin": "mysql_native_password"
 }
 
 # --- Connection Pool (giúp app chạy nhanh, ổn định) ---
