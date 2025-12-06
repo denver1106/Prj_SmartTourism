@@ -9,18 +9,19 @@ from google.oauth2 import id_token
 import google.auth.transport.requests
 import requests
 import random
+
 from core.data_manager import DataManager
 from core.auth_service import AuthService
 from core.search_handler import SearchHandler
 from core.manual_filters import filter_restaurants
 from core.services import SmartTourismService
 
+
 GOOGLE_CLIENT_SECRET_FILE = os.getenv("GOOGLE_CLIENT_SECRET_FILE", "google_client_secret.json")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://127.0.0.1:5000/auth/callback")
 
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
-
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 
 # 1. SETUP ENV & APP
 load_dotenv()
@@ -30,68 +31,75 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "super_secret_key_123")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
-# Singleton Services 
+# Weather API key (OpenWeather)
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY", "")
+
+# Singleton Services
 searcher = SearchHandler()
-smart_service = SmartTourismService(os.getenv("WEATHER_API_KEY", ""))
+smart_service = SmartTourismService(WEATHER_API_KEY)
+
 
 # 2. DATABASE CONNECT
 def get_db():
-    if 'db' not in g:
+    if "db" not in g:
         try:
             g.db = pymysql.connect(
                 host=os.getenv("DB_HOST", "127.0.0.1"),
                 user=os.getenv("DB_USER", "root"),
                 password=os.getenv("DB_PASSWORD", ""),
                 database=os.getenv("DB_DATABASE", "smarttourism"),
-                port=int(os.getenv("DB_PORT", 3306)),  #
+                port=int(os.getenv("DB_PORT", 3306)),
                 cursorclass=pymysql.cursors.DictCursor,
                 connect_timeout=10,
-                autocommit=True
+                autocommit=True,
             )
-            # Thêm dòng test này, nó sẽ in ra console của PyCharm/VSCode mỗi khi refresh trang
-            # print("✅ Flask đã kết nối DB thành công!") 
         except Exception as e:
             print(f"❌ FLASK DB ERROR: {e}")
             return None
     return g.db
 
+
 @app.teardown_appcontext
 def teardown_db(error):
     """Đóng kết nối DB khi request kết thúc."""
-    db = g.pop('db', None)
+    db = g.pop("db", None)
     if db is not None:
         db.close()
+
 
 # Factory Functions
 def get_dm():
     conn = get_db()
-
     return DataManager(conn) if conn else None
+
 
 def get_auth():
     conn = get_db()
     return AuthService(conn, GOOGLE_CLIENT_ID) if conn else None
 
+
 # 3. MIDDLEWARE
 def login_required(f):
     """Decorator yêu cầu đăng nhập trước khi truy cập route."""
+
     @wraps(f)
     def wrapper(*args, **kwargs):
         if "user_id" not in session:
             # Chuyển hướng về login và lưu URL hiện tại để quay lại sau
-            return redirect(url_for("login", next=request.url)) 
+            return redirect(url_for("login", next=request.url))
         return f(*args, **kwargs)
+
     return wrapper
+
 
 @app.context_processor
 def global_vars():
     """Tiêm biến toàn cục vào mọi template."""
     return dict(
-        user=dict(
-            name=session.get("user_name")
-        ),
-        google_client_id=GOOGLE_CLIENT_ID
+        user=dict(name=session.get("user_name")),
+        google_client_id=GOOGLE_CLIENT_ID,
     )
+
 
 # 4. AUTH ROUTES (Đăng nhập, Đăng ký, Đăng xuất)
 @app.route("/login", methods=["GET", "POST"])
@@ -104,7 +112,7 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
         auth = get_auth()
-        
+
         if auth:
             uid, msg = auth.login(email, password)
             if uid:
@@ -116,7 +124,7 @@ def login():
                         c.execute("SELECT username FROM users WHERE id=%s", (uid,))
                         u = c.fetchone()
                         session["user_name"] = u["username"] if u else email
-                
+
                 next_url = request.args.get("next")
                 return redirect(next_url or url_for("index"))
             error = msg
@@ -125,30 +133,32 @@ def login():
 
     return render_template("login.html", error=error)
 
+
 @app.route("/login/google")
 def login_google_redirect():
     """Redirect user to Google OAuth page"""
     flow = Flow.from_client_secrets_file(
-        "google_client_secret.json",
+        GOOGLE_CLIENT_SECRET_FILE,
         scopes=["openid", "email", "profile"],
-        redirect_uri="http://127.0.0.1:5000/login/google/callback"
+        redirect_uri="http://127.0.0.1:5000/login/google/callback",
     )
 
     auth_url, state = flow.authorization_url(
         access_type="offline",
-        include_granted_scopes=False,   
-        prompt="select_account"
+        include_granted_scopes=False,
+        prompt="select_account",
     )
 
     session["oauth_state"] = state
     return redirect(auth_url)
 
+
 @app.route("/login/google/callback")
 def google_callback():
     flow = Flow.from_client_secrets_file(
-        "google_client_secret.json",
+        GOOGLE_CLIENT_SECRET_FILE,
         scopes=["openid", "email", "profile"],
-        redirect_uri="http://127.0.0.1:5000/login/google/callback"
+        redirect_uri="http://127.0.0.1:5000/login/google/callback",
     )
 
     flow.fetch_token(authorization_response=request.url)
@@ -157,9 +167,9 @@ def google_callback():
     token = credentials.id_token
 
     from google.oauth2 import id_token
-    from google.auth.transport import requests
+    from google.auth.transport import requests as google_requests
 
-    idinfo = id_token.verify_oauth2_token(token, requests.Request())
+    idinfo = id_token.verify_oauth2_token(token, google_requests.Request())
 
     email = idinfo["email"]
     name = idinfo.get("name", email.split("@")[0])
@@ -174,7 +184,7 @@ def google_callback():
         else:
             cur.execute(
                 "INSERT INTO users(email, username) VALUES(%s, %s)",
-                (email, name)
+                (email, name),
             )
             conn.commit()
             user_id = cur.lastrowid
@@ -205,13 +215,15 @@ def register():
             error = msg
         else:
             error = "Lỗi kết nối DB"
-            
+
     return render_template("register.html", error=error)
+
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
 
 # 5. MAIN ROUTES (Trang Chủ, Kết Quả Tìm Kiếm, Chi Tiết)
 @app.route("/")
@@ -225,12 +237,12 @@ def index():
 def user_page():
     uid = session["user_id"]
     conn = get_db()
-    
+
     # Thông tin user
     with conn.cursor() as c:
         c.execute("SELECT username, email, id FROM users WHERE id=%s", (uid,))
         u = c.fetchone()
-    
+
     dm = get_dm()
     prefs = dm.get_user_preferences(uid)
 
@@ -245,8 +257,9 @@ def user_page():
         user=u,
         likes=prefs.get("like_tags", []),
         dislikes=prefs.get("dislike_tags", []),
-        history=history
+        history=history,
     )
+
 
 @app.route("/results")
 @login_required
@@ -256,7 +269,7 @@ def results_page():
     try:
         lat = float(request.args.get("lat", 0))
         lon = float(request.args.get("lon", 0))
-    except:
+    except Exception:
         lat, lon = 0, 0
 
     query = request.args.get("query", "").strip()
@@ -267,90 +280,99 @@ def results_page():
     if not dm:
         return "Lỗi CSDL"
 
-    # Phân tích query để biết đây là search món ăn hay search tỉnh/thành
-    parsed = searcher.parse_query(query) if query else {"is_location_search": False}
-    is_location_search = parsed.get("is_location_search", False)
-    print("DEBUG_RESULT_PAGE: query =", query, "| is_location_search =", is_location_search)
-
-    # Lấy toàn bộ quán (đã tính distance_km)
     restaurants = dm.get_all_restaurants(use_cache=True, user_lat=lat, user_lon=lon)
-    print("DEBUG_RESULT_PAGE: len(all_restaurants) =", len(restaurants))
 
     # 1. SEARCH
-    # - Nếu là search món ăn / từ khóa -> dùng SearchHandler như cũ
-    # - Nếu là search tỉnh/thành -> KHÔNG search theo text nữa (giữ nguyên danh sách)
-    if query and not is_location_search:
+    if query:
         restaurants = searcher.search(restaurants, query)
-        print("DEBUG_RESULT_PAGE: len(after search) =", len(restaurants))
 
     # 2. FILTER
     try:
         max_dist_val = float(max_dist) if max_dist else None
-    except:
+    except Exception:
         max_dist_val = None
-
-    # Nếu là search tỉnh/thành -> không dùng cravings_text để lọc nữa
-    cravings_for_filter = None
 
     filtered = filter_restaurants(
         restaurants,
         max_distance=max_dist_val,
         price_level=price,
         tag=tag,
-        cravings_text=cravings_for_filter,
+        cravings_text=query,
     )
 
-    print("DEBUG_RESULT_PAGE: len(after filter) =", len(filtered))
-
-    # Nếu không có query hoặc là search tỉnh/thành -> sort theo khoảng cách
-    if not query or is_location_search:
-        filtered.sort(key=lambda x: x.get("distance_km", 999))
+    if not query:
+        filtered.sort(key=lambda x: x["distance_km"])
 
     return render_template("result.html", restaurants=filtered[:40], query=query)
 
 
-@app.route("/detail/<rid>")
+@app.route("/detail/<int:rid>")
 @login_required
-def detail_page(rid):
+def detail_page(rid: int):
+    """
+    Result - Detail Page:
+    - Dùng SmartTourismService + DataManager để lấy chi tiết 1 quán.
+    - Đồng thời ghi lịch sử, chuẩn bị thêm dữ liệu nearby / weather (nếu cần).
+    """
     dm = get_dm()
-    if not dm: return abort(500, description="Lỗi kết nối CSDL")
-    
-    # Tìm chi tiết nhà hàng
-    data = dm.get_all_restaurants(use_cache=True)
-    r = next((x for x in data if str(x["id"]) == str(rid)), None)
-    if not r: return abort(404, description="Không tìm thấy nhà hàng")
-    
-    # Ghi nhật ký lịch sử xem
+    if not dm:
+        return abort(500, description="Lỗi kết nối CSDL")
+
+    # Nếu frontend có gửi lat/lon thì dùng để tính khoảng cách + gợi ý gần đó
     try:
-        dm.update_user_history(session["user_id"], rid, "view")
-    except Exception as e:
-        print(f"History log failed: {e}")
-        pass
-    
-    return render_template("detail.html", r=r)
+        user_lat = (
+            float(request.args.get("lat"))
+            if request.args.get("lat") is not None
+            else None
+        )
+        user_lon = (
+            float(request.args.get("lon"))
+            if request.args.get("lon") is not None
+            else None
+        )
+    except Exception:
+        user_lat = user_lon = None
+
+    ctx = smart_service.build_detail_page_context(
+        data_manager=dm,
+        restaurant_id=rid,
+        user_id=session.get("user_id"),
+        user_lat=user_lat,
+        user_lon=user_lon,
+    )
+
+    if ctx.get("status") == "not_found" or not ctx.get("restaurant"):
+        return abort(404, description="Không tìm thấy nhà hàng")
+
+    # Trả về template detail cũ, nhưng có thêm biến nearby + weather nếu bạn muốn dùng
+    return render_template(
+        "detail.html",
+        r=ctx["restaurant"],
+        nearby=ctx.get("nearby", []),
+        weather=ctx.get("weather"),
+    )
+
 
 # 6. AI FEATURES (Gợi ý thông minh)
-# app.py
-
 @app.route("/api/suggestion")
 @login_required
 def api_suggestion():
     dm = get_dm()
-    if not dm: return jsonify({"ok": False, "msg": "DB Error"}), 500
+    if not dm:
+        return jsonify({"ok": False, "msg": "DB Error"}), 500
 
     # 1. GET GPS
     try:
         lat = float(request.args.get("lat", 0))
         lon = float(request.args.get("lon", 0))
-    except:
+    except Exception:
         lat, lon = 0, 0
 
     user_id = session["user_id"]
 
     # 2. LẤY PREFERENCES
-    # Hàm này trả về {'like_tags': [...], 'dislike_tags': [...]} (theo data_manager cũ)
     prefs = dm.get_user_preferences(user_id)
-    
+
     # Chuẩn hóa về set để so sánh nhanh hơn
     liked_set = set(prefs.get("like_tags", []))
     disliked_set = set(prefs.get("dislike_tags", []))
@@ -358,7 +380,6 @@ def api_suggestion():
     # 3. GỌI AI / SMART SERVICE
     recs = []
     try:
-        # Hàm này đã được viết ở core/services.py
         result = smart_service.process_user_input(dm, user_id, lat, lon)
         recs = result.get("recommendations", [])
     except Exception as e:
@@ -369,47 +390,43 @@ def api_suggestion():
 
     # 4. LOGIC CHỌN QUÁN
     if recs:
-        # --- TRƯỜNG HỢP 1: AI TÌM THẤY ---
-        # Lấy random trong Top 5 để đổi vị (như đã bàn ở turn trước)
+        # TRƯỜNG HỢP 1: AI TÌM THẤY
         sample = recs[:5]
         top = random.choice(sample)
-        dist = f"{top.get('distance_km',0):.1f}km" if top.get('distance_km', 999) < 100 else "Gần đây"
-        
+        dist = (
+            f"{top.get('distance_km', 0):.1f}km"
+            if top.get("distance_km", 999) < 100
+            else "Gần đây"
+        )
+
         reason = f"Gợi ý: {top['name']} ({dist})"
-        if top.get('explain'):
+        if top.get("explain"):
             reason += f" • {top['explain']}"
-    
     else:
-        # --- TRƯỜNG HỢP 2: FALLBACK (THỦ CÔNG) ---
+        # TRƯỜNG HỢP 2: FALLBACK (THỦ CÔNG)
         print("⚡ AI trả về rỗng → Chạy lọc thủ công")
-        
-        # Lấy tất cả quán từ DB
+
         all_data = dm.get_all_restaurants(use_cache=True, user_lat=lat, user_lon=lon)
-        
+
         if not all_data:
             return jsonify({"ok": False, "msg": "Dữ liệu quán ăn đang trống"}), 200
 
         # Lọc bỏ quán chứa tag user ghét
-        # (Nếu bất kỳ tag nào của quán nằm trong disliked_set -> Loại)
         safe_list = [
-            r for r in all_data 
-            if not disliked_set.intersection(set(r.get("tags", [])))
+            r for r in all_data if not disliked_set.intersection(set(r.get("tags", [])))
         ]
-        
+
         # Nếu lọc ghét xong mà hết quán -> Dùng lại all_data
-        if not safe_list: 
+        if not safe_list:
             safe_list = all_data
 
         # Tìm quán chứa tag user thích
-        # (Nếu quán có ít nhất 1 tag nằm trong liked_set)
         preferred_list = [
-            r for r in safe_list 
-            if liked_set.intersection(set(r.get("tags", [])))
+            r for r in safe_list if liked_set.intersection(set(r.get("tags", [])))
         ]
 
         if preferred_list:
             top = random.choice(preferred_list)
-            # Tìm ra tag nào trùng để hiện lý do
             matched = list(liked_set.intersection(set(top["tags"])))[:1]
             tag_name = matched[0] if matched else "sở thích"
             reason = f"Gợi ý quán này vì bạn thích '{tag_name}'"
@@ -419,68 +436,61 @@ def api_suggestion():
         else:
             top = random.choice(all_data)
             reason = "Thử vận may xem sao!"
-            
-    return jsonify({
-        "ok": True,
-        "query": top["name"],  
-        "reason": reason,
-        "id": top["id"] # Trả thêm ID để nếu cần frontend redirect thẳng
-    })
+
+    return jsonify(
+        {
+            "ok": True,
+            "query": top["name"],
+            "reason": reason,
+            "id": top["id"],  # Trả thêm ID để nếu cần frontend redirect thẳng
+        }
+    )
+
+
 @app.route("/recommend")
 @login_required
 def recommend_page():
     """Trang hiển thị kết quả gợi ý thông minh (Smart Recommendation)"""
     dm = get_dm()
-    if not dm: return abort(500, description="Lỗi kết nối CSDL")
-    
+    if not dm:
+        return abort(500, description="Lỗi kết nối CSDL")
+
     try:
         lat = float(request.args.get("lat", 0))
         lon = float(request.args.get("lon", 0))
-    except: lat, lon = 0, 0
-    
+    except Exception:
+        lat, lon = 0, 0
+
     res = smart_service.process_user_input(dm, session["user_id"], lat, lon)
     recs = res.get("recommendations", [])
-    
+
     # Thêm smart_score để hiển thị
-    for r in recs: r["smart_score"] = r.get("score", 0)
+    for r in recs:
+        r["smart_score"] = r.get("score", 0)
 
-    return render_template("result.html", restaurants=recs, query="Gợi ý dành riêng cho bạn")
-
-# 7. USER PROFILE API (Thông tin người dùng và lịch sử)
-# @app.route("/user")
-# @login_required
-# def user_page():
-#     uid = session["user_id"]
-#     conn = get_db()
-#     with conn.cursor() as c:
-#         c.execute("SELECT username, email, id FROM users WHERE id=%s", (uid,))
-#         u = c.fetchone()
-    
-#     dm = get_dm()
-#     prefs = dm.get_user_preferences(uid) # Lấy cả Like và Dislike
-    
-#     return render_template("user.html", 
-#                            user=u, 
-#                            likes=prefs.get("like_tags", []), 
-#                            dislikes=prefs.get("dislike_tags", []), # Truyền dislikes xuống HTML
-#                            history=dm.get_user_history(uid))
+    return render_template(
+        "result.html",
+        restaurants=recs,
+        query="Gợi ý dành riêng cho bạn",
+    )
 
 
 @app.route("/api/user/preferences", methods=["POST"])
 @login_required
 def save_preferences():
     data = request.json
-    liked = data.get("liked", [])     # Danh sách Thích
-    disliked = data.get("disliked", []) # Danh sách Không thích
-    
+    liked = data.get("liked", [])  # Danh sách Thích
+    disliked = data.get("disliked", [])  # Danh sách Không thích
+
     # Clean input
     liked = [str(x).lower().strip() for x in liked if x]
     disliked = [str(x).lower().strip() for x in disliked if x]
-    
+
     dm = get_dm()
     dm.save_user_preferences(session["user_id"], liked, disliked)
-    
+
     return jsonify({"message": "Đã cập nhật khẩu vị thành công!"})
+
 
 @app.route("/api/history/click", methods=["POST"])
 @login_required
@@ -488,17 +498,84 @@ def log_click():
     """Ghi nhật ký 'Check-in' hoặc 'Đã đến'."""
     rid = request.json.get("restaurant_id")
     dm = get_dm()
-    if not dm: return jsonify({"ok": False, "msg": "Lỗi kết nối CSDL"}), 500
-    
+    if not dm:
+        return jsonify({"ok": False, "msg": "Lỗi kết nối CSDL"}), 500
+
     try:
         dm.update_user_history(session["user_id"], rid, "visit")
         return jsonify({"ok": True})
     except Exception as e:
         print(f"Error logging click: {e}")
-        return jsonify({"ok": False, "msg": "Lỗi server khi ghi nhật ký."}), 500
+        return jsonify(
+            {"ok": False, "msg": "Lỗi server khi ghi nhật ký."}
+        ), 500
+
+
+# 7. WEATHER CONTEXT API (thời tiết thật theo GPS)
+@app.route("/api/weather-context")
+def weather_context_api():
+    """Trả về mô tả thời tiết + gợi ý ăn uống dựa trên OpenWeather."""
+    lat = request.args.get("lat", type=float)
+    lon = request.args.get("lon", type=float)
+
+    if lat is None or lon is None:
+        return jsonify({"ok": False, "msg": "Thiếu tọa độ GPS"}), 400
+
+    # Debug: in key ra xem có đọc được không
+    print("DEBUG WEATHER_API_KEY empty? ->", not bool(WEATHER_API_KEY))
+
+    if not WEATHER_API_KEY:
+        return jsonify({"ok": False, "msg": "Chưa cấu hình WEATHER_API_KEY"}), 500
+
+    try:
+        url = "https://api.openweathermap.org/data/2.5/weather"
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "appid": WEATHER_API_KEY,
+            "units": "metric",  # độ C
+            "lang": "vi",       # mô tả tiếng Việt
+        }
+        resp = requests.get(url, params=params, timeout=5)
+        print("DEBUG WEATHER status:", resp.status_code)
+        # In thử 1 phần nội dung để xem nếu có lỗi từ OpenWeather
+        print("DEBUG WEATHER body:", resp.text[:300])
+
+        if resp.status_code != 200:
+            # Trả thẳng mã lỗi để bạn biết lý do (401, 429, ...)
+            return jsonify({
+                "ok": False,
+                "msg": f"Lỗi API thời tiết (status={resp.status_code}). Kiểm tra lại WEATHER_API_KEY hoặc quota."
+            }), 500
+
+        wdata = resp.json()
+
+        temp = wdata["main"]["temp"]
+        desc = wdata["weather"][0]["description"]
+        main = wdata["weather"][0]["main"]  # Clear, Rain, Clouds, ...
+
+        if main == "Rain":
+            extra = "Trời đang mưa – thử món nóng, phở, lẩu cho ấm bụng nhé."
+        elif main == "Clear" and temp >= 30:
+            extra = "Trời nắng nóng – mấy món nước, trà sữa hay kem sẽ hợp hơn."
+        elif main == "Clouds":
+            extra = "Trời nhiều mây, thời tiết dễ chịu – ăn gì cũng hợp."
+        else:
+            extra = "Thời tiết khá ổn – bạn chọn món theo sở thích nhé."
+
+        summary = f"Nhiệt độ khoảng {round(temp)}°C, {desc}. {extra}"
+
+        return jsonify({"ok": True, "summary": summary})
+    except Exception as e:
+        print("Weather error:", repr(e))
+        return jsonify({
+            "ok": False,
+            "msg": f"Không lấy được dữ liệu thời tiết (lỗi {type(e).__name__})."
+        }), 500
+
+
 
 # 8. RUN
 if __name__ == "__main__":
     print("🚀 Khởi động SmartTourism App...")
-    # Chạy Flask App ở chế độ debug
     app.run(debug=True, port=5000)

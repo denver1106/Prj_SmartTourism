@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-
         :root {
             --primary: #ff6b00;
             --bg: #f8fafc;
@@ -196,6 +195,9 @@
             font-size: 14px;
             color: #475569;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
             .quick-context .icon-line {
@@ -248,11 +250,15 @@
                     <!-- <button type="button" class="primary-btn" onclick="smartRecommend()" style="background:#4f46e5;">🤖 Gợi ý thông minh</button> -->
                 </div>
 
-                <!-- Context nhanh về thời gian & GPS -->
+                <!-- Context nhanh: Thời gian + Thời tiết + GPS -->
                 <div id="quickContext" class="quick-context">
                     <div class="icon-line" id="timeContextLine">
                         <span>⏰</span>
                         <span id="timeContextText">Đang xác định thời gian...</span>
+                    </div>
+                    <div class="icon-line" id="weatherContextLine">
+                        <span>🌤</span>
+                        <span id="weatherContextText">Đang lấy thời tiết...</span>
                     </div>
                     <div class="icon-line" id="gpsContextLine">
                         <span>📍</span>
@@ -314,10 +320,11 @@
     </div>
 
     <script>
-        // 1. Auto GPS + Context theo giờ
+        // 1. Auto GPS + Context theo giờ + gọi API thời tiết
         window.onload = () => {
             const timeContextText = document.getElementById("timeContextText");
             const gpsContextText = document.getElementById("gpsContextText");
+            const weatherContextText = document.getElementById("weatherContextText");
 
             // Context theo thời gian trong ngày
             if (timeContextText) {
@@ -346,24 +353,40 @@
                 if (gpsContextText) {
                     gpsContextText.textContent = "Trình duyệt không hỗ trợ GPS – bạn vẫn có thể nhập khu vực để tìm.";
                 }
+                if (weatherContextText) {
+                    weatherContextText.textContent = "Không lấy được GPS nên không xác định được thời tiết chính xác.";
+                }
                 return;
             }
 
             document.getElementById("gpsStatus").style.display = "block";
             navigator.geolocation.getCurrentPosition(
                 pos => {
-                    document.getElementById("latInput").value = pos.coords.latitude;
-                    document.getElementById("lonInput").value = pos.coords.longitude;
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+
+                    document.getElementById("latInput").value = lat;
+                    document.getElementById("lonInput").value = lon;
                     document.getElementById("gpsStatus").innerHTML = "✅ GPS đã sẵn sàng";
                     if (gpsContextText) {
-                        gpsContextText.textContent = "GPS sẵn sàng – bạn có thể tìm kiếm ngay.";
+                        gpsContextText.textContent = "GPS sẵn sàng – SmartFood sẽ ưu tiên quán gần bạn.";
                     }
+
+                    // Sau khi có GPS -> gọi API lấy thời tiết
+                    if (weatherContextText) {
+                        weatherContextText.textContent = "Đang lấy thời tiết gần vị trí của bạn...";
+                    }
+                    fetchWeatherContext(lat, lon);
+
                     setTimeout(() => document.getElementById("gpsStatus").style.display = "none", 2000);
                 },
                 err => {
                     document.getElementById("gpsStatus").innerHTML = "❌ Lỗi GPS: " + err.message;
                     if (gpsContextText) {
                         gpsContextText.textContent = "Không lấy được GPS – hãy nhập khu vực bạn muốn tìm nhé.";
+                    }
+                    if (weatherContextText) {
+                        weatherContextText.textContent = "Không lấy được vị trí nên không thể gợi ý theo thời tiết.";
                     }
                 }
             );
@@ -405,7 +428,6 @@
             }
 
             try {
-                // Gửi tọa độ và nhận gợi ý (món ăn/tag)
                 const res = await fetch(`/api/suggestion?lat=${lat}&lon=${lon}`);
                 const data = await res.json();
 
@@ -421,8 +443,26 @@
             } catch (e) {
                 alert("Lỗi kết nối hoặc API");
             } finally {
-                // Đặt lại placeholder sau khi hoàn thành
                 queryInput.setAttribute("placeholder", "🔍 Bạn thèm món gì? (VD: phở, trà sữa...)");
+            }
+        }
+
+        // 3. Gọi API thời tiết (backend cần có route /api/weather-context)
+        async function fetchWeatherContext(lat, lon) {
+            const weatherContextText = document.getElementById("weatherContextText");
+            if (!weatherContextText) return;
+
+            try {
+                const res = await fetch(`/api/weather-context?lat=${lat}&lon=${lon}`);
+                const data = await res.json();
+
+                if (data.ok && data.summary) {
+                    weatherContextText.textContent = data.summary;
+                } else {
+                    weatherContextText.textContent = data.msg || "Không lấy được thông tin thời tiết.";
+                }
+            } catch (e) {
+                weatherContextText.textContent = "Không lấy được thời tiết – bạn chọn món theo cảm giác nhé.";
             }
         }
 
@@ -433,7 +473,6 @@
                 alert("Vui lòng đợi lấy GPS xong.");
                 return;
             }
-            // Redirect to recommended filter
             window.location.href = `/recommend?lat=${lat}&lon=${lon}`;
         }
     </script>
