@@ -246,3 +246,4 @@ class SearchHandler:
             key=lambda x: (-x.get("search_score", 0), x.get("distance_km", 999))
         )
         return results
+    
