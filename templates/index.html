@@ -3,415 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <title>SmartFood – Trang chủ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+
+        :root {
+            --primary: #ff6b00;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+            .nav-links a:hover, .nav-links a.active {
+                color: var(--primary);
+            }
+
+        .logout {
+            color: #ef4444 !important;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+            .hero h1 {
+                margin: 10px 0;
+                font-size: 32px;
+                color: #431407;
+            }
+
+            .hero p {
+                color: #9a3412;
+                font-size: 16px;
+                margin: 0;
+            }
+
+        /* Search Card */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .search-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+            .search-input:focus {
+                border-color: var(--primary);
+                outline: none;
+            }
+
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .primary-btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+
+        .secondary-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-sizing: border-box;
+        }
+
+        /* Collection Grid */
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .col-card {
+            padding: 20px;
+            border-radius: 16px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .col-card:hover {
+                transform: translateY(-3px);
+            }
+
+            .col-card h3 {
+                margin: 0 0 5px 0;
+                font-size: 18px;
+            }
+
+            .col-card p {
+                margin: 0;
+                font-size: 13px;
+                opacity: 0.9;
+            }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .quick-context {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+            .quick-context .icon-line {
+                display: flex;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+        @media (max-width: 600px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="page">
-
-        <!-- NAVBAR -->
-        <header class="navbar">
-            <div class="nav-logo">
-                <span class="icon">🍽️</span>
-                <span class="brand-name">SmartFood</span>
+        <nav class="navbar">
+            <a href="/" class="brand"><span>🍲</span> SmartFood</a>
+            <div class="nav-links">
+                <a href="{{ url_for('user_page') }}">Tôi</a>
+                <a href="{{ url_for('logout') }}" class="logout">Thoát</a>
             </div>
-            <nav class="nav-links">
-                <a href="{{ url_for('index') }}" class="nav-link active">Trang chủ</a>
-                <a href="{{ url_for('user_page') }}" class="nav-link">Người dùng</a>
-                <a href="{{ url_for('logout') }}" class="nav-link logout">Đăng xuất</a>
-            </nav>
+        </nav>
+
+        <header class="hero">
+            <div style="font-size: 13px; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">SmartFood</div>
+            <h1>Chào {{ user.name or "bạn" }}, <br>hôm nay ăn gì nhỉ?</h1>
+            <p>Hãy để SmartFood gợi ý thông minh cho bạn nhé.</p>
         </header>
-
-        <!-- HERO -->
-        <section class="hero">
-            <div class="hero-text">
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    Prototype UI • Trang chủ
-                </div>
-                <h1>Xin chào, {{ user_name if user_name else "bạn" }} – hôm nay ăn gì đây?</h1>
-                <p class="subtitle">
-                    SmartFood giúp bạn tìm quán ăn phù hợp với khẩu vị, khoảng cách và ngân sách.
-                    Bạn chỉ cần nhập tên món hoặc địa điểm, chọn bộ lọc mong muốn, hệ thống sẽ gợi ý
-                    những lựa chọn hợp lý nhất.
-                </p>
-            </div>
-            <div class="hero-visual">
-                <div class="hero-card">
-                    <div>
-                        <div class="hero-card-title">Gợi ý cho bạn</div>
-                        <div class="hero-badges" style="margin-top: 8px;">
-                            <div class="hero-pill">🍽️ Quán ăn</div>
-                            <div class="hero-pill">🍜 Món ăn</div>
-                            <div class="hero-pill">🚶‍♂️ Gần bạn</div>
-                        </div>
-                    </div>
-                    <div class="hero-map">
-                        <span>🗺️ Xem đường đi trên Google Maps</span>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- FORM TÌM KIẾM -->
         <section class="card">
-            <div class="section-title">
-                <span class="icon">🔎</span>
-                Thanh tìm kiếm & bộ lọc
-            </div>
-
-            <!-- Form có ID và onsubmit để xử lý logic vị trí -->
-            <form action="{{ url_for('results_page') }}" method="get" id="searchForm" onsubmit="return handleSearch(event)">
-                
-                <!-- HAI Ô INPUT ẨN ĐỂ CHỨA TỌA ĐỘ -->
+            <form action="{{ url_for('results_page') }}" method="get" onsubmit="return handleSearch(event)">
                 <input type="hidden" name="lat" id="latInput">
                 <input type="hidden" name="lon" id="lonInput">
 
-                <div class="search-bar">
-                    <div class="search-input-wrap">
-                        <span>🔍</span>
-                        <input name="query"
-                               type="text"
-                               class="search-input"
-                               placeholder="Nhập tên món ăn (vd: 'phở bò', 'bánh mì') hoặc địa điểm (vd: 'Quận 5')..."
-                               required>
-                    </div>
-                    <button type="submit" class="primary-btn" id="searchBtn">
-                        Tìm quán ăn
-                        <span>🍜</span>
-                    </button>
+                <div class="search-group">
+                    <input name="query" id="queryInput" class="search-input" placeholder="🔍 Bạn thèm món gì? (VD: phở, trà sữa...)" required>
+                    <button type="submit" class="primary-btn">Tìm</button>
                 </div>
 
-                <div class="filters-grid">
-                    <!-- Khoảng cách & giá -->
-                    <div class="filter-group">
-                        <label>Khoảng cách tối đa (km)</label>
-                        <input name="max_distance"
-                               id="maxDistanceInput"
-                               type="number"
-                               min="0"
-                               step="0.5"
-                               placeholder="Ví dụ: 3">
+                <!-- Suggestion Text -->
+                <div id="suggestBox" style="margin-bottom: 15px; display: none; background: #fff7ed; padding: 10px; border-radius: 8px; color: #c2410c; font-size: 14px; border: 1px solid #ffedd5;">
+                    ✨ <b>Gợi ý:</b> <span id="suggestText"></span>
+                </div>
 
-                        <label style="margin-top: 8px;">Mức giá</label>
-                        <select name="price_level" id="priceLevelSelect">
-                            <option value="">Không chọn</option>
-                            <option value="cheap">Rẻ</option>
-                            <option value="medium">Vừa</option>
-                            <option value="expensive">Cao</option>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="button" class="secondary-btn" onclick="fetchSuggestion()">🎲 Gợi ý cho bạn</button>
+                    <!-- <button type="button" class="primary-btn" onclick="smartRecommend()" style="background:#4f46e5;">🤖 Gợi ý thông minh</button> -->
+                </div>
+
+                <!-- Context nhanh về thời gian & GPS -->
+                <div id="quickContext" class="quick-context">
+                    <div class="icon-line" id="timeContextLine">
+                        <span>⏰</span>
+                        <span id="timeContextText">Đang xác định thời gian...</span>
+                    </div>
+                    <div class="icon-line" id="gpsContextLine">
+                        <span>📍</span>
+                        <span id="gpsContextText">Đang kiểm tra GPS...</span>
+                    </div>
+                </div>
+
+                <div id="gpsStatus" class="loader">📍 Đang lấy tọa độ GPS...</div>
+
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div style="font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 10px;">Bộ lọc nâng cao ▼</div>
+                <div class="filters">
+                    <div>
+                        <label style="font-size:13px; color:#64748b;">Khoảng cách (km)</label>
+                        <input name="max_distance" type="number" step="0.5" placeholder="Tất cả">
+                    </div>
+                    <div>
+                        <label style="font-size:13px; color:#64748b;">Mức giá</label>
+                        <select name="price_level">
+                            <option value="">Tất cả</option>
+                            <option value="cheap">Rẻ ($)</option>
+                            <option value="medium">Vừa ($$)</option>
+                            <option value="expensive">Sang ($$$)</option>
                         </select>
-
-                        <div class="tags" id="priceLevelDisplay" style="margin-top: 4px;">
-                            <span class="restaurant-meta">Chưa chọn mức giá.</span>
-                        </div>
                     </div>
-
-                    <!-- Mô tả mong muốn (chỉ còn ô text) -->
-                    <div class="filter-group">
-                        <label>Mong muốn hiện tại / mô tả thêm</label>
-                        <textarea name="cravings_text"
-                                  id="cravingsInput"
-                                  rows="3"
-                                  placeholder="Ví dụ: đói quá, muốn món nước, tránh đồ chiên nhiều dầu, không muốn fast food..."></textarea>
-                        <small>Backend có thể đọc phần mô tả này để hiểu rõ hơn nhu cầu của user.</small>
-                    </div>
-
-                    <!-- Filter loại quán -->
-                    <div class="filter-group">
-                        <label>Loại quán (tags)</label>
-                        <select name="tag" id="tagsSelect">
-                            <option value="">Không chọn</option>
-                            <option value="fast_food">Fast food</option>
-                            <option value="noodle">Mì/Bún</option>
+                    <div>
+                        <label style="font-size:13px; color:#64748b;">Loại quán</label>
+                        <select name="tag">
+                            <option value="">Tất cả</option>
+                            <option value="noodle">Mì / Bún / Phở</option>
                             <option value="soup">Món nước</option>
-                            <option value="breakfast">Ăn sáng</option>
-                            <option value="lunch">Ăn trưa</option>
-                            <option value="bbq">Nướng / BBQ</option>
+                            <option value="rice">Cơm</option>
+                            <option value="fast_food">Ăn nhanh</option>
+                            <option value="drink">Đồ uống</option>
+                            <option value="healthy">Healthy</option>
                         </select>
-
-                        <div class="tags" id="tagsDisplay" style="margin-top: 4px;">
-                            <span class="restaurant-meta">Chưa chọn loại quán.</span>
-                        </div>
-
-                        <small>Các tag này dùng để lọc theo loại quán. Việc xử lý chi tiết do backend quyết định.</small>
                     </div>
                 </div>
-
-                <!-- Hàng gợi ý cho bạn -->
-                <div class="suggest-row">
-                    <button type="button" class="secondary-btn" id="suggestBtn">
-                        Gợi ý món nhanh ✨
-                    </button>
-                    <div class="divider-vertical"></div>
-                    <!-- NÚT GỢI Ý THÔNG MINH (GPS) -->
-                    <button type="button" onclick="getLocationAndRecommend()" class="smart-btn">
-                        ✨ Gợi ý thông minh theo vị trí & thời tiết
-                    </button>
-                </div>
-                <p class="suggest-text" id="suggestText" style="margin-top: 8px;">
-                    Bấm "Gợi ý thông minh" để hệ thống tự động tìm món ngon quanh bạn.
-                </p>
             </form>
-
-            <div class="status">
-                <div class="status-dot"></div>
-                Hệ thống đã sẵn sàng. Vui lòng cấp quyền vị trí để kết quả chính xác nhất.
-            </div>
         </section>
 
-        <!-- ========= BỘ SƯU TẬP NỔI BẬT ========= -->
-        <section class="card">
-            <div class="section-title">
-                <span class="icon">📚</span>
-                Bộ sưu tập nổi bật
+        <!-- CATEGORIES -->
+        <div style="margin-bottom: 10px; font-weight: 700; color: #334155;">Chủ đề phổ biến</div>
+        <div class="collection-grid">
+            <div class="col-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <h3>Cơm trưa</h3>
+                <p>No bụng chắc dạ</p>
             </div>
-            <p class="subtitle" style="margin-bottom: 10px;">
-                Một số bộ sưu tập theo chủ đề.
-            </p>
-
-            <div class="collection-grid">
-                <!-- Cơm / món mặn -->
-                <div class="collection-card" style="background: linear-gradient(135deg,#4f46e5,#6366f1);">
-                    <div class="collection-title">Cơm trưa no bụng</div>
-                    <div class="collection-desc">
-                        Cơm tấm, cơm phần, bún thịt nướng... dành cho những buổi trưa cần ăn no để có sức làm việc.
-                    </div>
-                    <div class="collection-tag">🍚 Khoảng 35k – 60k / người</div>
-                </div>
-
-                <!-- Ăn vặt -->
-                <div class="collection-card" style="background: linear-gradient(135deg,#ec4899,#f97316);">
-                    <div class="collection-title">Ăn vặt cuối tuần</div>
-                    <div class="collection-desc">
-                        Xiên que, gà rán, bánh tráng, trà sữa... cho những buổi tụ tập “xả stress” với bạn bè.
-                    </div>
-                    <div class="collection-tag">🍢 Phù hợp nhóm 3–5 người</div>
-                </div>
-
-                <!-- Món nước -->
-                <div class="collection-card" style="background: linear-gradient(135deg,#22c55e,#16a34a);">
-                    <div class="collection-title">Món nước nóng ngày mưa</div>
-                    <div class="collection-desc">
-                        Phở, bún bò Huế, hủ tiếu, mì cay... phù hợp khi thời tiết se lạnh hoặc trời mưa.
-                    </div>
-                    <div class="collection-tag">🍜 Món nước / ăn nóng</div>
-                </div>
+            <div class="col-card" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">
+                <h3>Món cay</h3>
+                <p>Thách thức vị giác</p>
             </div>
-        </section>
-
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-columns">
-                <div class="footer-logo">
-                    <div class="footer-logo-main">
-                        <span class="icon">🍽️</span>
-                        <span>SmartFood</span>
-                    </div>
-                    <div class="restaurant-meta">
-                        Hệ thống gợi ý quán ăn được thiết kế cho người dùng trẻ: nhanh, gọn và phù hợp túi tiền.
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="footer-column-title">Về chúng tôi</div>
-                    <div class="footer-link">Giới thiệu</div>
-                    <div class="footer-link">Cách thức hoạt động</div>
-                    <div class="footer-link">Blog (demo)</div>
-                </div>
-
-                <div>
-                    <div class="footer-column-title">Hỗ trợ</div>
-                    <div class="footer-link">Câu hỏi thường gặp</div>
-                    <div class="footer-link">Liên hệ</div>
-                    <div class="footer-link">Góp ý tính năng</div>
-                </div>
-
-                <div>
-                    <div class="footer-column-title">Pháp lý</div>
-                    <div class="footer-link">Điều khoản sử dụng</div>
-                    <div class="footer-link">Chính sách bảo mật</div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div>© 2025 SmartFood. All rights reserved.</div>
-                <div class="footer-social">
-                    <span>🌐</span>
-                    <span>Facebook</span>
-                    <span>Instagram</span>
-                    <span>TikTok</span>
-                </div>
+            <div class="col-card" style="background: linear-gradient(135deg, #10b981, #047857);">
+                <h3>Eat Clean</h3>
+                <p>Sống khỏe mỗi ngày</p>
             </div>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // ==========================================
-        // 1. LOGIC LẤY VỊ TRÍ (GEOLOCATION)
-        // ==========================================
+        // 1. Auto GPS + Context theo giờ
+        window.onload = () => {
+            const timeContextText = document.getElementById("timeContextText");
+            const gpsContextText = document.getElementById("gpsContextText");
 
-        // Tự động lấy vị trí khi tải trang để điền vào ô ẩn
-        window.onload = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const latInput = document.getElementById('latInput');
-                    const lonInput = document.getElementById('lonInput');
-                    
-                    if (latInput && lonInput) {
-                        latInput.value = position.coords.latitude;
-                        lonInput.value = position.coords.longitude;
-                        console.log("📍 Đã cập nhật vị trí ngầm:", position.coords.latitude, position.coords.longitude);
-                    }
-                }, function(error) {
-                    console.log("⚠️ Không lấy được vị trí tự động:", error.message);
-                });
-            }
-        };
+            // Context theo thời gian trong ngày
+            if (timeContextText) {
+                const now = new Date();
+                const hour = now.getHours();
+                let msg = "";
 
-        // Hàm xử lý khi bấm nút Tìm kiếm
-        // Nếu chưa có tọa độ, chặn submit để xin quyền vị trí trước
-        function handleSearch(event) {
-            const latInput = document.getElementById('latInput');
-            
-            // Nếu đã có tọa độ trong ô ẩn -> Cho phép submit ngay
-            if (latInput && latInput.value) {
-                return true; 
-            }
-
-            // Nếu chưa có -> Chặn submit để xin quyền
-            event.preventDefault();
-            
-            if (navigator.geolocation) {
-                const btn = document.getElementById('searchBtn');
-                const oldText = btn.innerHTML;
-                btn.innerHTML = "Đang lấy vị trí...";
-                btn.disabled = true;
-
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        // Thành công -> Điền tọa độ và submit lại
-                        document.getElementById('latInput').value = position.coords.latitude;
-                        document.getElementById('lonInput').value = position.coords.longitude;
-                        
-                        btn.innerHTML = oldText;
-                        btn.disabled = false;
-                        
-                        // Submit form bằng code JS
-                        document.getElementById('searchForm').submit();
-                    }, 
-                    (error) => {
-                        // Thất bại (User từ chối) -> Submit luôn (Backend sẽ dùng tọa độ mặc định)
-                        console.log("User từ chối vị trí, dùng mặc định.");
-                        btn.innerHTML = oldText;
-                        btn.disabled = false;
-                        document.getElementById('searchForm').submit();
-                    },
-                    { timeout: 5000 } // Chờ tối đa 5s
-                );
-            } else {
-                // Trình duyệt không hỗ trợ -> Submit luôn
-                return true;
-            }
-        }
-
-        // Hàm cho nút "Gợi ý thông minh"
-        function getLocationAndRecommend() {
-            if (navigator.geolocation) {
-                // alert("Đang phân tích vị trí & thời tiết...");
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        window.location.href = `/recommend?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
-                    }, 
-                    (error) => {
-                        let msg = "Đã có lỗi xảy ra khi lấy vị trí.";
-                        if (error.code === error.PERMISSION_DENIED) {
-                            msg = "Bạn đã từ chối cấp quyền vị trí. Vui lòng cho phép để dùng tính năng này.";
-                        }
-                        alert(msg);
-                    }
-                );
-            } else {
-                alert("Trình duyệt của bạn không hỗ trợ định vị GPS.");
-            }
-        }
-
-        // ==========================================
-        // 2. LOGIC GIAO DIỆN (SUGGESTION & UI)
-        // ==========================================
-
-        const suggestBtn = document.getElementById("suggestBtn");
-        const suggestText = document.getElementById("suggestText");
-        const queryInput = document.querySelector('input[name="query"]');
-        const tagsSelect = document.getElementById("tagsSelect");
-        const cravingsInput = document.getElementById("cravingsInput");
-
-        const SUGGESTIONS = [
-            { q: "phở bò", tag: "noodle", note: "Muốn món nước, ấm bụng, buổi sáng hoặc tối nhẹ nhàng." },
-            { q: "bánh mì", tag: "fast_food", note: "Cần ăn nhanh, mang đi được, phù hợp buổi sáng vội." },
-            { q: "hủ tiếu nam vang", tag: "noodle", note: "Món nước đậm đà, muốn đổi gió so với phở." },
-            { q: "bún bò huế", tag: "noodle", note: "Thích món cay cay, đậm vị." }
-        ];
-
-        if (suggestBtn) {
-            suggestBtn.addEventListener("click", () => {
-                const s = SUGGESTIONS[Math.floor(Math.random() * SUGGESTIONS.length)];
-                if (queryInput) queryInput.value = s.q;
-                if (cravingsInput) cravingsInput.value = s.note;
-
-                if (tagsSelect) {
-                    tagsSelect.value = s.tag || "";
-                    updateTagDisplay();
+                if (hour >= 5 && hour < 11) {
+                    msg = "Buổi sáng – gọi nhẹ nhàng cho ngày mới.";
+                } else if (hour >= 11 && hour < 14) {
+                    msg = "Giờ ăn trưa – nạp năng lượng cho buổi chiều.";
+                } else if (hour >= 14 && hour < 17) {
+                    msg = "Xế chiều – làm ly nước hoặc đồ ngọt cho tỉnh táo.";
+                } else if (hour >= 17 && hour < 21) {
+                    msg = "Giờ ăn tối – thưởng thức bữa ngon bên gia đình, bạn bè.";
+                } else {
+                    // 21h - 5h: ăn đêm
+                    msg = "Đêm khuya – săn đồ ăn đêm cho chiếc bụng đói.";
                 }
 
-                if (suggestText) {
-                    suggestText.textContent = "Gợi ý: " + s.note;
+                timeContextText.textContent = msg;
+            }
+
+            // GPS
+            if (!navigator.geolocation) {
+                if (gpsContextText) {
+                    gpsContextText.textContent = "Trình duyệt không hỗ trợ GPS – bạn vẫn có thể nhập khu vực để tìm.";
                 }
-            });
-        }
+                return;
+            }
 
-        // ---------- HIỂN THỊ PILL MỨC GIÁ & LOẠI QUÁN ----------
-        const priceSelect = document.getElementById("priceLevelSelect");
-        const priceDisplay = document.getElementById("priceLevelDisplay");
-        const tagsDisplay = document.getElementById("tagsDisplay");
-
-        const PRICE_LABELS = { "cheap": "Rẻ", "medium": "Vừa", "expensive": "Cao" };
-        const TAG_LABELS = { 
-            "fast_food": "Fast food", "noodle": "Mì/Bún", "soup": "Món nước", 
-            "breakfast": "Ăn sáng", "lunch": "Ăn trưa", "bbq": "Nướng / BBQ" 
+            document.getElementById("gpsStatus").style.display = "block";
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    document.getElementById("latInput").value = pos.coords.latitude;
+                    document.getElementById("lonInput").value = pos.coords.longitude;
+                    document.getElementById("gpsStatus").innerHTML = "✅ GPS đã sẵn sàng";
+                    if (gpsContextText) {
+                        gpsContextText.textContent = "GPS sẵn sàng – bạn có thể tìm kiếm ngay.";
+                    }
+                    setTimeout(() => document.getElementById("gpsStatus").style.display = "none", 2000);
+                },
+                err => {
+                    document.getElementById("gpsStatus").innerHTML = "❌ Lỗi GPS: " + err.message;
+                    if (gpsContextText) {
+                        gpsContextText.textContent = "Không lấy được GPS – hãy nhập khu vực bạn muốn tìm nhé.";
+                    }
+                }
+            );
         };
 
-        function updatePriceDisplay() {
-            if (!priceDisplay || !priceSelect) return;
-            const val = priceSelect.value;
-            if (!val) {
-                priceDisplay.innerHTML = '<span class="restaurant-meta">Chưa chọn mức giá.</span>';
-                return;
+        function handleSearch(e) {
+            if (!document.getElementById("latInput").value) {
+                e.preventDefault();
+                alert("Chưa lấy được vị trí GPS. Vui lòng chờ giây lát.");
+                return false;
             }
-            const label = PRICE_LABELS[val] || val;
-            priceDisplay.innerHTML = '<span class="tag">' + label + '</span>';
+            return true;
         }
 
-        function updateTagDisplay() {
-            if (!tagsDisplay || !tagsSelect) return;
-            const val = tagsSelect.value;
-            if (!val) {
-                tagsDisplay.innerHTML = '<span class="restaurant-meta">Chưa chọn loại quán.</span>';
-                return;
+        // 2. Gợi ý API – cộng thêm lý do theo giờ
+        async function fetchSuggestion() {
+            const queryInput = document.getElementById("queryInput");
+            const lat = document.getElementById("latInput").value || 0;
+            const lon = document.getElementById("lonInput").value || 0;
+
+            // Show loading placeholder
+            queryInput.setAttribute("placeholder", "Đang suy nghĩ...");
+
+            // Tạo lý do theo giờ
+            const now = new Date();
+            const hour = now.getHours();
+            let timeHint = "";
+
+            if (hour >= 5 && hour < 11) {
+                timeHint = " Hiện đang là buổi sáng nên tụi mình ưu tiên vài món cho ngày mới nhẹ nhàng.";
+            } else if (hour >= 11 && hour < 14) {
+                timeHint = " Đang giờ ăn trưa – hợp với các món no bụng, chắc dạ.";
+            } else if (hour >= 14 && hour < 17) {
+                timeHint = " Buổi xế chiều – vài món ăn vặt, nước uống cho tỉnh táo.";
+            } else if (hour >= 17 && hour < 21) {
+                timeHint = " Giờ ăn tối – thích hợp đi ăn cùng bạn bè, gia đình.";
+            } else {
+                timeHint = " Đêm khuya – gợi ý thiên về các món ăn đêm ấm bụng.";
             }
-            const label = TAG_LABELS[val] || val;
-            tagsDisplay.innerHTML = '<span class="tag">' + label + '</span>';
+
+            try {
+                // Gửi tọa độ và nhận gợi ý (món ăn/tag)
+                const res = await fetch(`/api/suggestion?lat=${lat}&lon=${lon}`);
+                const data = await res.json();
+
+                if (data.ok && data.query) {
+                    queryInput.value = data.query;
+                    document.getElementById("suggestBox").style.display = "block";
+
+                    const baseReason = data.reason || "Dựa trên bối cảnh hiện tại của bạn.";
+                    document.getElementById("suggestText").innerText = baseReason + timeHint;
+                } else {
+                    alert(data.msg || "Không tìm thấy gợi ý món ăn phù hợp.");
+                }
+            } catch (e) {
+                alert("Lỗi kết nối hoặc API");
+            } finally {
+                // Đặt lại placeholder sau khi hoàn thành
+                queryInput.setAttribute("placeholder", "🔍 Bạn thèm món gì? (VD: phở, trà sữa...)");
+            }
         }
 
-        if (priceSelect) {
-            priceSelect.addEventListener("change", updatePriceDisplay);
-            updatePriceDisplay();
-        }
-        if (tagsSelect) {
-            tagsSelect.addEventListener("change", updateTagDisplay);
-            updateTagDisplay();
+        function smartRecommend() {
+            const lat = document.getElementById("latInput").value;
+            const lon = document.getElementById("lonInput").value;
+            if (!lat) {
+                alert("Vui lòng đợi lấy GPS xong.");
+                return;
+            }
+            // Redirect to recommended filter
+            window.location.href = `/recommend?lat=${lat}&lon=${lon}`;
         }
     </script>
 </body>
